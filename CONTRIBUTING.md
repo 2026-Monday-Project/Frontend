@@ -25,20 +25,24 @@ CodeRabbit 자동 리뷰
 ↓
 필요한 수정 사항 반영
 ↓
-팀장 Merge
+리뷰와 체크리스트 확인
+↓
+팀원 누구나 Merge
+↓
+작업 브랜치 삭제
 ```
 
 ---
 
 ## 🌱 Branch Naming
 
-**형식**
+### 형식
 
 ```text
 타입/이슈번호-작업내용
 ```
 
-**예시**
+### 예시
 
 ```text
 feat/2-login
@@ -61,7 +65,7 @@ refactor/10-header
 | `test` | 테스트 코드 |
 | `chore` | 설정 및 기타 작업 |
 
-**예시**
+### 예시
 
 ```text
 feat: 로그인 기능 구현
@@ -73,15 +77,16 @@ docs: README 업데이트
 
 ## 🚀 Pull Request
 
-### PR 생성 전 체크
+### PR 생성 전 체크리스트
 
-- [ ] 최신 `develop` 반영
-- [ ] 기능 테스트 완료
-- [ ] `npm run build` 성공
-- [ ] 불필요한 `console.log` 제거
-- [ ] Issue 연결 (`Closes #번호`)
+- [ ] 작업 브랜치에서 기능을 직접 테스트했는지
+- [ ] 최신 `develop` 내용을 반영했는지
+- [ ] `npm run build`가 성공하는지
+- [ ] 불필요한 `console.log`를 제거했는지
+- [ ] PR의 Base 브랜치가 `develop`인지
+- [ ] Issue를 연결했는지 (`Closes #번호`)
 
-**PR 제목 예시**
+### PR 제목 예시
 
 ```text
 feat: 로그인 기능 구현
@@ -94,12 +99,17 @@ fix: 회원가입 오류 수정
 
 - 모든 PR은 **CodeRabbit** 자동 리뷰를 사용합니다.
 - PR 작성자는 리뷰 내용을 확인하고 필요한 수정 사항을 반영합니다.
-- 팀장은 리뷰 결과를 확인한 후 `develop` 브랜치에 Merge합니다.
+- CodeRabbit의 제안을 반드시 모두 반영할 필요는 없지만, 주요 지적 사항은 검토합니다.
+- 기능 구현 및 자체 테스트는 PR 작성자가 책임집니다.
+- 리뷰, 충돌 여부, 빌드 결과, 체크리스트 확인이 완료되면 **팀원 누구나 Merge**할 수 있습니다.
+- Merge를 진행한 팀원은 작업 브랜치를 삭제합니다.
 
 ---
 
 ## 🚫 Rules
 
-- `main`, `develop` 브랜치 직접 Push 금지
-- 모든 작업은 Pull Request를 통해 Merge
-- Merge 후 작업 브랜치는 삭제합니다.
+- `main`, `develop` 브랜치에는 직접 Push하지 않습니다.
+- 모든 작업은 Pull Request를 통해 Merge합니다.
+- 기능 개발 PR은 `develop` 브랜치를 대상으로 생성합니다.
+- `develop` → `main` PR은 배포 시에만 생성합니다.
+- 충돌이 발생하면 PR 작성자가 해결합니다.

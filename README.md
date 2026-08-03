@@ -54,9 +54,12 @@ npm run build
 
 ## 🤝 Collaboration
 
-- 작업 전 Issue 생성
-- `develop`에서 작업 브랜치 생성
-- PR 생성 후 CodeRabbit 리뷰 확인
-- 팀장 확인 후 Merge
+- 작업 시작 전 Issue 생성
+- 최신 develop에서 작업 브랜치 생성
+- 기능 구현 및 자체 테스트
+- develop 대상으로 Pull Request 생성
+- CodeRabbit 자동 리뷰 확인 및 필요한 수정 반영
+- 리뷰와 체크리스트 확인 후 Merge
+- Merge 후 작업 브랜치 삭제
 
 자세한 협업 규칙은 `CONTRIBUTING.md`를 참고해주세요.
