@@ -22,4 +22,3 @@ Closes #
 - [ ] npm run build 성공
 - [ ] 최신 develop 반영
 - [ ] console.log 제거
-- [ ] CodeRabbit 리뷰 확인
