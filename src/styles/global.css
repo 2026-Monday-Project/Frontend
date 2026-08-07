@@ -26,6 +26,7 @@
     font-style: normal;
 }
 
+/* 디자인 텍스트 Bold */
 @font-face {
     font-family: "Warhaven";
     src: url("../assets/fonts/nexon-warhaven-bold.ttf") format("truetype");
@@ -34,27 +35,57 @@
 }
 
 /* ==============================
-    프로젝트 공통 스타일
-    main.jsx에서 "@/styles/global.css"로 한 번 import되어 있으므로
-    아래 전역 스타일은 모든 페이지에 공통 적용됩니다.
-============================== */
+    프로젝트 공통 변수
+
+    필요한 페이지 CSS에서 아래처럼 사용할 수 있습니다.
+
+    예)
+    color: var(--color-text);
+    background-color: var(--color-background);
+   ============================== */
 
 :root {
-    /*
-    * 공통 CSS 변수
-    * 필요한 CSS 파일에서 아래와 같이 사용합니다.
-    * background-color: var(--color-background);
-    * max-width: var(--max-mobile-width);
-    */
+    /* Figma 디자인 시스템 색상 */
 
-    /* 대부분 페이지의 기본 배경색 */
+    /* 그린 메인 */
+    --color-green-main: #315338;
+
+    /* 기본 배경 */
     --color-background: #faf6eb;
 
-    /* Figma 모바일 디자인 기준 너비 */
+    /* 기본 텍스트 */
+    --color-text: #000000;
+
+    /* 그린 흐림 - #315338 / opacity 약 83% */
+    --color-green-muted: #315338d4;
+
+    /* 브라운 */
+    --color-brown: #9c8779;
+
+    /* 텍스트 흐림 - #000000 / opacity 약 45% */
+    --color-text-muted: #00000073;
+
+    /* 서브 그린 */
+    --color-green-sub: #455535;
+
+    /* 베이지 */
+    --color-beige: #e0cdb6;
+
+    /* 라이트 그레이 */
+    --color-gray-light: #e4e3df;
+
+    /* Figma 모바일 디자인 기준 최대 너비 */
     --max-mobile-width: 402px;
 }
 
-/* 모든 요소에 자동 적용 */
+/* ==============================
+    CSS Reset
+
+    브라우저마다 기본으로 적용되는 스타일 차이를 줄이고
+    모든 페이지에서 동일한 기준으로 작업하기 위한 설정입니다.
+============================== */
+
+/* padding과 border가 요소의 width / height 안에 포함되도록 설정 */
 * {
     box-sizing: border-box;
 }
@@ -68,28 +99,80 @@ body,
 }
 
 /*
- * 프로젝트 기본 배경색
- * 대부분 페이지에는 자동 적용됩니다.
- * 홈처럼 다른 배경이 필요한 경우 페이지 최상위 클래스에서
- * background-color 또는 background-image를 별도로 지정합니다.
+ * 버튼과 입력 요소가 브라우저 기본 폰트 대신
+ * 프로젝트의 폰트 설정을 그대로 사용하도록 합니다.
  */
-
- /* 기본 배경색은 전체 페이지에 자동 적용 */
-body {
-    background-color: var(--color-background);
-    font-family: "Pretendard", sans-serif;
-
+button,
+input,
+textarea,
+select {
+    font: inherit;
 }
 
 /*
- * 모바일 웹 공통 레이아웃
- *
- * 402px 이하: 기기 화면 너비에 맞게 표시
- * 402px 초과: 최대 402px로 유지하며 가운데 정렬
- *
- * 모든 페이지에 자동 적용되므로
- * 페이지별로 width: 402px을 다시 지정하지 않습니다.
+ * 버튼의 브라우저 기본 디자인을 제거합니다.
+ * 실제 버튼 디자인은 각 컴포넌트 CSS에서 지정합니다.
  */
+button {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/*
+ * 링크의 기본 파란색과 밑줄을 제거합니다.
+ * 부모 요소의 글자색을 그대로 사용합니다.
+ */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/*
+ * 이미지 아래에 생길 수 있는 기본 여백을 제거하고
+ * 부모 영역보다 이미지가 커지지 않도록 합니다.
+ */
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* ==============================
+    프로젝트 공통 스타일
+
+    main.jsx에서 "@/styles/global.css"로 한 번 import되어 있으므로
+    아래 스타일은 모든 페이지에 자동으로 적용됩니다.
+============================== */
+
+/*
+ * 프로젝트 기본 스타일
+ *
+ * - 기본 배경색: #FAF6EB
+ * - 기본 글자색: #000000
+ * - 기본 폰트: Pretendard
+ *
+ * 홈처럼 별도의 배경을 사용하는 페이지는
+ * 해당 페이지 CSS에서 background를 따로 지정합니다.
+ */
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: "Pretendard", sans-serif;
+}
+
+/* ==============================
+    모바일 웹 공통 레이아웃
+
+    - Figma 디자인 기준 너비: 402px
+    - 402px 이하: 기기 화면 너비에 맞게 표시
+    - 402px 초과: 최대 402px로 유지하고 가운데 정렬
+
+    모든 페이지에 자동 적용되므로
+    페이지별로 width: 402px을 다시 지정하지 않습니다.
+============================== */
+
 #root {
     width: 100%;
     max-width: var(--max-mobile-width);
