@@ -4,7 +4,7 @@
 
 /* 기본 본문 폰트 */
 @font-face {
-    font-family: "Pretendard";
+    font-family: Pretendard;
     src: url("../assets/fonts/pretendard-variable.woff2") format("woff2");
     font-weight: 100 900;
     font-style: normal;
@@ -20,7 +20,7 @@
 
 /* 디자인 텍스트에 사용하는 폰트 */
 @font-face {
-    font-family: "Warhaven";
+    font-family: Warhaven;
     src: url("../assets/fonts/nexon-warhaven-regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
@@ -28,7 +28,7 @@
 
 /* 디자인 텍스트 Bold */
 @font-face {
-    font-family: "Warhaven";
+    font-family: Warhaven;
     src: url("../assets/fonts/nexon-warhaven-bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
@@ -159,7 +159,7 @@ img {
 body {
     background-color: var(--color-background);
     color: var(--color-text);
-    font-family: "Pretendard", sans-serif;
+    font-family: Pretendard, sans-serif;
 }
 
 /* ==============================
