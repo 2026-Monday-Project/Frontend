@@ -1,4 +1,39 @@
 /* ==============================
+    Font
+   ============================== */
+
+/* 기본 본문 폰트 */
+@font-face {
+    font-family: "Pretendard";
+    src: url("../assets/fonts/pretendard-variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+/* 공연명에 사용하는 폰트 */
+@font-face {
+    font-family: "Magical Night";
+    src: url("../assets/fonts/magical-night.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* 디자인 텍스트에 사용하는 폰트 */
+@font-face {
+    font-family: "Warhaven";
+    src: url("../assets/fonts/nexon-warhaven-regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Warhaven";
+    src: url("../assets/fonts/nexon-warhaven-bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* ==============================
     프로젝트 공통 스타일
     main.jsx에서 "@/styles/global.css"로 한 번 import되어 있으므로
     아래 전역 스타일은 모든 페이지에 공통 적용됩니다.
@@ -42,6 +77,8 @@ body,
  /* 기본 배경색은 전체 페이지에 자동 적용 */
 body {
     background-color: var(--color-background);
+    font-family: "Pretendard", sans-serif;
+
 }
 
 /*
