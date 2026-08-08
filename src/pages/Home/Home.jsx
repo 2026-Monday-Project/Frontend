@@ -1,7 +1,18 @@
+import homeBackground from "@/assets/images/custom/home-background.svg";
+import "./Home.css";
 
-// 홈 페이지
 const Home = () => {
-    return <div>Home</div>;
+  return (
+    <main className="home-container">
+      <img
+        className="home-background"
+        src={homeBackground}
+        alt=""
+        aria-hidden="true"
+      />
+
+    </main>
+  );
 };
 
 export default Home;
