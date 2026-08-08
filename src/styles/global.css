@@ -8,6 +8,7 @@
     src: url("../assets/fonts/pretendard-variable.woff2") format("woff2");
     font-weight: 100 900;
     font-style: normal;
+    font-display: swap;
 }
 
 /* 공연명에 사용하는 폰트 */
@@ -16,6 +17,7 @@
     src: url("../assets/fonts/magical-night.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 /* 디자인 텍스트에 사용하는 폰트 */
@@ -24,6 +26,7 @@
     src: url("../assets/fonts/nexon-warhaven-regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 /* 디자인 텍스트 Bold */
@@ -32,6 +35,7 @@
     src: url("../assets/fonts/nexon-warhaven-bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 /* ==============================
@@ -176,6 +180,6 @@ body {
 #root {
     width: 100%;
     max-width: var(--max-mobile-width);
-    min-height: 100vh;
+    min-height: 100dvh;
     margin: 0 auto;
 }
