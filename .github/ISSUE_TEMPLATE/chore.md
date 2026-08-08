@@ -1,8 +1,8 @@
 ---
-name: 🐥 Feature 🐥
-about: 개발 작업을 위한 이슈 템플릿
-title: "feat: "
-labels: "🐣 feat"
+name: 🍋 Chore 🍋
+about: 설정, 환경 구성, 문서 등 기타 작업
+title: "chore: "
+labels: "🍋 chore"
 assignees: ""
 ---
 
