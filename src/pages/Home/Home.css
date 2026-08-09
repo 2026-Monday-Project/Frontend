@@ -1,6 +1,4 @@
-.home-container {
-  position: relative;
-
+.home-page {
   width: 100%;
   height: 100dvh;
 
@@ -13,49 +11,51 @@
   overflow: hidden;
 }
 
-.home-design {
+.home-scale-container {
   position: relative;
 
-  /*
-    가로는 최대 402px,
-    세로는 현재 브라우저 높이를 넘지 않도록 제한
-  */
-  width: min(
-    100%,
-    calc(100dvh * 402 / 874)
-  );
+  flex-shrink: 0;
 
-  aspect-ratio: 402 / 874;
+  overflow: hidden;
+}
+
+.home-design {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 402px;
+  height: 874px;
+
+  transform-origin: top left;
 
   background-image: url("@/assets/images/custom/home-background.svg");
-  background-size: 100% 100%;
-  background-position: center;
+  background-size: 402px 874px;
+  background-position: top left;
   background-repeat: no-repeat;
 
   overflow: hidden;
 }
 
 
-/* ==============================
-공연 정보
-============================== */
+/* 공연 정보 */
 
 .home-info {
   position: absolute;
 
-  top: 30.66%;
-  left: 22.64%;
-  right: 22.64%;
+  top: 268px;
+  left: 91px;
+
+  width: 220px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  color: #605a30;
-
   text-align: center;
-}
 
+  color: #605a30;
+}
 
 .home-title {
   margin: 0;
@@ -64,26 +64,20 @@
   font-size: 36px;
   font-weight: 400;
   font-style: normal;
-  line-height: 100%;
+  line-height: 46px;
   letter-spacing: 0;
 
   white-space: nowrap;
 }
-
 
 .home-divider {
   width: 104px;
   height: 29px;
 
   object-fit: contain;
+
   flex-shrink: 0;
 }
-
-
-.home-subtitle + .home-divider {
-  margin-bottom: 7px;
-}
-
 
 .home-subtitle {
   margin: 0;
@@ -98,10 +92,14 @@
   white-space: nowrap;
 }
 
+.home-subtitle + .home-divider {
+  margin-bottom: 7px;
+}
 
 .home-performance-info {
   display: flex;
   flex-direction: column;
+
   gap: 6px;
 
   margin: 0;
@@ -116,30 +114,25 @@
   text-align: center;
 }
 
-
 .home-performance-info p {
   margin: 0;
 }
 
 
-/* ==============================
-스와이프 안내 문구
-============================== */
+/* 스와이프 문구 */
 
 .home-entry-guide-text {
   position: absolute;
 
-  /*
-    Figma처럼 아치 바로 위쪽에 배치
-  */
   left: 50%;
-  bottom: 14%;
+
+  /* 이 값만 네가 피그마 보면서 조정 */
+  bottom: 137px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  /* 두 줄 사이 */
   gap: 5px;
 
   margin: 0;
@@ -151,58 +144,34 @@
   line-height: 100%;
   letter-spacing: 0;
 
-  color: #ffffff;
-
   text-align: center;
   white-space: nowrap;
 
+  color: #ffffff;
+
   pointer-events: none;
-
-  opacity: 1;
-
-  transition:
-    transform 0.25s ease-out,
-    opacity 0.15s ease;
 
   z-index: 6;
 }
-
 
 .home-entry-guide-text p {
   margin: 0;
 }
 
 
-.home-entry-guide-text.is-dragging {
-  transition: none;
-}
+/* 아치 */
 
-
-.home-entry-guide-text.is-hidden {
-  opacity: 0;
-}
-
-
-/* ==============================
-초록색 드래그 아치
-============================== */
-
-/*
-  지금 사용하는 SVG는 이미 아래가 잘려 있는 파일이므로
-  Figma PNG의 193px 높이를 다시 만들지 않고
-  화면 바닥에 직접 붙인다.
-*/
 .home-entry-arch {
   position: absolute;
 
   left: 50%;
   bottom: 0;
 
-  /* 402px 디자인에서 129px */
-  width: calc((129 / 402) * 100%);
+  width: 129px;
 
   padding: 0;
   border: 0;
+
   background: transparent;
 
   touch-action: none;
@@ -212,13 +181,10 @@
 
   cursor: grab;
 
-  transition: transform 0.25s ease-out;
-
   z-index: 5;
 }
 
 .home-entry-arch.is-dragging {
-  transition: none;
   cursor: grabbing;
 }
 
@@ -238,9 +204,7 @@
 }
 
 
-/* ==============================
-흰색 스와이프 가이드
-============================== */
+/* 흰색 가이드 */
 
 .home-entry-trail-container {
   position: absolute;
@@ -258,7 +222,6 @@
   z-index: 4;
 }
 
-
 .home-entry-base-guide {
   position: absolute;
 
@@ -266,11 +229,9 @@
   bottom: 0;
 
   width: 82px;
-  height: auto;
 
   transform: translateX(-50%);
 }
-
 
 .home-entry-trail {
   position: absolute;
@@ -278,16 +239,13 @@
   left: 50%;
 
   width: 12px;
-  height: auto;
 
   transform: translateX(-50%);
 }
 
-
 .home-entry-trail-short {
   bottom: 48px;
 }
-
 
 .home-entry-trail-long {
   bottom: 48px;
