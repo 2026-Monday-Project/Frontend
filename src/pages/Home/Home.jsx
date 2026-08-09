@@ -1,10 +1,102 @@
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import homeDivider from "@/assets/images/custom/home-devider.svg";
+import homeEntryArch from "@/assets/images/custom/home-entry-arch.svg";
+import homeEntryGuide from "@/assets/images/custom/home-entry-guide.svg";
+import homeEntryTrailShort from "@/assets/images/custom/home-entry-trail-short.svg";
+import homeEntryTrailLong from "@/assets/images/custom/home-entry-trail-long.svg";
+
 import "./Home.css";
 
+const FIGMA_WIDTH = 402;
+const FIGMA_MAX_DRAG_DISTANCE = 146;
+
+
 const Home = () => {
+  const navigate = useNavigate();
+
+  const homeDesignRef = useRef(null);
+  const startYRef = useRef(0);
+
+  const [dragDistance, setDragDistance] = useState(0);
+  const [maxDragDistance, setMaxDragDistance] = useState(
+    FIGMA_MAX_DRAG_DISTANCE,
+  );
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handlePointerDown = (event) => {
+    const designWidth =
+      homeDesignRef.current?.clientWidth ?? FIGMA_WIDTH;
+
+    const scale = designWidth / FIGMA_WIDTH;
+
+    setMaxDragDistance(FIGMA_MAX_DRAG_DISTANCE * scale);
+
+    startYRef.current = event.clientY;
+    setIsDragging(true);
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event) => {
+    if (!isDragging) return;
+
+    const movedDistance =
+      startYRef.current - event.clientY;
+
+    const limitedDistance = Math.min(
+      Math.max(movedDistance, 0),
+      maxDragDistance,
+    );
+
+    setDragDistance(limitedDistance);
+  };
+
+  const handlePointerUp = (event) => {
+    if (!isDragging) return;
+
+    const progress =
+      maxDragDistance > 0
+        ? Math.min(dragDistance / maxDragDistance, 1)
+        : 0;
+
+    setIsDragging(false);
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    if (progress >= 0.95) {
+      navigate("/garden");
+      return;
+    }
+
+    setDragDistance(0);
+  };
+
+  const handlePointerCancel = (event) => {
+    setIsDragging(false);
+    setDragDistance(0);
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const dragProgress =
+    maxDragDistance > 0
+      ? Math.min(dragDistance / maxDragDistance, 1)
+      : 0;
+
+  const isCompleted = dragProgress >= 0.95;
+
   return (
     <main className="home-container">
-      <div className="home-design">
+      <div
+        ref={homeDesignRef}
+        className="home-design"
+      >
         <section className="home-info">
           <h1 className="home-title">
             MAGGIE'S
@@ -35,6 +127,68 @@ const Home = () => {
             <p>살롱문보우</p>
           </div>
         </section>
+
+        <div
+          className={`home-entry-guide-text ${
+            isDragging ? "is-dragging" : ""
+          } ${isCompleted ? "is-hidden" : ""}`}
+          style={{
+            transform: `translate(-50%, -${dragDistance}px)`,
+          }}
+        >
+          <p>위로 스와이프하여</p>
+          <p>정원으로 입장하세요.</p>
+        </div>
+
+        {isDragging && dragProgress >= 0.18 && (
+          <div
+            className="home-entry-trail-container"
+            aria-hidden="true"
+          >
+            <img
+              className="home-entry-base-guide"
+              src={homeEntryGuide}
+              alt=""
+            />
+
+            {dragProgress < 0.55 && (
+              <img
+                className="home-entry-trail home-entry-trail-short"
+                src={homeEntryTrailShort}
+                alt=""
+              />
+            )}
+
+            {dragProgress >= 0.55 && (
+              <img
+                className="home-entry-trail home-entry-trail-long"
+                src={homeEntryTrailLong}
+                alt=""
+              />
+            )}
+          </div>
+        )}
+
+      <button
+        type="button"
+        className={`home-entry-arch ${
+          isDragging ? "is-dragging" : ""
+        }`}
+        style={{
+          transform: `translate(-50%, -${dragDistance}px)`,
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        aria-label="위로 밀어서 정원 입장하기"
+      >
+        <img
+          src={homeEntryArch}
+          alt=""
+          draggable="false"
+        />
+      </button>
       </div>
     </main>
   );
