@@ -70,7 +70,7 @@
   font-weight: 400;
   font-style: normal;
   font-size: 32px;
-  line-height:41px;
+  line-height:normal;
   letter-spacing: 0;
 
   text-align: center;
@@ -94,7 +94,7 @@
   font-weight: 400;
   font-style: normal;
   font-size: 14px;
-  line-height: 100%;
+  line-height: normal;
   letter-spacing: 0;
 
   color: var(--color-text);
@@ -130,7 +130,8 @@
   align-items: center;
   justify-content: center;
 
-  padding: 10px 0;
+  gap:10px;
+  padding: 10px 60px;
 
   border-radius: 15px;
 
@@ -138,7 +139,7 @@
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 100%;
+  line-height: normal;
   letter-spacing: 0;
 
   white-space: nowrap;
@@ -154,7 +155,6 @@
   background-color: var(--color-green-main);
   color: #ffffff;
 
-    box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
 }
 
 .home-entered-button-secondary {
