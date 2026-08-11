@@ -1,0 +1,135 @@
+.story-card {
+  position: relative;
+  width: 100%;
+  min-height: 112px;
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid var(--color-green-main);
+  border-radius: 12px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  box-shadow: 0 4px 4px #0000001f;
+}
+
+.story-card-button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.story-card-button:focus-visible {
+  outline: 3px solid var(--color-green-muted);
+  outline-offset: 2px;
+}
+
+.story-card-image {
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.story-card-content {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.story-card-title {
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.story-card-pet-info {
+  margin: 4px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.story-card-meta-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.story-card-date {
+  white-space: nowrap;
+}
+
+.story-card-counts,
+.story-card-count {
+  display: flex;
+  align-items: center;
+}
+
+.story-card-counts {
+  gap: 10px;
+}
+
+.story-card-count {
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.story-card-view-icon {
+  position: relative;
+  width: 16px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.story-card-view-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.story-card-like-icon {
+  color: var(--color-green-muted);
+  font-size: 14px;
+  line-height: 1;
+}
+
+@media (max-width: 360px) {
+  .story-card {
+    gap: 12px;
+  }
+
+  .story-card-image {
+    width: 80px;
+    height: 80px;
+  }
+}
