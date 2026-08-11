@@ -75,9 +75,23 @@ const Home = () => {
   const handlePointerUp = (event) => {
     if (!isDragging) return;
 
+    const currentMaxDragDistance =
+      FIGMA_MAX_DRAG_DISTANCE * scale;
+
+    const movedDistance =
+      startYRef.current - event.clientY;
+
+    const currentDragDistance = Math.min(
+      Math.max(movedDistance, 0),
+      currentMaxDragDistance,
+    );
+
     const progress =
-      maxDragDistance > 0
-        ? Math.min(dragDistance / maxDragDistance, 1)
+      currentMaxDragDistance > 0
+        ? Math.min(
+            currentDragDistance / currentMaxDragDistance,
+            1,
+          )
         : 0;
 
     setIsDragging(false);
@@ -86,7 +100,6 @@ const Home = () => {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
 
-    /* ⭐ 여기서 HomeEntered로 화면 교체 */
     if (progress >= 0.95) {
       setIsEntered(true);
       return;
