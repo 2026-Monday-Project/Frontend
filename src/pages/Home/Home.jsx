@@ -103,6 +103,12 @@ const Home = () => {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
   };
+  const handleEntryKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setIsEntered(true);
+    }
+  };
 
   const dragProgress =
     maxDragDistance > 0
@@ -217,6 +223,7 @@ const Home = () => {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerCancel}
+            onKeyDown={handleEntryKeyDown}
             aria-label="위로 밀어서 정원 입장하기"
           >
             <img
