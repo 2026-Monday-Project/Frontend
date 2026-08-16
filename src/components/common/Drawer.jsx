@@ -35,15 +35,47 @@ const MENU_ITEMS = [
 
 const Drawer = ({ isOpen, onClose }) => {
   const closeButtonRef = useRef(null);
+  const panelRef = useRef(null);
+  const previousActiveElementRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
     const previousBodyOverflow = document.body.style.overflow;
+    previousActiveElementRef.current = document.activeElement;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusableElements = panelRef.current?.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+
+      if (!focusableElements?.length) return;
+
+      const firstFocusableElement = focusableElements[0];
+      const lastFocusableElement = focusableElements[focusableElements.length - 1];
+      const isFocusOutsidePanel = !panelRef.current?.contains(document.activeElement);
+
+      if (event.shiftKey && (document.activeElement === firstFocusableElement || isFocusOutsidePanel)) {
+        event.preventDefault();
+        lastFocusableElement.focus();
+        return;
+      }
+
+      if (!event.shiftKey && (document.activeElement === lastFocusableElement || isFocusOutsidePanel)) {
+        event.preventDefault();
+        firstFocusableElement.focus();
       }
     };
 
@@ -58,8 +90,12 @@ const Drawer = ({ isOpen, onClose }) => {
       window.cancelAnimationFrame(focusFrame);
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousBodyOverflow;
+
+      if (previousActiveElementRef.current?.isConnected) {
+        previousActiveElementRef.current.focus();
+      }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   const handlePanelClick = (event) => {
     event.stopPropagation();
@@ -69,68 +105,71 @@ const Drawer = ({ isOpen, onClose }) => {
 
   return (
     <div className="drawer-overlay" onClick={onClose}>
-      <aside
-        id="common-drawer"
-        className="drawer-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="전체 메뉴"
-        onClick={handlePanelClick}
-      >
-        <button
-          ref={closeButtonRef}
-          type="button"
-          className="drawer-close-button"
-          onClick={onClose}
-          aria-label="메뉴 닫기"
+      <div className="drawer-container">
+        <aside
+          ref={panelRef}
+          id="common-drawer"
+          className="drawer-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="전체 메뉴"
+          onClick={handlePanelClick}
         >
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className="drawer-close-button"
+            onClick={onClose}
+            aria-label="메뉴 닫기"
+          >
+            <img
+              className="drawer-close-icon"
+              src={arrowBackIcon}
+              alt=""
+              aria-hidden="true"
+            />
+          </button>
+
+          <div className="drawer-content">
+            <div className="drawer-introduction">
+              <p className="drawer-heading">
+                반려동물과 함께한
+                <br />
+                소중한 순간들
+              </p>
+              <p className="drawer-description">공감과 추억을 나눠보세요</p>
+            </div>
+
+            <div className="drawer-divider" aria-hidden="true" />
+
+            <nav className="drawer-navigation" aria-label="주요 메뉴">
+              {MENU_ITEMS.map((item) => (
+                <NavLink
+                  key={item.path}
+                  className="drawer-menu-item"
+                  to={item.path}
+                  onClick={onClose}
+                >
+                  <img
+                    className="drawer-menu-icon"
+                    src={item.icon}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+
           <img
-            className="drawer-close-icon"
-            src={arrowBackIcon}
+            className="drawer-decoration"
+            src={drawerDecoration}
             alt=""
             aria-hidden="true"
           />
-        </button>
-
-        <div className="drawer-content">
-          <div className="drawer-introduction">
-            <p className="drawer-heading">
-              반려동물과 함께한
-              <br />
-              소중한 순간들
-            </p>
-            <p className="drawer-description">공감과 추억을 나눠보세요</p>
-          </div>
-
-          <div className="drawer-divider" aria-hidden="true" />
-
-          <nav className="drawer-navigation" aria-label="주요 메뉴">
-            {MENU_ITEMS.map((item) => (
-              <NavLink
-                key={item.path}
-                className="drawer-menu-item"
-                to={item.path}
-                onClick={onClose}
-              >
-                <img
-                  className="drawer-menu-icon"
-                  src={item.icon}
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </nav>
-        </div>
-
-        <img
-          className="drawer-decoration"
-          src={drawerDecoration}
-          alt=""
-          aria-hidden="true"
-        />
-      </aside>
+        </aside>
+      </div>
     </div>
   );
 };

@@ -2,10 +2,14 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
+  background-color: #00000059;
+}
+
+.drawer-container {
   width: 100%;
   max-width: var(--max-mobile-width);
+  height: 100%;
   margin: 0 auto;
-  background-color: #00000059;
 }
 
 .drawer-panel {
