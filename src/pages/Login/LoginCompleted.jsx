@@ -17,13 +17,12 @@ const LoginCompleted = () => {
         <div className="login-completed-container">
             <main className="completed-main">
                 <div className="image-wrapper">
-                    <img
-                        src={loginCompletedImg}
-                        alt="정원 문과 우체통"
-                        className="completed-image"
+                    <img 
+                        src={loginCompletedImg} 
+                        alt="정원 문과 우체통" 
+                        className="completed-image" 
                     />
                 </div>
-
                 <h1 className="completed-title">
                     정원에 오신 것을<br />환영합니다.
                 </h1>
@@ -31,7 +30,6 @@ const LoginCompleted = () => {
                     따뜻한 이야기를 함께 나눠보세요.
                 </p>
             </main>
-
             <footer className="completed-footer">
                 <button className="primary-button" onClick={handleGoMyGarden}>
                     내 정원으로 가기

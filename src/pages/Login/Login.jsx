@@ -1,21 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '@/components/common/Navbar';
 import './Login.css';
-import '@/styles/global.css';
-import hamburger from '../../assets/images/custom/hamburger.svg';
-import backBtn from '../../assets/images/custom/back-btn.svg';
 
 const Login = () => {
     const navigate = useNavigate();
-
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('default');
 
     const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
+        const value = e.target.value;
+        setEmail(value);
 
-    if (value === '') {
+        if (value === '') {
             setStatus('default');
         } else if (value === 'loveyou@naver.com') {
             setStatus('error');
@@ -33,57 +30,46 @@ const Login = () => {
     };
 
     return (
-    <div className="login-container">
-        <header className="login-header">
-            <div onClick={() => navigate(-1)}>
-                <img className="back-btn" src={backBtn} alt="뒤로 가기 아이콘" />
-            </div>
-            <h1 className="header-title">로그인</h1>
-            <div onClick={() => navigate('/menu')}>
-                <img className="hamburger" src={hamburger} alt="햄버거 아이콘" />
-            </div>
-        </header>
-
-        <main className="login-main">
-            <h2 className="main-title">
-                사연을 보낼 때 사용한<br />이메일을 입력해주세요
-            </h2>
-
-        <div className="input-group">
-            <label htmlFor="email">이메일</label>
-            <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                className={`email-input ${status === 'error' ? 'error' : ''}`}
-            />
-            
-            {status === 'success' && (
-            <p className="helper-text success">
-                사연을 제출한 적 있는 이메일이에요.<br />
-                내 정원으로 가기 버튼을 눌러 제출했던 사연을 확인해 보세요.
-            </p>
-            )}
-            {status === 'error' && (
-            <p className="helper-text error">
-                아직 제출한 사연이 없어요.<br />
-                사연을 제출한 후 로그인 할 수 있어요.
-            </p>
-            )}
+        <div className="login-container">
+            <Navbar />
+            <main className="login-main">
+                <h2 className="main-title">
+                    사연을 보낼 때 사용한<br />이메일을 입력해주세요
+                </h2>
+                <div className="input-group">
+                    <label htmlFor="email">이메일</label>
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder="이메일"
+                        className={`email-input ${status === 'error' ? 'error' : ''}`}
+                    />
+                    {status === 'success' && (
+                        <p className="helper-text success">
+                            사연을 제출한 적 있는 이메일이에요.<br />
+                            로그인하기 버튼을 눌러 제출했던 사연을 확인해 보세요.
+                        </p>
+                    )}
+                    {status === 'error' && (
+                        <p className="helper-text error">
+                            아직 제출한 사연이 없어요.<br />
+                            사연을 제출한 후 로그인 할 수 있어요.
+                        </p>
+                    )}
+                </div>
+            </main>
+            <footer className="login-footer">
+                <button
+                    className="submit-button"
+                    disabled={status !== 'success'}
+                    onClick={handleSubmit}
+                >
+                    내 정원으로 가기
+                </button>
+            </footer>
         </div>
-        </main>
-
-        <footer className="login-footer">
-            <button
-                className="submit-button"
-                disabled={status !== 'success'}
-                onClick={handleSubmit}
-            >
-                내 정원으로 가기
-            </button>
-        </footer>
-    </div>
     );
 };
 
