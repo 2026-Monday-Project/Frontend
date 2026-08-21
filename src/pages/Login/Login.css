@@ -65,11 +65,10 @@
     align-self: stretch;
     border-radius: 10px;
     border: 1px solid var(--color-green-main);
-    background-color: #FFFDF6;
 }
 
 .email-input:focus {
-    border-color: #2D4C3B;
+    border-color: var(--color-green-main);
 }
 
 .email-input.error {
@@ -77,13 +76,13 @@
 }
 
 .helper-text {
-    font-size: 12px;
-    margin-top: 8px;
+    font-size: 13px;
+    margin-top: 10px;
     line-height: 1.4;
 }
 
 .helper-text.success {
-    color: #555;
+    color: var(--color-green-main);
 }
 
 .helper-text.error {
@@ -96,18 +95,20 @@
 }
 
 .submit-button {
+    font-family: "Warhaven", sans-serif;
     width: 100%;
-    padding: 16px;
+    padding: 13px 0 10px 0;
+    align-items: center;
+    justify-content: center;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 15px;
+    font-size: 20px;
     color: #fff;
-    background-color: #2D4C3B;
+    background-color: var(--color-green-main);
     cursor: pointer;
 }
 
 .submit-button:disabled {
-    background-color: #D3D8D5;
+    background-color: #dfe7d6;
     cursor: not-allowed;
 }
