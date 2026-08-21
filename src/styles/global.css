@@ -183,4 +183,9 @@ body {
     max-width: var(--max-mobile-width);
     min-height: 100dvh;
     margin: 0 auto;
+
+    /* 데스크톱 화면에서 모바일 영역 구분 */
+    box-shadow:
+        -12px 0 24px rgba(0, 0, 0, 0.12),
+        12px 0 24px rgba(0, 0, 0, 0.12);
 }
