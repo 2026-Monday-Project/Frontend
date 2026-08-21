@@ -1,0 +1,54 @@
+.navbar {
+  width: 100%;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: var(--color-background);
+  color: var(--color-green-main);
+}
+
+.navbar-action {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-button {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.navbar-button:focus-visible {
+  outline: 3px solid var(--color-green-muted);
+  outline-offset: 2px;
+}
+
+.navbar-icon {
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.navbar-title {
+  margin: 0;
+  overflow: hidden;
+  font-family: Warhaven, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
