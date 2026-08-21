@@ -1,8 +1,14 @@
-.login-container {
+.login-page {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 30px;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 20px;
     box-sizing: border-box;
 }
 
