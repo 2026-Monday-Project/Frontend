@@ -5,6 +5,7 @@ import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import Login from "@/pages/Login/Login";
+import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import Settings from "@/pages/Settings/Settings";
@@ -35,6 +36,8 @@ const Router = () => {
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
+
+            <Route path="/login-completed" element={<LoginCompleted />}                 />
 
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
