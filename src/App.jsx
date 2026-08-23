@@ -1,7 +1,18 @@
-import Router from "@/router/Router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "@/pages/Home/Home";
+import Login from "@/pages/Login/Login";
+import LoginCompleted from "@/pages/Login/LoginCompleted";
 
-function App() {
-  return <Router />;
-}
+const Router = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login-completed" element={<LoginCompleted />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-export default App;
+export default Router;

@@ -80,6 +80,8 @@
 
     /* Figma 모바일 디자인 기준 최대 너비 */
     --max-mobile-width: 402px;
+
+    --color-page-backgroud: #f8f7f4;
 }
 
 /* ==============================
@@ -102,6 +104,7 @@ body,
     min-height: 100%;
     width: 100%;
 }
+
 
 /*
  * 버튼과 입력 요소가 브라우저 기본 폰트 대신
@@ -162,7 +165,7 @@ img {
  * 해당 페이지 CSS에서 background를 따로 지정합니다.
  */
 body {
-    background-color: var(--color-background);
+    background-color: var(--color-page-backgroud);
     color: var(--color-text);
     font-family: Pretendard, sans-serif;
 }
@@ -183,9 +186,6 @@ body {
     max-width: var(--max-mobile-width);
     min-height: 100dvh;
     margin: 0 auto;
-
-    /* 데스크톱 화면에서 모바일 영역 구분 */
-    box-shadow:
-        -12px 0 24px rgba(0, 0, 0, 0.12),
-        12px 0 24px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-background);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
 }
