@@ -7,6 +7,7 @@ import gardenIcon from "@/assets/icons/garden.svg";
 import myGardenIcon from "@/assets/icons/my-garden.svg";
 import performanceIcon from "@/assets/icons/performance.svg";
 import drawerDecoration from "@/assets/images/custom/drawer-decoration.png";
+import drawerDivider from "@/assets/images/custom/drawer-divider.png";
 
 import "./Drawer.css";
 
@@ -140,7 +141,12 @@ const Drawer = ({ isOpen, onClose }) => {
               <p className="drawer-description">공감과 추억을 나눠보세요</p>
             </div>
 
-            <div className="drawer-divider" aria-hidden="true" />
+            <img
+              className="drawer-divider"
+              src={drawerDivider}
+              alt=""
+              aria-hidden="true"
+            />
 
             <nav className="drawer-navigation" aria-label="주요 메뉴">
               {MENU_ITEMS.map((item) => (
