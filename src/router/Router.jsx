@@ -4,7 +4,9 @@ import Home from "@/pages/Home/Home";
 import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
+import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import Login from "@/pages/Login/Login";
+import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import Settings from "@/pages/Settings/Settings";
@@ -32,9 +34,11 @@ const Router = () => {
 
             {/* 사연 작성 및 수정 */}
             <Route path="/story" element={<StoryForm1 />} />
+            <Route path="/story/send/2" element={<StoryForm2 />} />
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
+            <Route path="/login-completed" element={<LoginCompleted />} />
 
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
