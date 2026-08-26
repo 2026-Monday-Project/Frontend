@@ -189,6 +189,7 @@ const StoryForm2 = () => {
                   className="story-form2-photo-thumb"
                   key={photo.id}
                   onClick={() => handlePhotoThumbClick(index)}
+                  aria-label={`${index + 1}번째 사진 자세히 보기`}
                 >
                   <img src={photo.url} alt="" />
                 </button>
@@ -265,6 +266,8 @@ const StoryForm2 = () => {
                     index === viewerIndex ? "is-active" : ""
                   }`}
                   onClick={() => setViewerIndex(index)}
+                  aria-label={`${index + 1}번째 사진 선택`}
+                  aria-pressed={index === viewerIndex}
                 >
                   <img src={photo.url} alt="" />
                 </button>
