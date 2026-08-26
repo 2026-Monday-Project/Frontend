@@ -11,6 +11,7 @@ import MyGarden from "@/pages/MyGarden/MyGarden";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound/NotFound";
+import MyGardenUnLoggedIn from "@/pages/MyGarden/MyGardenUnLoggedIn";
 
 /*
  * 프로젝트의 페이지 경로를 관리합니다.
@@ -42,6 +43,7 @@ const Router = () => {
 
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
+            <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
