@@ -1,0 +1,148 @@
+.story-form3-container {
+  padding-bottom: 40px;
+}
+
+/* 동의 항목 */
+
+.story-form3-consent-group {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.story-form3-consent-heading {
+  margin: 0 0 12px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.story-form3-consent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.story-form3-consent-item-wrapper {
+  width: 100%;
+}
+
+.story-form3-consent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border: 1.5px solid var(--color-green-main);
+  border-radius: 14px;
+}
+
+.story-form3-consent-item.story-form-input-invalid {
+  border-color: #e03131;
+}
+
+.story-form3-consent-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.story-form3-consent-detail-button {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border: none;
+  padding: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.story-form3-consent-checkbox {
+  flex-shrink: 0;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1.5px solid var(--color-green-main);
+  border-radius: 5px;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.story-form3-consent-checkbox:checked {
+  border-color: var(--color-green-main);
+}
+
+.story-form3-consent-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--color-green-main);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.story-form3-consent-checkbox:focus-visible {
+  outline: 2px solid var(--color-green-main);
+  outline-offset: 2px;
+}
+
+.story-form3-consent-label {
+  flex: 1;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.story-form3-consent-chevron {
+  flex-shrink: 0;
+  width: 8px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* 이전 / 사연 보내기 */
+
+.story-form3-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.story-form3-prev-button {
+  flex: 1;
+  height: 52px;
+  border: 1.5px solid var(--color-green-main);
+  border-radius: 16px;
+  background-color: transparent;
+  color: var(--color-green-main);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.story-form3-submit-button {
+  flex: 1.4;
+  height: 52px;
+  border: none;
+  border-radius: 16px;
+  background-color: #9caf97;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
+  cursor: pointer;
+}
+
+.story-form3-submit-button.is-valid {
+  background-color: var(--color-green-main);
+}

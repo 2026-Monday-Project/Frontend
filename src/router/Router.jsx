@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Home from "@/pages/Home/Home";
 import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
+import StoryForm3 from "@/pages/StoryForm/StoryForm3";
+import ConsentPage1 from "@/pages/ConsentPage/ConsentPage1";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
@@ -36,6 +38,10 @@ const Router = () => {
             {/* 사연 작성 및 수정 */}
             <Route path="/story" element={<StoryForm1 />} />
             <Route path="/story/send/2" element={<StoryForm2 />} />
+            <Route path="/story/send/3" element={<StoryForm3 />} />
+
+            {/* 동의서 세부내용 */}
+            <Route path="/story/consent/1" element={<ConsentPage1 />} />
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
@@ -54,6 +60,26 @@ const Router = () => {
             {/* 존재하지 않는 주소 */}
             <Route path="*" element={<NotFound />} />
         </Routes>
+
+        {/* TODO: 임시 버튼 - 사연 작성 플로우 테스트용, 정식 진입 동선이 생기면 제거 */}
+        <Link
+            to="/story"
+            style={{
+                position: "fixed",
+                bottom: "16px",
+                right: "16px",
+                zIndex: 9999,
+                padding: "10px 14px",
+                borderRadius: "10px",
+                border: "1px dashed #315338",
+                background: "#faf6eb",
+                color: "#315338",
+                fontSize: "12px",
+                fontWeight: 600,
+            }}
+        >
+            사연 작성 (임시)
+        </Link>
         </BrowserRouter>
     );
 };

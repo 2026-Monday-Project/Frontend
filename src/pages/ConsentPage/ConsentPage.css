@@ -1,0 +1,99 @@
+.consent-page {
+  width: 100%;
+  min-height: 100dvh;
+  background-color: var(--color-background);
+}
+
+.consent-page-container {
+  width: 100%;
+  min-height: 100dvh;
+  padding: 32px 28px 40px;
+  background-color: var(--color-background);
+}
+
+/* 상단 */
+
+.consent-page-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 24px;
+}
+
+.consent-page-back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.consent-page-back-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.consent-page-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: var(--color-green-main);
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 본문 */
+
+.consent-page-intro {
+  margin: 0 0 24px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.consent-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.consent-page-card {
+  width: 100%;
+  padding: 18px 16px;
+  border: 1.5px solid var(--color-green-main);
+  border-radius: 14px;
+}
+
+.consent-page-card-title {
+  margin: 0 0 10px;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.consent-page-card-text {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 하단 로고 */
+
+.consent-page-logo {
+  display: block;
+  width: 210px;
+  margin: 0 auto;
+}
