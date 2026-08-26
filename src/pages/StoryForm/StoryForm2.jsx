@@ -6,6 +6,7 @@ import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm2.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
+const PHOTO_REQUIRED_MESSAGE = "*사진을 업로드 해주세요.";
 const MAX_PHOTOS = 5;
 const MAX_CONTENT_LENGTH = 500;
 
@@ -22,10 +23,14 @@ const StoryForm2 = () => {
   const [errors, setErrors] = useState({
     title: "",
     content: "",
+    photos: "",
   });
 
   const [photos, setPhotos] = useState([]);
   const [viewerIndex, setViewerIndex] = useState(null);
+
+  const isFormValid =
+    formData.title.trim() && formData.content.trim() && photos.length > 0;
 
   useEffect(() => {
     photosRef.current = photos;
@@ -69,6 +74,7 @@ const StoryForm2 = () => {
     const newErrors = {
       title: formData.title.trim() ? "" : REQUIRED_MESSAGE,
       content: formData.content.trim() ? "" : REQUIRED_MESSAGE,
+      photos: photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
     };
 
     setErrors(newErrors);
@@ -104,6 +110,11 @@ const StoryForm2 = () => {
     }));
 
     setPhotos((prev) => [...prev, ...newPhotos]);
+
+    setErrors((prev) => ({
+      ...prev,
+      photos: "",
+    }));
   };
 
   return (
@@ -198,7 +209,7 @@ const StoryForm2 = () => {
               {photos.length < MAX_PHOTOS && (
                 <button
                   type="button"
-                  className="story-form2-photo-add-button"
+                  className={`story-form2-photo-add-button ${errors.photos ? "story-form-input-invalid" : ""}`}
                   onClick={handlePhotoButtonClick}
                   aria-label="사진 추가"
                 >
@@ -206,6 +217,10 @@ const StoryForm2 = () => {
                 </button>
               )}
             </div>
+
+            {errors.photos && (
+              <p className="story-form-error-message">{errors.photos}</p>
+            )}
 
             <input
               ref={fileInputRef}
@@ -229,7 +244,7 @@ const StoryForm2 = () => {
 
           <button
             type="button"
-            className="story-form2-next-button"
+            className={`story-form2-next-button ${isFormValid ? "is-valid" : ""}`}
             onClick={handleNext}
           >
             다음

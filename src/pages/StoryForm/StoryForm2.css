@@ -77,6 +77,10 @@
   cursor: pointer;
 }
 
+.story-form2-photo-add-button.story-form-input-invalid {
+  border: 1.5px solid #e03131;
+}
+
 .story-form2-photo-input {
   display: none;
 }
@@ -107,13 +111,17 @@
   height: 52px;
   border: none;
   border-radius: 16px;
-  background-color: var(--color-green-main);
+  background-color: #9caf97;
   color: #ffffff;
   font-family: inherit;
   font-size: 18px;
   font-weight: 600;
   box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
   cursor: pointer;
+}
+
+.story-form2-next-button.is-valid {
+  background-color: var(--color-green-main);
 }
 
 /* 사진 자세히 보기 */
