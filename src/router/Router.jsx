@@ -6,6 +6,7 @@ import Garden from "@/pages/Garden/Garden";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
+import StoryComplete from "@/pages/StoryForm/StoryComplete";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
@@ -42,6 +43,7 @@ const Router = () => {
             <Route path="/story" element={<StoryForm1 />} />
             <Route path="/story/send/2" element={<StoryForm2 />} />
             <Route path="/story/send/3" element={<StoryForm3 />} />
+            <Route path="/story/complete" element={<StoryComplete />} />
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />

@@ -100,6 +100,7 @@ const StoryForm3 = () => {
     if (hasError) return;
 
     // TODO: 사연 제출 API 연결
+    navigate("/story/complete");
   };
 
   return (
