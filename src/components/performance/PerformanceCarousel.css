@@ -1,0 +1,39 @@
+.performance-carousel {
+    width: 100%;
+}
+
+.performance-carousel-track {
+    width: 100%;
+    overflow: hidden;
+
+    border: 1px solid var(--color-green-main);
+    border-radius: 12px;
+}
+
+.performance-carousel-image {
+    width: 100%;
+    height: auto;
+}
+
+.performance-carousel-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 10px;
+}
+
+.performance-carousel-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background-color: #b7b7a6;
+}
+
+.performance-carousel-dot-active {
+    width: 12px;
+    border-radius: 10px;
+    background-color: var(--color-green-main);
+}

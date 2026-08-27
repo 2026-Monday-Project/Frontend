@@ -1,0 +1,81 @@
+.performance-faq {
+    padding: 26px 14px 70px;
+
+    border-top: 1px solid var(--color-green-main);
+}
+
+.performance-faq-label {
+    margin: 0;
+
+    color: var(--color-green-main);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.performance-faq-title {
+    margin: 12px 0 16px;
+
+    color: var(--color-text);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.performance-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.performance-faq-item {
+    overflow: hidden;
+
+    border: 1px solid var(--color-green-main);
+    border-radius: 10px;
+
+    background-color: var(--color-background);
+}
+
+.performance-faq-question {
+    display: flex;
+    width: 100%;
+    min-height: 49px;
+    padding: 12px 14px;
+
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    color: var(--color-text);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.performance-faq-arrow {
+    flex-shrink: 0;
+
+    font-size: 18px;
+    transition: transform 0.2s ease;
+}
+
+.performance-faq-arrow-open {
+    transform: rotate(180deg);
+}
+
+.performance-faq-answer {
+    padding: 0 14px 14px;
+
+    color: var(--color-text);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.performance-faq-logo {
+    margin-top: 90px;
+
+    color: rgba(255, 255, 255, 0.9);
+    font-family: "Magical Night", serif;
+    font-size: 50px;
+    line-height: 0.9;
+    text-align: center;
+}
