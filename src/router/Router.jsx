@@ -9,6 +9,10 @@ import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import Mailbox from "@/pages/Mailbox/Mailbox";
+import MailUnderReview from "@/pages/Mailbox/MailUnderReview";
+import MailHidden from "@/pages/Mailbox/MailHidden";
+import MailPublic from "@/pages/Mailbox/MailPublic";
+import MailDeleted from "@/pages/Mailbox/MailDeleted";
 import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound/NotFound";
 import MyGardenUnLoggedIn from "@/pages/MyGarden/MyGardenUnLoggedIn";
@@ -47,6 +51,10 @@ const Router = () => {
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
+            <Route path="/mail-public" element={<MailPublic />} />
+            <Route path="/mail-under-review" element={<MailUnderReview />} />
+            <Route path="/mail-hidden" element={<MailHidden />} />
+            <Route path="/mail-deleted" element={<MailDeleted />} />
 
             {/* 설정 */}
             <Route path="/settings" element={<Settings />} />
