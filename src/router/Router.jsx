@@ -5,10 +5,15 @@ import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
+import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import Mailbox from "@/pages/Mailbox/Mailbox";
+import MailUnderReview from "@/pages/Mailbox/MailUnderReview";
+import MailHidden from "@/pages/Mailbox/MailHidden";
+import MailPublic from "@/pages/Mailbox/MailPublic";
+import MailDeleted from "@/pages/Mailbox/MailDeleted";
 import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound/NotFound";
 import MyGardenUnLoggedIn from "@/pages/MyGarden/MyGardenUnLoggedIn";
@@ -36,6 +41,7 @@ const Router = () => {
             {/* 사연 작성 및 수정 */}
             <Route path="/story" element={<StoryForm1 />} />
             <Route path="/story/send/2" element={<StoryForm2 />} />
+            <Route path="/story/send/3" element={<StoryForm3 />} />
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
@@ -49,6 +55,10 @@ const Router = () => {
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
+            <Route path="/mail-public" element={<MailPublic />} />
+            <Route path="/mail-under-review" element={<MailUnderReview />} />
+            <Route path="/mail-hidden" element={<MailHidden />} />
+            <Route path="/mail-deleted" element={<MailDeleted />} />
 
             {/* 설정 */}
             <Route path="/settings" element={<Settings />} />
