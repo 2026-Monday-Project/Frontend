@@ -175,7 +175,7 @@ const StoryForm2 = () => {
                 maxLength={MAX_CONTENT_LENGTH}
                 value={formData.content}
                 onChange={handleInputChange}
-                placeholder="반려동물과의 이야기를 들려주세요."
+                placeholder="내용을 입력해주세요."
               />
 
               <span className="story-form2-textarea-count">

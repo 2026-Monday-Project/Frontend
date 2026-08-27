@@ -14,13 +14,29 @@ const REQUIRED_CONSENTS = [
     label: "개인정보 수집·이용 동의 (필수)",
     detailPath: "/story/consent/1",
   },
-  { key: "content", label: "콘텐츠 처리 및 운영정책 확인 (필수)" },
-  { key: "website", label: "웹사이트 공개 동의 (필수)" },
+  {
+    key: "content",
+    label: "콘텐츠 처리 및 운영정책 확인 (필수)",
+    detailPath: "/story/consent/2",
+  },
+  {
+    key: "website",
+    label: "웹사이트 공개 동의 (필수)",
+    detailPath: "/story/consent/3",
+  },
 ];
 
 const OPTIONAL_CONSENTS = [
-  { key: "intro", label: "공연 중 소개·낭독 동의 (선택)" },
-  { key: "sns", label: "SNS·홍보물 활용 동의 (선택)" },
+  {
+    key: "intro",
+    label: "공연 중 소개·낭독 동의 (선택)",
+    detailPath: "/story/consent/4",
+  },
+  {
+    key: "sns",
+    label: "SNS·홍보물 활용 동의 (선택)",
+    detailPath: "/story/consent/5",
+  },
 ];
 
 const ConsentList = ({ items, consents, errors = {}, onToggle, onViewDetail }) => (
@@ -167,6 +183,7 @@ const StoryForm3 = () => {
             items={OPTIONAL_CONSENTS}
             consents={consents}
             onToggle={handleConsentToggle}
+            onViewDetail={handleViewDetail}
           />
         </div>
 

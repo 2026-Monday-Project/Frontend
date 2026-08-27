@@ -7,6 +7,10 @@ import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import ConsentPage1 from "@/pages/ConsentPage/ConsentPage1";
+import ConsentPage2 from "@/pages/ConsentPage/ConsentPage2";
+import ConsentPage3 from "@/pages/ConsentPage/ConsentPage3";
+import ConsentPage4 from "@/pages/ConsentPage/ConsentPage4";
+import ConsentPage5 from "@/pages/ConsentPage/ConsentPage5";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
@@ -42,6 +46,10 @@ const Router = () => {
 
             {/* 동의서 세부내용 */}
             <Route path="/story/consent/1" element={<ConsentPage1 />} />
+            <Route path="/story/consent/2" element={<ConsentPage2 />} />
+            <Route path="/story/consent/3" element={<ConsentPage3 />} />
+            <Route path="/story/consent/4" element={<ConsentPage4 />} />
+            <Route path="/story/consent/5" element={<ConsentPage5 />} />
 
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
