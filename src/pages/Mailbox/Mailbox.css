@@ -1,0 +1,108 @@
+.mailbox-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.grasses-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.mailbox-container {
+    padding: 0 18px 0 17px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.mailbox-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-shrink: 0;
+}
+
+.mailbox-image {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: 302px;
+}
+
+.mail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 20px;
+    padding-bottom: 120px;
+}
+
+.mailbox-page .mail-item, 
+.mailbox-page .mail-item-read {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fffdf6;
+    padding: 16px 20px;
+    border-radius: 10px;
+    gap: 23px;
+    box-shadow: none;
+}
+
+.mail-content, .mail-content-read {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mail-title, .mail-title-read {
+    align-self: stretch;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.mail-desc, .mail-desc-read {
+    font-size: 12px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
+
+.mail-date, .mail-date-read {
+    font-size: 10px;
+    margin: 0;
+    margin-top: 4px;
+}
+
+.unread-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.mail-item-read {
+    color: #686866;
+}
