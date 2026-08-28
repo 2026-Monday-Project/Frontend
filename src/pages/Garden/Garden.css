@@ -91,12 +91,6 @@
     margin-top: 31px;
 }
 
-.garden-story-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
 .garden-cta-wrapper {
     margin-top: auto;
     width: 100%;

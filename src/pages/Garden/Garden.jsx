@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import arrowDownIcon from "@/assets/icons/arrow-down.svg";
@@ -6,10 +6,18 @@ import plusIcon from "@/assets/icons/plus.svg";
 import Drawer from "@/components/common/Drawer";
 import Navbar from "@/components/common/Navbar";
 import GardenEmptyState from "@/components/garden/GardenEmptyState";
+import GardenStoryList from "@/components/garden/GardenStoryList";
+import { gardenStories } from "@/data/gardenStories";
 
 import "./Garden.css";
 
 const SORT_OPTIONS = ["최신순", "조회순", "공감순"];
+
+const SORT_COMPARATORS = {
+    최신순: (firstStory, secondStory) => secondStory.date.localeCompare(firstStory.date),
+    조회순: (firstStory, secondStory) => secondStory.viewCount - firstStory.viewCount,
+    공감순: (firstStory, secondStory) => secondStory.likeCount - firstStory.likeCount,
+};
 
 const Garden = () => {
     const navigate = useNavigate();
@@ -17,7 +25,11 @@ const Garden = () => {
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
     const sortRef = useRef(null);
-    const stories = [];
+    const stories = gardenStories;
+    const sortedStories = useMemo(
+        () => [...stories].sort(SORT_COMPARATORS[selectedSort]),
+        [selectedSort, stories],
+    );
 
     useEffect(() => {
         if (!isSortOpen) return undefined;
@@ -116,9 +128,10 @@ const Garden = () => {
                 {stories.length === 0 ? (
                     <GardenEmptyState />
                 ) : (
-                    <div className="garden-story-list">
-                        {/* 추후 StoryCard 목록을 렌더링합니다. */}
-                    </div>
+                    <GardenStoryList
+                        stories={sortedStories}
+                        onStoryClick={(storyId) => navigate(`/garden/${storyId}`)}
+                    />
                 )}
             </section>
 

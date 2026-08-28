@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "@/pages/Home/Home";
 import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
+import GardenDetail from "@/pages/Garden/GardenDetail";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
@@ -43,6 +44,7 @@ const Router = () => {
 
             {/* 정원 둘러보기 */}
             <Route path="/garden" element={<Garden />} />
+            <Route path="/garden/:storyId" element={<GardenDetail />} />
 
             {/* 사연 작성 및 수정 */}
             <Route path="/story" element={<StoryForm1 />} />
