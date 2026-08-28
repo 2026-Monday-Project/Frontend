@@ -9,6 +9,7 @@ import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
+import MyStoriesList from "@/pages/MyGarden/MyStoriesList";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import MailUnderReview from "@/pages/Mailbox/MailUnderReview";
 import MailHidden from "@/pages/Mailbox/MailHidden";
@@ -50,6 +51,7 @@ const Router = () => {
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
             <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
+            <Route path="/my-stories-list" element={<MyStoriesList />} />
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
