@@ -31,7 +31,7 @@
     padding: 6px 14px;
     border-radius: 99px;
     cursor: pointer;
-        font-weight: 500;
+    font-weight: 500;
 
 }
 
@@ -40,87 +40,16 @@
     color: #ffffff;
 }
 
-.story-list-scroll {
+.my-stories-page .story-list-scroll {
     flex: 1;
     overflow-y: auto;
-    padding: 0 21px 80px 36px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     z-index: 1;
+    padding: 0 28px;
 }
 
 .story-list-scroll::-webkit-scrollbar {
     display: none;
-}
-
-.story-card {
-    display: flex;
-    width: 345px;
-    height: 129px;
-    padding: 16px 19px 16px 11px;
-    border-radius: 10px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    position: relative;
-    border: 1px solid var(--color-green-main);
-}
-
-.story-thumbnail {
-    width: 97px;
-    height: 97px;
-    border-radius: 5px;
-    object-fit: cover;
-}
-
-.story-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    flex: 1;
-}
-
-.status-title {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 6px;
-}
-
-
-.story-status {
-    display: flex;
-}
-
-.story-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--color-text);
-    margin: 0;
-}
-
-.story-date {
-    font-size: 11px;
-    color: rgba(0, 0, 0, 0.45);
-    margin: 0;
-}
-
-.story-metrics {
-    position: absolute;
-    bottom: 19px;
-    right: 19px;
-    display: flex;
-    gap: 12px;
-}
-
-.metric {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 11px;
-    color: rgba(0, 0, 0, 0.45);
-}
-
-.likes-icon, .views-icon {
-    width: 16px;
-    height: 16px;
 }

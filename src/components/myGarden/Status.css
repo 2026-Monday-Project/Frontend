@@ -1,0 +1,27 @@
+.story-status-badge {
+    display: inline-flex;
+    width: 60px;
+    height: 26px;
+    padding: 6px 14px;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 99px;
+}
+
+.status-review {
+    color: #7D6E39;
+    background: #F7EDBD;
+}
+
+.status-private {
+    color: #7C7C7C;
+    background: #E6E6DF;
+}
+
+.status-public {
+    color: var(--color-green-main);
+    background: #DFE7D6;
+}
