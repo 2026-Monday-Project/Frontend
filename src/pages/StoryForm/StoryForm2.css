@@ -33,6 +33,15 @@
   box-shadow: 0 0 0 2px var(--color-green-muted);
 }
 
+.story-form2-textarea.story-form-input-invalid {
+  border-color: #e03131;
+}
+
+.story-form2-textarea.story-form-input-invalid:focus {
+  border-color: #e03131;
+  box-shadow: 0 0 0 2px #e0313133;
+}
+
 .story-form2-textarea-count {
   position: absolute;
   right: 14px;
