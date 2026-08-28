@@ -23,7 +23,10 @@ const ConsentPage4 = () => {
             <img className="consent-page-back-icon" src={arrowLeft} alt="" />
           </button>
 
-          <h1 className="consent-page-title">공연 중 소개·낭독 동의 (선택)</h1>
+          <h1 className="consent-page-title">
+            공연 중 소개·낭독 동의{" "}
+            <span className="consent-page-title-tag">(선택)</span>
+          </h1>
         </header>
 
         <p className="consent-page-intro">

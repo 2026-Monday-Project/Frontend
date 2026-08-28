@@ -23,12 +23,15 @@ const ConsentPage3 = () => {
             <img className="consent-page-back-icon" src={arrowLeft} alt="" />
           </button>
 
-          <h1 className="consent-page-title">웹사이트 공개 동의 (필수)</h1>
+          <h1 className="consent-page-title">
+            웹사이트 공개 동의{" "}
+            <span className="consent-page-title-tag">(필수)</span>
+          </h1>
         </header>
 
         <p className="consent-page-intro">
-          먼데이프로젝트는 관객 사연 접수 및 운영을 위해 아래와 같이
-          개인정보를 수집·이용합니다.
+          먼데이프로젝트는 제출된 사연을 웹사이트에 공개하기 위해 아래와 같이
+          공개 위치와 범위를 안내합니다.
         </p>
 
         <div className="consent-page-content">
@@ -70,7 +73,7 @@ const ConsentPage3 = () => {
               5. 동의 거부 권리 및 불이익
             </h2>
             <p className="consent-page-card-text">
-              본 운영정책 확인에 동의하지 않을 경우 사연 제출이 제한될 수
+              본 웹사이트 공개에 동의하지 않을 경우 사연 제출이 제한될 수
               있습니다.
             </p>
           </section>

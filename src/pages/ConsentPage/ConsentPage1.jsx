@@ -23,7 +23,10 @@ const ConsentPage1 = () => {
             <img className="consent-page-back-icon" src={arrowLeft} alt="" />
           </button>
 
-          <h1 className="consent-page-title">개인정보 수집·이용 동의 (필수)</h1>
+          <h1 className="consent-page-title">
+            개인정보 수집·이용 동의{" "}
+            <span className="consent-page-title-tag">(필수)</span>
+          </h1>
         </header>
 
         <p className="consent-page-intro">

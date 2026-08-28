@@ -23,7 +23,10 @@ const ConsentPage2 = () => {
             <img className="consent-page-back-icon" src={arrowLeft} alt="" />
           </button>
 
-          <h1 className="consent-page-title">콘텐츠 처리 및 운영정책 확인 (필수)</h1>
+          <h1 className="consent-page-title">
+            콘텐츠 처리 및 운영정책 확인{" "}
+            <span className="consent-page-title-tag">(필수)</span>
+          </h1>
         </header>
 
         <p className="consent-page-intro">
