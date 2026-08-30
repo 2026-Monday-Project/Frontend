@@ -19,6 +19,7 @@ const posterList = [
 ];
 
 const DRAG_THRESHOLD = 50;
+const WHEEL_THRESHOLD = 35;
 
 const PerformanceCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,12 +27,27 @@ const PerformanceCarousel = () => {
     const [isDragging, setIsDragging] = useState(false);
 
     const dragStartX = useRef(0);
+    const wheelLocked = useRef(false);
+
+    const handleNext = () => {
+        setCurrentIndex((prev) =>
+            Math.min(prev + 1, posterList.length - 1),
+        );
+    };
+
+    const handlePrevious = () => {
+        setCurrentIndex((prev) =>
+            Math.max(prev - 1, 0),
+        );
+    };
 
     const handlePointerDown = (event) => {
         setIsDragging(true);
         dragStartX.current = event.clientX;
 
-        event.currentTarget.setPointerCapture(event.pointerId);
+        event.currentTarget.setPointerCapture(
+            event.pointerId,
+        );
     };
 
     const handlePointerMove = (event) => {
@@ -39,7 +55,9 @@ const PerformanceCarousel = () => {
             return;
         }
 
-        const distance = event.clientX - dragStartX.current;
+        const distance =
+            event.clientX - dragStartX.current;
+
         setDragDistance(distance);
     };
 
@@ -48,22 +66,45 @@ const PerformanceCarousel = () => {
             return;
         }
 
-        if (
-            dragDistance < -DRAG_THRESHOLD &&
-            currentIndex < posterList.length - 1
-        ) {
-            setCurrentIndex((prev) => prev + 1);
+        if (dragDistance <= -DRAG_THRESHOLD) {
+            handleNext();
         }
 
-        if (
-            dragDistance > DRAG_THRESHOLD &&
-            currentIndex > 0
-        ) {
-            setCurrentIndex((prev) => prev - 1);
+        if (dragDistance >= DRAG_THRESHOLD) {
+            handlePrevious();
         }
 
         setDragDistance(0);
         setIsDragging(false);
+    };
+
+    const handleWheel = (event) => {
+        if (wheelLocked.current) {
+            return;
+        }
+
+        if (
+            Math.abs(event.deltaX) <
+            Math.abs(event.deltaY)
+        ) {
+            return;
+        }
+
+        if (Math.abs(event.deltaX) < WHEEL_THRESHOLD) {
+            return;
+        }
+
+        wheelLocked.current = true;
+
+        if (event.deltaX > 0) {
+            handleNext();
+        } else {
+            handlePrevious();
+        }
+
+        window.setTimeout(() => {
+            wheelLocked.current = false;
+        }, 400);
     };
 
     const handlePosterChange = (index) => {
@@ -79,6 +120,7 @@ const PerformanceCarousel = () => {
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerUp}
+                onWheel={handleWheel}
             >
                 <div
                     className={`performance-carousel-track ${
@@ -106,10 +148,7 @@ const PerformanceCarousel = () => {
                 </div>
             </div>
 
-            <div
-                className="performance-carousel-indicator"
-                aria-label="공연 포스터 선택"
-            >
+            <div className="performance-carousel-indicator">
                 {posterList.map((_, index) => (
                     <button
                         key={index}
@@ -119,7 +158,9 @@ const PerformanceCarousel = () => {
                                 ? "performance-carousel-dot-active"
                                 : ""
                         }`}
-                        onClick={() => handlePosterChange(index)}
+                        onClick={() =>
+                            handlePosterChange(index)
+                        }
                         aria-label={`${index + 1}번째 포스터 보기`}
                     />
                 ))}
