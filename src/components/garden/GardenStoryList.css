@@ -1,0 +1,8 @@
+.garden-story-list {
+    width: min(329px, calc(100% - 36px));
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 31px;
+    margin-bottom: 96px;
+}
