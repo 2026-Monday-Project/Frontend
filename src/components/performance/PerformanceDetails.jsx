@@ -1,9 +1,16 @@
+import instagramLogo from "@/assets/icons/instagram-logo.svg";
+import arrowSquareOut from "@/assets/icons/arrow-square-out.svg";
+import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarousel";
+import salonMoonbowMap from "@/assets/images/provided/maps/salon-moonbow-map.svg";
+
 import "./PerformanceDetails.css";
+
+const INSTAGRAM_URL = "https://www.instagram.com/mondayprojectkr/";
 
 const PerformanceDetails = () => {
     const handleReservationClick = () => {
         window.open(
-            "https://www.melon.com/ticket/",
+            "https://ticket.melon.com/main/index.htm",
             "_blank",
             "noopener,noreferrer",
         );
@@ -59,18 +66,43 @@ const PerformanceDetails = () => {
                 </p>
 
                 <h2 className="performance-about-title">
-                    매기의 정원에
+                    매기네 정원에
                     <br />
                     편지가 도착했습니다.
                 </h2>
 
                 <p className="performance-about-description">
-                    당신의 온 우린 집 정원들이,
+                    발신인은 우리 집 귀염둥이,
                     <br />
-                    사랑을 시작합니다.
+                    내용은 사랑,
                     <br />
                     답장은 매기스가든의 노래로 보내드립니다!
                 </p>
+
+                <p className="performance-instagram-description">
+                    자세한 내용은 먼데이프로젝트 인스타그램에서 확인하세요!
+                </p>
+
+                <a
+                    className="performance-instagram-link"
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <img
+                        className="performance-instagram-icon"
+                        src={instagramLogo}
+                        alt=""
+                    />
+
+                    <span>mondayprojectkr</span>
+
+                    <img
+                        className="performance-external-icon"
+                        src={arrowSquareOut}
+                        alt=""
+                    />
+                </a>
             </section>
 
             <section className="performance-song">
@@ -88,17 +120,14 @@ const PerformanceDetails = () => {
                     매기스가든이 직접 전하는 비하인드 스토리
                 </p>
 
-                <div className="performance-song-placeholder">
-                    <span>COMING SOON</span>
-                    <small>2026.09.27 공개 예정</small>
-                </div>
+                <MondayOneSongCarousel />
             </section>
 
             <section className="performance-location">
                 <p className="performance-section-label">
                     찾아오시는 길
                 </p>
-0
+
                 <h2 className="performance-location-title">
                     살롱문보우
                 </h2>
@@ -107,9 +136,11 @@ const PerformanceDetails = () => {
                     서울 마포구 잔다리로 113 지층
                 </p>
 
-                <div className="performance-map-placeholder">
-                    지도 이미지 영역
-                </div>
+                <img
+                    className="performance-map"
+                    src={salonMoonbowMap}
+                    alt="살롱문보우 위치 지도"
+                />
             </section>
         </>
     );

@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import "./PerformanceFaq.css";
+import caretDown from "@/assets/icons/caret-down.svg";
+import mondayProjectLogo from "@/assets/images/provided/logos/monday-project/white-label.png";
 
 const faqList = [
     {
@@ -27,7 +29,7 @@ const faqList = [
                 사연과 어울리는 곡을 연주할 예정입니다.
                 <br />
                 <br />
-                소개되지 않는 사연도 공연 요소의 일부로서
+                소개되지 않는 사연도 공연 요소의 일부분으로서
                 <br />
                 관객들이 서로 소통할 수 있는 창구로 활용됩니다.
             </>
@@ -99,15 +101,15 @@ const PerformanceFaq = () => {
                                 aria-expanded={isOpen}
                             >
                                 <span>{faq.question}</span>
-                                <span
+                                <img
                                     className={`performance-faq-arrow ${
                                         isOpen
                                             ? "performance-faq-arrow-open"
                                             : ""
                                     }`}
-                                >
-                                    ⌄
-                                </span>
+                                    src={caretDown}
+                                    alt=""
+                                />
                             </button>
 
                             {isOpen && (
@@ -120,14 +122,11 @@ const PerformanceFaq = () => {
                 })}
             </div>
 
-            <div
+            <img
                 className="performance-faq-logo"
-                aria-hidden="true"
-            >
-                Monday
-                <br />
-                Project
-            </div>
+                src={mondayProjectLogo}
+                alt=""
+            />
         </section>
     );
 };

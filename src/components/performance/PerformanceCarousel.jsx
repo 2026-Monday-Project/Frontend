@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import performance1 from "@/assets/images/provided/posters/performance1.svg";
 import performance2 from "@/assets/images/provided/posters/performance2.svg";
@@ -18,21 +18,92 @@ const posterList = [
     performance6,
 ];
 
+const DRAG_THRESHOLD = 50;
+
 const PerformanceCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [dragDistance, setDragDistance] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const dragStartX = useRef(0);
+
+    const handlePointerDown = (event) => {
+        setIsDragging(true);
+        dragStartX.current = event.clientX;
+
+        event.currentTarget.setPointerCapture(event.pointerId);
+    };
+
+    const handlePointerMove = (event) => {
+        if (!isDragging) {
+            return;
+        }
+
+        const distance = event.clientX - dragStartX.current;
+        setDragDistance(distance);
+    };
+
+    const handlePointerUp = () => {
+        if (!isDragging) {
+            return;
+        }
+
+        if (
+            dragDistance < -DRAG_THRESHOLD &&
+            currentIndex < posterList.length - 1
+        ) {
+            setCurrentIndex((prev) => prev + 1);
+        }
+
+        if (
+            dragDistance > DRAG_THRESHOLD &&
+            currentIndex > 0
+        ) {
+            setCurrentIndex((prev) => prev - 1);
+        }
+
+        setDragDistance(0);
+        setIsDragging(false);
+    };
 
     const handlePosterChange = (index) => {
         setCurrentIndex(index);
+        setDragDistance(0);
     };
 
     return (
         <section className="performance-carousel">
-            <div className="performance-carousel-track">
-                <img
-                    className="performance-carousel-image"
-                    src={posterList[currentIndex]}
-                    alt={`공연 포스터 ${currentIndex + 1}`}
-                />
+            <div
+                className="performance-carousel-viewport"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+            >
+                <div
+                    className={`performance-carousel-track ${
+                        isDragging
+                            ? "performance-carousel-track-dragging"
+                            : ""
+                    }`}
+                    style={{
+                        transform: `translateX(calc(-${currentIndex * 100}% + ${dragDistance}px))`,
+                    }}
+                >
+                    {posterList.map((poster, index) => (
+                        <div
+                            className="performance-carousel-slide"
+                            key={poster}
+                        >
+                            <img
+                                className="performance-carousel-image"
+                                src={poster}
+                                alt={`공연 포스터 ${index + 1}`}
+                                draggable="false"
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <div
