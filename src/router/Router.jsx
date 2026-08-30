@@ -62,6 +62,8 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/login-completed" element={<LoginCompleted />} />
 
+            <Route path="/login-completed" element={<LoginCompleted />}                 />
+
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
             <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
