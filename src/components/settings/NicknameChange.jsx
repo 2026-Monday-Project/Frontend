@@ -2,12 +2,14 @@ import { useState } from "react";
 
 import Navbar from "@/components/common/Navbar";
 import Drawer from "@/components/common/Drawer";
+import NicknameChangeCompleted from "@/components/settings/NicknameChangeCompleted";
 
 import "./NicknameChange.css";
 
 const NicknameChange = ({ onBack }) => {
     const [nickname, setNickname] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
 
     const handleNicknameChange = (event) => {
         setNickname(event.target.value);
@@ -24,6 +26,19 @@ const NicknameChange = ({ onBack }) => {
     const handleMenuClose = () => {
         setIsMenuOpen(false);
     };
+
+    const handleSubmit = () => {
+        if (!nickname.trim()) {
+            return;
+        }
+
+        // TODO: 추후 닉네임 변경 API 성공 후 처리
+        setIsCompleted(true);
+    };
+
+    if (isCompleted) {
+        return <NicknameChangeCompleted />;
+    }
 
     return (
         <main className="nickname-change">
@@ -80,6 +95,7 @@ const NicknameChange = ({ onBack }) => {
                     type="button"
                     className="nickname-change-submit"
                     disabled={!nickname.trim()}
+                    onClick={handleSubmit}
                 >
                     변경하기
                 </button>

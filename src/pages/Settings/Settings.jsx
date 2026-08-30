@@ -33,6 +33,7 @@ const Settings = () => {
     const handleNicknameChangeBack = () => {
         setIsNicknameChangeOpen(false);
     };
+
     const handleLogout = () => {
         navigate("/");
     };
