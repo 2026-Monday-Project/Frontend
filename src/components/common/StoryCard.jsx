@@ -1,3 +1,6 @@
+import eyeIcon from "@/assets/icons/Eye.svg";
+import heartIcon from "@/assets/icons/heart.svg";
+
 import "./StoryCard.css";
 
 const StoryCard = ({
@@ -25,9 +28,9 @@ const StoryCard = ({
 
           <p className="story-card-pet-info">
             <span>{petName}</span>
-            <span aria-hidden="true">·</span>
+            <span className="story-card-pet-separator" aria-hidden="true" />
             <span>{breed}</span>
-            <span aria-hidden="true">·</span>
+            <span className="story-card-pet-separator" aria-hidden="true" />
             <span>{age}살</span>
           </p>
         </div>
@@ -37,14 +40,12 @@ const StoryCard = ({
 
           <div className="story-card-counts">
             <span className="story-card-count" aria-label={`조회수 ${viewCount}`}>
-              <span className="story-card-view-icon" aria-hidden="true" />
+              <img className="story-card-view-icon" src={eyeIcon} alt="" aria-hidden="true" />
               {viewCount}
             </span>
 
             <span className="story-card-count" aria-label={`좋아요 수 ${likeCount}`}>
-              <span className="story-card-like-icon" aria-hidden="true">
-                ♥
-              </span>
+              <img className="story-card-like-icon" src={heartIcon} alt="" aria-hidden="true" />
               {likeCount}
             </span>
           </div>
@@ -54,7 +55,7 @@ const StoryCard = ({
   );
 
   return (
-    <article className="story-card">
+    <article className="story-card story-card-common">
       {content}
 
       {onClick && (
