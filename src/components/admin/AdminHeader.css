@@ -1,0 +1,30 @@
+.admin-header {
+    display: flex;
+    align-items: center;
+    padding: 30px 24px 0;
+}
+
+.admin-header-back {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.admin-header-back img {
+    width: 24px;
+    height: 24px;
+}
+
+.admin-header-title {
+    margin: 0 0 0 20px;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}

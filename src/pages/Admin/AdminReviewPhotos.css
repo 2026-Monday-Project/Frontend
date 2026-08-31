@@ -1,0 +1,206 @@
+.admin-review-photos {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
+
+    flex-direction: column;
+
+    background: var(--color-background);
+}
+
+
+/* ==============================
+    Header
+============================== */
+
+.admin-review-photos-header {
+    position: relative;
+
+    display: flex;
+    width: 100%;
+    height: 110px;
+    padding-top: 30px;
+
+    flex-shrink: 0;
+
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.admin-review-photos-back {
+    position: absolute;
+    top: 30px;
+    left: 24px;
+}
+
+.admin-review-photos-back img {
+    width: 24px;
+    height: 24px;
+}
+
+.admin-review-photos-count {
+    color: #151515;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* ==============================
+    Main Photo
+============================== */
+
+.admin-review-photos-main {
+    display: flex;
+    width: 100%;
+    height: 390px;
+
+    flex-shrink: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    background: var(--color-gray-light);
+}
+
+.admin-review-photos-main img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+.admin-review-photos-main span {
+    color: #151515;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+}
+
+
+/* ==============================
+    Thumbnail Area
+
+    화면 높이에 따라 무조건 맨 아래로
+    끌려 올라오지 않도록 별도 영역으로 관리
+============================== */
+
+.admin-review-photos-bottom {
+    width: 100%;
+
+    /*
+     * 기본 디자인에서는 충분한 여백을 유지하고,
+     * 작은 화면에서도 60px 아래로는 줄어들지 않음.
+     */
+    margin-top: clamp(60px, 12dvh, 110px);
+
+    padding-bottom: 28px;
+}
+
+.admin-review-photos-thumbnails {
+    display: flex;
+    width: 100%;
+    padding: 0 16px;
+
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    cursor: grab;
+    user-select: none;
+
+    overscroll-behavior-x: contain;
+    scroll-behavior: auto;
+
+    scrollbar-width: none;
+}
+
+.admin-review-photos-thumbnails-dragging {
+    cursor: grabbing;
+}
+
+.admin-review-photos-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* ==============================
+    Thumbnail
+============================== */
+
+.admin-review-photo-thumbnail {
+    display: flex;
+
+    width: 104px;
+    height: 104px;
+
+    flex: 0 0 104px;
+
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+    background: var(--color-gray-light);
+
+    color: #7c7c7c;
+    font-family: Pretendard, sans-serif;
+    font-size: 11px;
+}
+
+.admin-review-photo-thumbnail img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+.admin-review-photo-thumbnail span {
+    pointer-events: none;
+}
+
+.admin-review-photo-thumbnail-active {
+    outline: 1px solid var(--color-green-main);
+    outline-offset: -1px;
+}
+
+
+/* ==============================
+    Scroll Indicator
+============================== */
+
+.admin-review-photos-scroll {
+    position: relative;
+
+    width: calc(100% - 32px);
+    height: 6px;
+
+    margin: 6px 16px 0;
+
+    overflow: hidden;
+}
+
+.admin-review-photos-scroll-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 74.5px;
+    height: 6px;
+
+    border-radius: 1000px;
+    background: rgba(0, 0, 0, 0.15);
+
+    transition:
+        left 0.1s linear,
+        transform 0.1s linear;
+}
