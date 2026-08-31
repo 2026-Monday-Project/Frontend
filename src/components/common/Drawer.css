@@ -1,8 +1,13 @@
 .drawer-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 50%;
   z-index: 1000;
+  width: 100%;
+  max-width: var(--max-mobile-width);
+  height: 100dvh;
   background-color: #00000059;
+  transform: translateX(-50%);
 }
 
 .drawer-container {

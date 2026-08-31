@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
+import StoryCard from '@/components/myGarden/StoryCard';
 import footprintIcon from '@/assets/images/custom/footprint.svg';
 import seperateLine from '@/assets/images/custom/seperate-line.svg';
 import settingsIcon from '@/assets/images/custom/settings.svg';
-import statusUnderReview from '@/assets/images/custom/status-under-review.svg';
 import arrowViewAll from '@/assets/images/custom/arrow-view-all.svg';
 import louisProfile from '@/assets/images/custom/louis-profile.svg';
-import viewsIcon from '@/assets/images/custom/views.svg';
-import likesIcon from '@/assets/images/custom/likes.svg';
 import unreadDot from '@/assets/images/custom/unread-dot.svg';
 import leavesLeftTop from '@/assets/images/custom/leaves-left-top.svg'
 import leavesLeftBottom from '@/assets/images/custom/leaves-left-bottom.svg'
@@ -86,48 +84,24 @@ const MyGarden = () => {
                             전체보기 <img src={arrowViewAll} alt="" />
                         </button>
                     </div>
+                    
                     <div className="story-list">
-                        <div className="story-card">
-                            <img src={louisProfile} alt="" className="story-thumbnail" />
-                            <div className="story-content">
-                                <div className="status-title">
-                                    <div className="story-status">
-                                    <img src={statusUnderReview} alt="" />
-                                </div>
-                                <p className="story-title">산책 한마디에 대소동</p>
-                                </div>
-                                <p className="story-date">2026.07.03</p>
-                            </div>
-                            <div className="story-metrics">
-                                <span className="metric">
-                                    <img className="views" src={viewsIcon} alt="" /> 1
-                                </span>
-                                <span className="metric">
-                                    <img className="likes" src={likesIcon} alt="" /> 1
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="story-card">
-                            <img src={louisProfile} alt="" className="story-thumbnail" />
-                            <div className="story-content">
-                                <div className="status-title">
-                                    <div className="story-status">
-                                    <img src={statusUnderReview} alt="" />
-                                </div>
-                                <p className="story-title">산책 한마디에 대소동</p>
-                                </div>
-                                <p className="story-date">2026.07.03</p>
-                            </div>
-                            <div className="story-metrics">
-                                <span className="metric">
-                                    <img className="views" src={viewsIcon} alt="" /> 1
-                                </span>
-                                <span className="metric">
-                                    <img className="likes" src={likesIcon} alt="" /> 1
-                                </span>
-                            </div>
-                        </div>
+                        <StoryCard 
+                            thumbnail={louisProfile}
+                            status="검토중"
+                            title="산책 한마디에 대소동"
+                            date="2026.07.15"
+                            views={1}
+                            likes={1}
+                        />
+                        <StoryCard 
+                            thumbnail={louisProfile}
+                            status="비공개"
+                            title="산책 한마디에 대소동"
+                            date="2026.07.15"
+                            views={1}
+                            likes={1}
+                        />
                     </div>
                 </section>
 

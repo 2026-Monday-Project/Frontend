@@ -1,15 +1,22 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "@/pages/Home/Home";
 import Performance from "@/pages/Performance/Performance";
 import Garden from "@/pages/Garden/Garden";
+import GardenDetail from "@/pages/Garden/GardenDetail";
 import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import StoryComplete from "@/pages/StoryForm/StoryComplete";
+import ConsentPage1 from "@/pages/ConsentPage/ConsentPage1";
+import ConsentPage2 from "@/pages/ConsentPage/ConsentPage2";
+import ConsentPage3 from "@/pages/ConsentPage/ConsentPage3";
+import ConsentPage4 from "@/pages/ConsentPage/ConsentPage4";
+import ConsentPage5 from "@/pages/ConsentPage/ConsentPage5";
 import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
+import MyStoriesList from "@/pages/MyGarden/MyStoriesList";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import MailUnderReview from "@/pages/Mailbox/MailUnderReview";
 import MailHidden from "@/pages/Mailbox/MailHidden";
@@ -38,6 +45,7 @@ const Router = () => {
 
             {/* 정원 둘러보기 */}
             <Route path="/garden" element={<Garden />} />
+            <Route path="/garden/:storyId" element={<GardenDetail />} />
 
             {/* 사연 작성 */}
             <Route path="/story" element={<StoryForm1 />} />
@@ -54,6 +62,13 @@ const Router = () => {
                 element={<StoryComplete mode="edit" />}
             />
 
+            {/* 동의서 세부내용 */}
+            <Route path="/story/consent/1" element={<ConsentPage1 />} />
+            <Route path="/story/consent/2" element={<ConsentPage2 />} />
+            <Route path="/story/consent/3" element={<ConsentPage3 />} />
+            <Route path="/story/consent/4" element={<ConsentPage4 />} />
+            <Route path="/story/consent/5" element={<ConsentPage5 />} />
+
             {/* 로그인 */}
             <Route path="/login" element={<Login />} />
             <Route path="/login-completed" element={<LoginCompleted />} />
@@ -61,6 +76,7 @@ const Router = () => {
             {/* 내 정원 */}
             <Route path="/my-garden" element={<MyGarden />} />
             <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
+            <Route path="/my-stories-list" element={<MyStoriesList />} />
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
@@ -75,49 +91,6 @@ const Router = () => {
             {/* 존재하지 않는 주소 */}
             <Route path="*" element={<NotFound />} />
         </Routes>
-
-        {/* TODO: 임시 버튼 - 사연 작성/수정 플로우 테스트용, 정식 진입 동선이 생기면 제거 */}
-        <div
-            style={{
-                position: "fixed",
-                bottom: "16px",
-                right: "16px",
-                zIndex: 9999,
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-            }}
-        >
-            <Link
-                to="/story"
-                style={{
-                    padding: "10px 14px",
-                    borderRadius: "10px",
-                    border: "1px dashed #315338",
-                    background: "#faf6eb",
-                    color: "#315338",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                }}
-            >
-                사연 작성 (임시)
-            </Link>
-
-            <Link
-                to="/story/edit"
-                style={{
-                    padding: "10px 14px",
-                    borderRadius: "10px",
-                    border: "1px dashed #315338",
-                    background: "#faf6eb",
-                    color: "#315338",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                }}
-            >
-                사연 수정 (임시)
-            </Link>
-        </div>
         </BrowserRouter>
     );
 };
