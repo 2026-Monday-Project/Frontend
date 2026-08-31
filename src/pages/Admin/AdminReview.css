@@ -1,0 +1,140 @@
+.admin-review-page {
+    min-height: 100dvh;
+    padding: 30px 24px 60px;
+
+    background: var(--color-background);
+}
+
+.admin-review-title {
+    margin: 0;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.admin-review-summary {
+    margin-top: 24px;
+}
+
+.admin-review-summary-main,
+.admin-review-summary-small {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    border: 1px solid var(--color-beige);
+    border-radius: 12px;
+    background: #fffdf6;
+}
+
+.admin-review-summary-main {
+    width: 100%;
+    padding: 10px 12px 17px;
+}
+
+.admin-review-summary-row {
+    display: flex;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.admin-review-summary-small {
+    flex: 1;
+    padding: 10px 12px 17px;
+}
+
+.admin-review-summary span {
+    color: #7c7c7c;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.admin-review-summary strong {
+    margin-top: 5px;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.admin-review-summary .admin-review-public-count {
+    color: #456b4d;
+}
+
+.admin-review-summary .admin-review-private-count {
+    color: #9c6a5d;
+}
+
+.admin-review-filters {
+    display: flex;
+    margin-top: 24px;
+    gap: 8px;
+}
+
+.admin-review-filter {
+    display: inline-flex;
+    padding: 6px 18px;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--color-beige);
+    border-radius: 99px;
+    background: #fffdf6;
+
+    color: #7c7c7c;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.admin-review-filter-active {
+    border-color: var(--color-green-main);
+    background: var(--color-green-main);
+    color: #fff;
+}
+
+.admin-review-story-list {
+    display: flex;
+    margin-top: 18px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-review-empty {
+    display: flex;
+    width: 100%;
+    height: 193px;
+    margin-top: 18px;
+    padding: 26px 24px 20px;
+
+    flex-direction: column;
+    align-items: center;
+
+    border: 1px dashed var(--color-green-main);
+    border-radius: 10px;
+}
+
+.admin-review-empty-image {
+    width: 110px;
+    height: auto;
+}
+
+.admin-review-empty-text {
+    margin: 8px 0 0;
+
+    color: var(--color-green-main);
+    text-align: center;
+    font-family: Warhaven, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.admin-review-empty-divider {
+    width: 100%;
+    margin-top: 14px;
+}

@@ -1,0 +1,72 @@
+.nickname-completed {
+    min-height: 100dvh;
+    background-color: var(--color-background);
+}
+
+.nickname-completed-content {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
+    padding: 63px 47px 40px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nickname-completed-image {
+    width: 307px;
+    height: 335px;
+    aspect-ratio: 296 / 323;
+    object-fit: contain;
+}
+
+.nickname-completed-title {
+    align-self: stretch;
+    margin: 28px 0 0;
+
+    color: var(--color-green-main);
+    text-align: center;
+    font-family: Warhaven, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.nickname-completed-buttons {
+    display: flex;
+    width: 100%;
+    margin-top: 56px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.nickname-completed-button {
+    display: flex;
+    width: 100%;
+    height: 43px;
+    padding: 10px 60px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 15px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.nickname-completed-button-primary {
+    background: var(--color-green-main);
+    color: #fff;
+}
+
+.nickname-completed-button-secondary {
+    border: 1px solid var(--color-green-main);
+    background: transparent;
+    color: var(--color-green-main);
+}
