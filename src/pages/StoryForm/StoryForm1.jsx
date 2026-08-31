@@ -6,16 +6,30 @@ import "@/pages/StoryForm/StoryForm1.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
 
-const StoryForm1 = () => {
-  const navigate = useNavigate();
+// TODO: 수정 모드 진입 시 실제 사연 데이터로 교체
+const EDIT_INITIAL_DATA = {
+  petName: "루이",
+  petAge: "8",
+  petType: "골든리트리버",
+  nickname: "참쮸",
+  email: "pdjfd4844@gmail.com",
+};
 
-  const [formData, setFormData] = useState({
-    petName: "",
-    petAge: "",
-    petType: "",
-    nickname: "",
-    email: "",
-  });
+const EMPTY_DATA = {
+  petName: "",
+  petAge: "",
+  petType: "",
+  nickname: "",
+  email: "",
+};
+
+const StoryForm1 = ({ mode }) => {
+  const navigate = useNavigate();
+  const isEdit = mode === "edit";
+
+  const [formData, setFormData] = useState(
+    isEdit ? EDIT_INITIAL_DATA : EMPTY_DATA,
+  );
 
   const [errors, setErrors] = useState({
     petName: "",
@@ -48,8 +62,8 @@ const StoryForm1 = () => {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
       petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
       petType: formData.petType.trim() ? "" : REQUIRED_MESSAGE,
-      nickname: formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
-      email: formData.email.trim() ? "" : REQUIRED_MESSAGE,
+      nickname: isEdit || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
+      email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
     setErrors(newErrors);
@@ -57,7 +71,7 @@ const StoryForm1 = () => {
     const hasError = Object.values(newErrors).some((message) => message);
     if (hasError) return;
 
-    navigate("/story/send/2");
+    navigate(isEdit ? "/story/edit/2" : "/story/send/2");
   };
 
   const handleNicknameCheck = () => {
@@ -162,29 +176,46 @@ const StoryForm1 = () => {
               공개 닉네임
             </label>
 
-            <div className="story-form-input-button-wrapper">
+            {isEdit ? (
               <input
-                className={`story-form-input story-form-input-with-button ${errors.nickname ? "story-form-input-invalid" : ""}`}
+                className="story-form-input"
                 id="nickname"
                 name="nickname"
                 type="text"
-                maxLength={10}
                 value={formData.nickname}
-                onChange={handleInputChange}
-                placeholder="10자 이내로 입력해주세요."
+                disabled
               />
+            ) : (
+              <div className="story-form-input-button-wrapper">
+                <input
+                  className={`story-form-input story-form-input-with-button ${errors.nickname ? "story-form-input-invalid" : ""}`}
+                  id="nickname"
+                  name="nickname"
+                  type="text"
+                  maxLength={10}
+                  value={formData.nickname}
+                  onChange={handleInputChange}
+                  placeholder="10자 이내로 입력해주세요."
+                />
 
-              <button
-                className="story-form-check-button"
-                type="button"
-                onClick={handleNicknameCheck}
-              >
-                중복 확인
-              </button>
-            </div>
+                <button
+                  className="story-form-check-button"
+                  type="button"
+                  onClick={handleNicknameCheck}
+                >
+                  중복 확인
+                </button>
+              </div>
+            )}
 
-            {errors.nickname && (
-              <p className="story-form-error-message">{errors.nickname}</p>
+            {isEdit ? (
+              <p className="story-form-hint">
+                닉네임은 설정에서 변경할 수 있어요.
+              </p>
+            ) : (
+              errors.nickname && (
+                <p className="story-form-error-message">{errors.nickname}</p>
+              )
             )}
           </div>
 
@@ -193,28 +224,43 @@ const StoryForm1 = () => {
               이메일
             </label>
 
-            <div className="story-form-input-button-wrapper">
+            {isEdit ? (
               <input
-                className={`story-form-input story-form-input-with-button ${errors.email ? "story-form-input-invalid" : ""}`}
+                className="story-form-input"
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
-                onChange={handleInputChange}
-                placeholder="나중에 이 이메일로 로그인 해요."
+                disabled
               />
+            ) : (
+              <div className="story-form-input-button-wrapper">
+                <input
+                  className={`story-form-input story-form-input-with-button ${errors.email ? "story-form-input-invalid" : ""}`}
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="나중에 이 이메일로 로그인 해요."
+                />
 
-              <button
-                className="story-form-check-button"
-                type="button"
-                onClick={handleEmailCheck}
-              >
-                중복 확인
-              </button>
-            </div>
+                <button
+                  className="story-form-check-button"
+                  type="button"
+                  onClick={handleEmailCheck}
+                >
+                  중복 확인
+                </button>
+              </div>
+            )}
 
-            {errors.email && (
-              <p className="story-form-error-message">{errors.email}</p>
+            {isEdit ? (
+              <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
+            ) : (
+              errors.email && (
+                <p className="story-form-error-message">{errors.email}</p>
+              )
             )}
           </div>
         </form>
