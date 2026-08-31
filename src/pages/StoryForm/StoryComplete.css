@@ -5,6 +5,7 @@
   padding: 40px 32px 56px;
   box-sizing: border-box;
   background-color: var(--color-background);
+  font-family: "Warhaven", sans-serif;
   text-align: center;
 }
 
@@ -29,8 +30,8 @@
 .story-complete-title {
   margin: 0 0 20px;
   color: var(--color-green-main);
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 400;
   line-height: 1.35;
 }
 
@@ -38,7 +39,7 @@
   margin: 0 0 56px;
   color: var(--color-text);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.6;
 }
 
@@ -57,8 +58,8 @@
   background-color: var(--color-green-main);
   color: #ffffff;
   font-family: inherit;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 400;
   box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
   cursor: pointer;
 }

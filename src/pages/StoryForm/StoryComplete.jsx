@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import storyCompleteImg from "@/assets/icons/storycomplete photo.png";
 import "@/pages/StoryForm/StoryComplete.css";
 
-const StoryComplete = () => {
+const StoryComplete = ({ mode }) => {
   const navigate = useNavigate();
+  const isEdit = mode === "edit";
 
   const handleGoMyGarden = () => {
     navigate("/my-garden");
@@ -27,7 +28,7 @@ const StoryComplete = () => {
         <h1 className="story-complete-title">
           당신의 이야기가
           <br />
-          정원에 도착했어요.
+          {isEdit ? "수정 되었습니다." : "정원에 도착했어요."}
         </h1>
 
         <p className="story-complete-subtitle">

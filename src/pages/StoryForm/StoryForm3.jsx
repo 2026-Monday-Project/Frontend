@@ -50,15 +50,16 @@ const ConsentList = ({ items, consents, errors = {}, onToggle }) => (
   </div>
 );
 
-const StoryForm3 = () => {
+const StoryForm3 = ({ mode }) => {
   const navigate = useNavigate();
+  const isEdit = mode === "edit";
 
   const [consents, setConsents] = useState({
-    privacy: false,
-    content: false,
-    website: false,
-    intro: false,
-    sns: false,
+    privacy: isEdit,
+    content: isEdit,
+    website: isEdit,
+    intro: isEdit,
+    sns: isEdit,
   });
 
   const [errors, setErrors] = useState({
@@ -100,7 +101,7 @@ const StoryForm3 = () => {
     if (hasError) return;
 
     // TODO: 사연 제출 API 연결
-    navigate("/story/complete");
+    navigate(isEdit ? "/story/edit/complete" : "/story/complete");
   };
 
   return (
@@ -162,7 +163,7 @@ const StoryForm3 = () => {
             className={`story-form3-submit-button ${isAllRequiredChecked ? "is-valid" : ""}`}
             onClick={handleSubmit}
           >
-            사연 보내기
+            {isEdit ? "수정 완료" : "사연 보내기"}
           </button>
         </div>
       </section>
