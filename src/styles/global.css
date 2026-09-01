@@ -38,6 +38,15 @@
     font-display: swap;
 }
 
+/* 내 사연 상세 본문 폰트 */
+@font-face {
+    font-family: Hahmlet;
+    src: url("../assets/fonts/Hahmlet-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ==============================
     프로젝트 공통 변수
 

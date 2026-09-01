@@ -1,6 +1,6 @@
 import './Status.css';
 
-const Status = ({ type }) => {
+const Status = ({ type, subText }) => {
     let statusClass = '';
     if (type === '검토중') statusClass = 'status-review';
     else if (type === '비공개') statusClass = 'status-private';
@@ -8,7 +8,7 @@ const Status = ({ type }) => {
 
     return (
         <div className={`story-status-badge ${statusClass}`}>
-            {type}
+            {type} {subText && <span> {subText}</span>}
         </div>
     );
 };
