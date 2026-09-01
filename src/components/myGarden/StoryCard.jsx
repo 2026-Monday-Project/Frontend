@@ -3,9 +3,9 @@ import viewsIcon from '@/assets/images/custom/views.svg';
 import likesIcon from '@/assets/images/custom/likes.svg';
 import './StoryCard.css';
 
-const StoryCard = ({ thumbnail, status, title, date, views, likes }) => {
+const StoryCard = ({ thumbnail, status, title, date, views, likes, onClick }) => {
     return (
-        <div className="story-card">
+        <div className="story-card" onClick={onClick}>
             <img src={thumbnail} alt="" className="story-thumbnail" />
             <div className="story-content">
                 <div className="status-title">

@@ -46,7 +46,7 @@ const MyStoryDetail = () => {
             return (
                 <div className="bottom-button-area dual-buttons">
                     <button className="btn-delete-half" onClick={openDeleteModal}>삭제</button>
-                    <button className="btn-edit-half">사연 수정하기</button>
+                    <button className="btn-edit-half" onClick={() => navigate('/story/edit')}>사연 수정하기</button>
                 </div>
             );
         }

@@ -56,6 +56,7 @@ const MyStoriesList = () => {
                     date="2026.07.15"
                     views={1}
                     likes={1}
+                    onClick={() => navigate('/my-story-detail')}
                 />
                 <StoryCard 
                     thumbnail={louisProfile}
@@ -64,6 +65,7 @@ const MyStoriesList = () => {
                     date="2026.07.15"
                     views={1}
                     likes={1}
+                    onClick={() => navigate('/my-story-detail')}
                 />
                 <StoryCard 
                     thumbnail={louisProfile}
@@ -72,6 +74,7 @@ const MyStoriesList = () => {
                     date="2026.07.15"
                     views={1}
                     likes={1}
+                    onClick={() => navigate('/my-story-detail')}
                 />
             </div>
         </div>

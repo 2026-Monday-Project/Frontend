@@ -19,7 +19,7 @@ const MyGarden = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleGoToMyStories = () => {
-        navigate('/my-stories');
+        navigate('/my-stories-list');
     };
 
     const handleGoToMailbox = () => {
@@ -57,7 +57,13 @@ const MyGarden = () => {
                             <p className="email">loveme@naver.com</p>
                         </div>
                     </div>
-                    <img src={settingsIcon} alt="설정" className="settings-icon"></img>
+                    <img 
+                        src={settingsIcon} 
+                        alt="설정" 
+                        className="settings-icon" 
+                        onClick={() => navigate('/settings')} 
+                        style={{ cursor: 'pointer' }}
+                    />
                 </section>    
 
                 <section className="stats-section">
@@ -93,6 +99,7 @@ const MyGarden = () => {
                             date="2026.07.15"
                             views={1}
                             likes={1}
+                            onClick={() => navigate('/my-story-detail')}
                         />
                         <StoryCard 
                             thumbnail={louisProfile}
@@ -101,6 +108,7 @@ const MyGarden = () => {
                             date="2026.07.15"
                             views={1}
                             likes={1}
+                            onClick={() => navigate('/my-story-detail')}
                         />
                     </div>
                 </section>
@@ -113,7 +121,7 @@ const MyGarden = () => {
                         </button>
                     </div>
                     <div className="mail-list">
-                        <div className="mail-item">
+                        <div className="mail-item" onClick={() => navigate('/mail-under-review')} style={{ cursor: 'pointer' }}>
                             <div className="mail-content">
                                 <p className="mail-title">당신의 이야기가 정원에 도착했어요.</p>
                                 <p className="mail-desc">운영팀 검수 후 공개여부와 상태를 내 정원에서 확인할 수 있어요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
@@ -121,14 +129,14 @@ const MyGarden = () => {
                             </div>
                             <img src={unreadDot} alt="" className="unread-dot" />
                         </div>
-                        <div className="mail-item">
+                        <div className="mail-item" onClick={() => navigate('/login-completed')} style={{ cursor: 'pointer' }}>
                             <div className="mail-content">
                                 <p className="mail-title">정원에 오신 걸 환영합니다.</p>
                                 <p className="mail-desc">따뜻한 이야기를 함께 나눠보세요.</p>
                                 <p className="mail-date">2026.07.01</p>
                             </div>
                         </div>
-                        <div className="mail-item-read">
+                        <div className="mail-item-read" onClick={() => navigate('/login-completed')} style={{ cursor: 'pointer' }}>
                             <div className="mail-content-read">
                                 <p className="mail-title-read">정원에 오신 걸 환영합니다.</p>
                                 <p className="mail-desc-read">따뜻한 이야기를 함께 나눠보세요.</p>
