@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 44px;
   align-items: center;
-  padding: 12px 12px 6px;
+  padding: 12px;
   background-color: var(--color-background);
   color: var(--color-green-main);
 }
