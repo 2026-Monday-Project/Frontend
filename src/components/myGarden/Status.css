@@ -9,6 +9,8 @@
     font-weight: 500;
     line-height: normal;
     border-radius: 99px;
+    white-space: nowrap;
+    width: fit-content;
 }
 
 .status-review {

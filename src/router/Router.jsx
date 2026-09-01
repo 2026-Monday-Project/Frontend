@@ -16,6 +16,7 @@ import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import MyStoriesList from "@/pages/MyGarden/MyStoriesList";
+import MyStoryDetail from "@/pages/MyGarden/MyStoryDetail";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import MailUnderReview from "@/pages/Mailbox/MailUnderReview";
 import MailHidden from "@/pages/Mailbox/MailHidden";
@@ -66,6 +67,7 @@ const Router = () => {
             <Route path="/my-garden" element={<MyGarden />} />
             <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
             <Route path="/my-stories-list" element={<MyStoriesList />} />
+            <Route path="/my-story-detail" element={<MyStoryDetail />} />
 
             {/* 편지함 */}
             <Route path="/mailbox" element={<Mailbox />} />
