@@ -1,0 +1,29 @@
+.admin-status-badge {
+    display: inline-flex;
+    padding: 6px 14px;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 99px;
+
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.admin-status-reviewing {
+    background: #f7edbd;
+    color: #7d6e39;
+}
+
+.admin-status-public {
+    background: #dfe7d6;
+    color: var(--color-green-main);
+}
+
+.admin-status-private {
+    background: #e6e6df;
+    color: #7c7c7c;
+}

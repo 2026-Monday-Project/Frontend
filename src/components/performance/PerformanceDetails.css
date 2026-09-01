@@ -1,0 +1,309 @@
+.performance-details {
+    margin-top: 30px;
+}
+
+.performance-details-category {
+    margin: 0;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.performance-details-title {
+    margin: 4px 0 24px;
+
+    color: #000;
+    font-family: "Magical Night", serif;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+
+/* 공연 정보 */
+
+.performance-information {
+    padding: 27px 27px 24px 28px;
+
+    border: 1px solid var(--color-green-main);
+    border-radius: 12px;
+}
+
+.performance-information-list {
+    display: flex;
+    margin: 0 0 26px;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.performance-information-row {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 25px;
+    align-items: center;
+}
+
+.performance-information-row dt,
+.performance-information-row dd {
+    margin: 0;
+
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-information-row dt {
+    color: #7c7c7c;
+}
+
+.performance-information-row dd {
+    color: #000;
+}
+
+.performance-reservation-button {
+    width: 100%;
+    height: 43px;
+
+    border-radius: 10px;
+    background-color: var(--color-green-main);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+    color: #fff;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+/* 섹션 공통 */
+
+.performance-about,
+.performance-song,
+.performance-location {
+    padding: 30px 0;
+}
+
+.performance-about,
+.performance-song {
+    position: relative;
+}
+
+.performance-about::after,
+.performance-song::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 1px;
+    background: #315338;
+}
+
+.performance-section-label {
+    margin: 0;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+/* ABOUT */
+
+.performance-about-title {
+    margin: 16px 0 0;
+
+    color: #000;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-about-description {
+    margin: 10px 0 0;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-instagram-description {
+    margin: 10px 0 0;
+
+    color: #7c7c7c;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-instagram-link {
+    display: flex;
+    width: fit-content;
+    margin-top: 8px;
+
+    align-items: center;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.performance-instagram-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.performance-instagram-link span {
+    margin-left: 6px;
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.performance-external-icon {
+    width: 15px;
+    height: 15px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+
+/* MONDAY ONE SONG */
+
+.performance-song-title {
+    margin: 16px 0 0;
+
+    color: #000;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-song-description {
+    margin: 10px 0 0;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-song-preview {
+    position: relative;
+
+    width: 100%;
+    margin-top: 26px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+}
+
+.performance-song-image {
+    width: 100%;
+    height: auto;
+
+    filter: blur(6px);
+    transform: scale(1.03);
+}
+
+.performance-song-overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.performance-song-overlay::before {
+    content: "";
+
+    position: absolute;
+
+    width: 72%;
+    height: 96px;
+
+    border: 1px solid #fff;
+    border-radius: 15px;
+}
+
+.performance-song-coming-soon,
+.performance-song-release {
+    position: relative;
+    z-index: 1;
+
+    margin: 0;
+    color: #fff;
+}
+
+.performance-song-coming-soon {
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.performance-song-release {
+    margin-top: 10px;
+
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+
+/* LOCATION */
+
+.performance-location-title {
+    margin: 16px 0 0;
+
+    color: #000;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-location-address {
+    margin: 10px 0 0;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.performance-map {
+    width: 100%;
+    height: auto;
+
+    margin-top: 26px;
+}

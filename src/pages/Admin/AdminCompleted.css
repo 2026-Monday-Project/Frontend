@@ -1,0 +1,49 @@
+.admin-completed {
+    position: relative;
+    min-height: 100dvh;
+    padding: 229px 24px 42px;
+
+    background: var(--color-background);
+}
+
+.admin-completed-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-completed-icon {
+    width: 90px;
+    height: 90px;
+}
+
+.admin-completed-text {
+    margin: 9px 0 0;
+
+    color: var(--color-green-main);
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.admin-completed-main-button {
+    position: absolute;
+    right: 24px;
+    bottom: 42px;
+    left: 24px;
+
+    display: flex;
+    padding: 14px 20px;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--color-green-main);
+    border-radius: 10px;
+    background: var(--color-green-main);
+
+    color: #fff;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
