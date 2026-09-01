@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import Status from '@/components/myGarden/Status';
+import StoryPhotoViewer from '@/components/garden/StoryPhotoViewer';
 import puppyRunningImg from '@/assets/images/custom/puppy-running.svg';
-import prevPicIcon from '@/assets/images/custom/prev-pic.svg';
-import nextPicIcon from '@/assets/images/custom/next-pic.svg';
 import currentPicIcon from '@/assets/images/custom/current-pic.svg';
 import otherPicIcon from '@/assets/images/custom/other-pic.svg';
 import checkedIcon from '@/assets/images/custom/checked.svg';
@@ -17,16 +16,23 @@ import './MyStoryDetail.css';
 const MyStoryDetail = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const [status, setStatus] = useState('검토중');
-
-    const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
-    const handleDrawerClose = () => setIsMenuOpen(false);
-
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isPhotoViewerOpen, setIsPhotoViewerOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+    
+    const mockImages = [puppyRunningImg, puppyRunningImg, puppyRunningImg];
+    
     const [consents, setConsents] = useState({
         performance: true,
         sns: true
     });
+
+    const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
+    const handleDrawerClose = () => setIsMenuOpen(false);
 
     const handleConsentChange = (e) => {
         const { name, checked } = e.target;
@@ -36,17 +42,66 @@ const MyStoryDetail = () => {
         }));
     };
 
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
     const openDeleteModal = () => setIsDeleteModalOpen(true);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+    const handleStatusToggle = () => {
+        if (status === '검토중') setStatus('공개');
+        else if (status === '공개') setStatus('비공개');
+        else setStatus('검토중');
+    };
+
+    const onDragStart = (e) => {
+        setTouchEnd(null);
+        setTouchStart(e.type.includes('mouse') ? e.clientX : e.targetTouches[0].clientX);
+    };
+
+    const onDragMove = (e) => {
+        if (touchStart === null) return;
+        setTouchEnd(e.type.includes('mouse') ? e.clientX : e.targetTouches[0].clientX);
+    };
+
+    const onDragEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        
+        const distance = touchStart - touchEnd;
+        const minSwipeDistance = 50;
+
+        if (distance > minSwipeDistance && currentImageIndex < mockImages.length - 1) {
+            setCurrentImageIndex(prev => prev + 1);
+        }
+        
+        if (distance < -minSwipeDistance && currentImageIndex > 0) {
+            setCurrentImageIndex(prev => prev - 1);
+        }
+    };
+
+    const onMouseLeave = () => {
+        if (touchStart !== null && touchEnd !== null) {
+            onDragEnd();
+        }
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
+
+    const handleImageClick = () => {
+        if (touchStart !== null && touchEnd !== null) {
+            const distance = Math.abs(touchStart - touchEnd);
+            if (distance > 10) return;
+        }
+        setIsPhotoViewerOpen(true);
+    };
+
+    const closePhotoViewer = () => {
+        setIsPhotoViewerOpen(false);
+    };
 
     const renderBottomButtons = () => {
         if (status === '검토중') {
             return (
                 <div className="bottom-button-area dual-buttons">
                     <button className="btn-delete-half" onClick={openDeleteModal}>삭제</button>
-                    <button className="btn-edit-half" onClick={() => navigate('/story/edit')}>사연 수정하기</button>
+                    <button className="btn-edit-half">사연 수정하기</button>
                 </div>
             );
         }
@@ -55,27 +110,6 @@ const MyStoryDetail = () => {
                 <button className="btn-delete-full" onClick={openDeleteModal}>사연 삭제하기</button>
             </div>
         );
-    };
-
-    const handleStatusToggle = () => {
-        if (status === '검토중') setStatus('공개');
-        else if (status === '공개') setStatus('비공개');
-        else setStatus('검토중');
-    };
-
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const mockImages = [puppyRunningImg, puppyRunningImg, puppyRunningImg];
-
-    const handlePrevClick = () => {
-        if (currentImageIndex > 0) {
-            setCurrentImageIndex(prev => prev - 1);
-        }
-    };
-
-    const handleNextClick = () => {
-        if (currentImageIndex < mockImages.length - 1) {
-            setCurrentImageIndex(prev => prev + 1);
-        }
     };
 
     return (
@@ -106,28 +140,25 @@ const MyStoryDetail = () => {
                     <h2 className="detail-title">산책 한마디에 대소동</h2>
                 </div>
 
-                <div className="detail-image-container">
-                    <img src={mockImages[currentImageIndex]} alt="사연 이미지" className="detail-image" />
+                <div 
+                    className="detail-image-container" 
+                    onClick={handleImageClick}
+                    onTouchStart={onDragStart}
+                    onTouchMove={onDragMove}
+                    onTouchEnd={onDragEnd}
+                    onMouseDown={onDragStart}
+                    onMouseMove={onDragMove}
+                    onMouseUp={onDragEnd}
+                    onMouseLeave={onMouseLeave}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <img 
+                        src={mockImages[currentImageIndex]} 
+                        alt="사연 이미지" 
+                        className="detail-image" 
+                        onDragStart={(e) => e.preventDefault()} 
+                    />
 
-                    <span className="image-indicator">{currentImageIndex + 1}/{mockImages.length}</span>
-
-                    {mockImages.length > 1 && currentImageIndex > 0 && (
-                        <img
-                            src={prevPicIcon}
-                            alt="이전 사진"
-                            className="nav-arrow prev-arrow"
-                            onClick={handlePrevClick}
-                        />
-                    )}
-
-                    {mockImages.length > 1 && currentImageIndex < mockImages.length - 1 && (
-                        <img
-                            src={nextPicIcon}
-                            alt="다음 사진"
-                            className="nav-arrow next-arrow"
-                            onClick={handleNextClick}
-                        />
-                    )}
                     <span className="image-indicator">{currentImageIndex + 1}/{mockImages.length}</span>
 
                     <div className="image-dots-wrapper">
@@ -216,6 +247,16 @@ const MyStoryDetail = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isPhotoViewerOpen && (
+                <StoryPhotoViewer
+                    images={mockImages}
+                    currentIndex={currentImageIndex}
+                    onChange={setCurrentImageIndex}
+                    onClose={closePhotoViewer}
+                    title="산책 한마디에 대소동"
+                />
             )}
         </div>
     );

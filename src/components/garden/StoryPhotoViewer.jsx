@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import arrowBackIcon from "@/assets/icons/arrow-back.svg";
 
 import "./StoryPhotoViewer.css";
 
 const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) => {
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+
     useEffect(() => {
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
@@ -20,6 +23,42 @@ const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) =>
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
+
+    const onDragStart = (e) => {
+        setTouchEnd(null);
+        setTouchStart(e.type.includes('mouse') ? e.clientX : e.targetTouches[0].clientX);
+    };
+
+    const onDragMove = (e) => {
+        if (touchStart === null) return;
+        setTouchEnd(e.type.includes('mouse') ? e.clientX : e.targetTouches[0].clientX);
+    };
+
+    const onDragEnd = () => {
+        if (touchStart === null || touchEnd === null) return;
+        
+        const distance = touchStart - touchEnd;
+        const minSwipeDistance = 50;
+
+        if (distance > minSwipeDistance && currentIndex < images.length - 1) {
+            onChange(currentIndex + 1);
+        }
+        
+        if (distance < -minSwipeDistance && currentIndex > 0) {
+            onChange(currentIndex - 1);
+        }
+
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
+
+    const onMouseLeave = () => {
+        if (touchStart !== null && touchEnd !== null) {
+            onDragEnd();
+        }
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
 
     return (
         <div className="story-photo-viewer" role="dialog" aria-modal="true" aria-label="사진 자세히 보기">
@@ -39,6 +78,15 @@ const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) =>
                 className="story-photo-viewer-image"
                 src={images[currentIndex]}
                 alt={`${title} 확대 사진 ${currentIndex + 1}`}
+                onTouchStart={onDragStart}
+                onTouchMove={onDragMove}
+                onTouchEnd={onDragEnd}
+                onMouseDown={onDragStart}
+                onMouseMove={onDragMove}
+                onMouseUp={onDragEnd}
+                onMouseLeave={onMouseLeave}
+                onDragStart={(e) => e.preventDefault()}
+                style={{ cursor: 'grab' }}
             />
 
             <div className="story-photo-viewer-thumbnails" aria-label="다른 사진 선택">
