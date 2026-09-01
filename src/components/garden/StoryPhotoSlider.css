@@ -14,6 +14,13 @@
 
 .story-photo-main-button {
     display: block;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+}
+
+.story-photo-main-button:active {
+    cursor: grabbing;
 }
 
 .story-photo-main-button:focus-visible {
