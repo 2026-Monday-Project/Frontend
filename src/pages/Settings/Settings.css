@@ -1,0 +1,42 @@
+.settings-page {
+    position: relative;
+    min-height: 100dvh;
+    background-color: var(--color-background);
+    overflow: hidden;
+}
+
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 44px;
+}
+
+.settings-menu-button {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    padding: 15px 13px;
+    justify-content: flex-start;
+    align-items: center;
+
+    border-radius: 10px;
+    background: #fffdf6;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: left;
+}
+
+.settings-flower {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    width: 190px;
+    height: 219px;
+}

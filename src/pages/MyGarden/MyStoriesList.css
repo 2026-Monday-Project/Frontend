@@ -1,0 +1,55 @@
+.my-stories-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.grasses-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.tabs-section {
+    display: flex;
+    gap: 10px;
+    margin: 30px 0 30px 24px;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.tab-button {
+    font-size: 12px;
+    color: #a0a998;
+    background: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 99px;
+    cursor: pointer;
+    font-weight: 500;
+
+}
+
+.tab-button.active {
+    background-color: var(--color-green-main);
+    color: #ffffff;
+}
+
+.my-stories-page .story-list-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1;
+    padding: 0 28px;
+}
+
+.story-list-scroll::-webkit-scrollbar {
+    display: none;
+}

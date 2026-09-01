@@ -1,0 +1,124 @@
+.admin-notification-page {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+
+    background: var(--color-background);
+}
+
+.admin-notification-content {
+    display: flex;
+    flex: 1;
+
+    padding: 40px 24px 28px;
+
+    flex-direction: column;
+}
+
+.admin-notification-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-notification-status > img {
+    width: 24px;
+    height: 24px;
+}
+
+.admin-notification-field {
+    display: flex;
+    margin-top: 30px;
+    flex-direction: column;
+}
+
+.admin-notification-field label {
+    color: #7c7c7c;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.admin-notification-field input,
+.admin-notification-field textarea {
+    width: 100%;
+    margin-top: 10px;
+
+    border: 1px solid var(--color-beige);
+    border-radius: 8px;
+    outline: none;
+    background: #fffdf6;
+
+    color: #151515;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.admin-notification-field input {
+    height: 38px;
+    padding: 0 12px;
+}
+
+.admin-notification-field textarea {
+    height: 79px;
+    padding: 12px;
+
+    resize: none;
+    overflow-y: auto;
+}
+
+.admin-notification-top-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-notification-auto,
+.admin-notification-confirm,
+.admin-notification-send {
+    display: flex;
+    padding: 14px 20px;
+
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--color-green-main);
+    border-radius: 10px;
+    background: #fffdf6;
+
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-notification-auto {
+    flex-shrink: 0;
+    color: var(--color-green-main);
+}
+
+.admin-notification-confirm {
+    flex: 1;
+    color: rgba(49, 83, 56, 0.5);
+}
+
+.admin-notification-send {
+    width: 100%;
+    margin-top: 12px;
+
+    color: rgba(49, 83, 56, 0.5);
+}
+
+.admin-notification-button-active {
+    background: var(--color-green-main);
+    color: #fff;
+}
+.admin-notification-actions {
+    margin-top: auto;
+    padding-top: 30px;
+}
+.admin-notification-auto:disabled {
+    border: 1px solid rgba(49, 83, 56, 0.5);
+    background: #fffdf6;
+    color: rgba(49, 83, 56, 0.5);
+    cursor: default;
+}

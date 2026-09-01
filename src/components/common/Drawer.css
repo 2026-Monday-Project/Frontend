@@ -1,0 +1,145 @@
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1000;
+  width: 100%;
+  max-width: var(--max-mobile-width);
+  height: 100dvh;
+  background-color: #00000059;
+  transform: translateX(-50%);
+}
+
+.drawer-container {
+  width: 100%;
+  max-width: var(--max-mobile-width);
+  height: 100%;
+  margin: 0 auto;
+}
+
+.drawer-panel {
+  position: relative;
+  z-index: 1001;
+  width: 76%;
+  max-width: 306px;
+  height: 100dvh;
+  margin-left: auto;
+  overflow: hidden;
+  background-color: var(--color-background);
+  color: var(--color-green-main);
+  font-family: Pretendard, sans-serif;
+}
+
+.drawer-close-button {
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.drawer-close-button:focus-visible,
+.drawer-menu-item:focus-visible {
+  outline: 3px solid var(--color-green-muted);
+  outline-offset: 2px;
+}
+
+.drawer-close-icon {
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.drawer-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 84px 28px 240px;
+  overflow-y: auto;
+}
+
+.drawer-introduction {
+  text-align: center;
+}
+
+.drawer-heading {
+  margin: 0;
+  color: var(--color-green-main);
+  font-family: Warhaven, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.drawer-description {
+  margin: 14px 0 0;
+  color: var(--color-text);
+  font-family: Warhaven, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.drawer-divider {
+  width: 264px;
+  max-width: none;
+  height: 82px;
+  margin: 4px calc((100% - 264px) / 2) 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.drawer-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drawer-menu-item {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--color-green-main);
+  font-family: Warhaven, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.drawer-menu-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.drawer-decoration {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 360px) {
+  .drawer-content {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+}
