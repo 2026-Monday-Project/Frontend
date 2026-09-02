@@ -1,165 +1,189 @@
 .home-entered-page {
-  width: 100%;
-  height: 100dvh;
+    display: flex;
 
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    width: 100%;
+    min-height: 100dvh;
 
-  background-color: var(--color-background);
+    justify-content: center;
+    align-items: flex-start;
 
-  overflow: hidden;
+    background-color: var(--color-background);
+
+    overflow-x: hidden;
 }
 
 .home-entered-scale-container {
-  position: relative;
+    position: relative;
 
-  flex-shrink: 0;
+    flex-shrink: 0;
 
-  overflow: hidden;
+    overflow: hidden;
 }
 
-.home-entered {
-  position: absolute;
+.home-entered-design {
+    position: absolute;
+    top: 0;
+    left: 0;
 
-  top: 0;
-  left: 0;
+    width: 402px;
+    min-height: 874px;
 
-  width: 402px;
-  height: 874px;
+    transform-origin: top left;
 
-  transform-origin: top left;
+    background-image:
+        url("@/assets/images/custom/home-entered-background.svg");
 
-  background-image: url("@/assets/images/custom/home-entered-background.svg");
-  background-size: 402px 874px;
-  background-position: top left;
-  background-repeat: no-repeat;
+    /*
+     * SVG 자체 하단의 빈 영역을 화면 밖으로 밀어내기 위해
+     * 배경을 세로로 조금 더 크게 렌더링
+     */
+    background-size: 402px calc(100% + 30px);
+    background-position: top center;
+    background-repeat: no-repeat;
 
-  overflow: hidden;
+    overflow: hidden;
 }
 
-
-/* 텍스트 */
+/* ==============================
+    텍스트
+   ============================== */
 
 .home-entered-text {
-  position: absolute;
+    position: absolute;
 
-  top: 292px;
-  left: 0;
+    /*
+     * 기존 292px 위치에
+     * 배경이 늘어난 만큼 약 10px 보정
+     */
+    top: 302px;
+    left: 0;
 
-  width: 100%;
+    display: flex;
+    width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    flex-direction: column;
+    align-items: center;
 
-  text-align: center;
+    text-align: center;
 }
 
 .home-entered-text-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
 
-  /* 여기로 두 줄 사이 여백 조절 */
-  gap: 9px;
+    flex-direction: column;
+    align-items: center;
 
-  margin: 0;
+    gap: 9px;
 
-  font-family: Warhaven;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 32px;
-  line-height:normal;
-  letter-spacing: 0;
+    margin: 0;
 
-  text-align: center;
+    color: var(--color-green-main);
 
-  color: var(--color-green-main);
+    font-family: Warhaven, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
+
+    text-align: center;
 }
 
 .home-entered-text-title p {
-  margin: 0;
+    margin: 0;
 }
 
 .home-entered-text-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
 
-  gap: 5px;
-  margin-top: 23px;
+    flex-direction: column;
+    align-items: center;
 
-  font-family: Warhaven;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 14px;
-  line-height: normal;
-  letter-spacing: 0;
+    gap: 5px;
 
-  color: var(--color-text);
+    margin-top: 23px;
+
+    color: var(--color-text);
+
+    font-family: Warhaven, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
+
+    text-align: center;
 }
 
 .home-entered-text-content p {
-  margin: 0;
+    margin: 0;
 }
 
-/* 버튼 */
+/* ==============================
+    버튼
+   ============================== */
 
 .home-entered-buttons {
-  position: absolute;
+    position: absolute;
 
-  top: 491px;
-  left: 50%;
+    /*
+     * 기존 491px에서
+     * 배경 늘어난 비율만큼 약 17px 보정
+     */
+    top: 508px;
+    left: 50%;
 
-  width: 239px;
+    display: flex;
+    width: 239px;
 
-  transform: translateX(-50%);
+    flex-direction: column;
 
-  display: flex;
-  flex-direction: column;
+    gap: 20px;
 
-  gap: 20px;
+    transform: translateX(-50%);
 }
 
 .home-entered-button {
-  width: 239px;
-  height: 43px;
+    display: flex;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 239px;
+    height: 43px;
 
-  gap:10px;
-  padding: 10px 60px;
+    align-items: center;
+    justify-content: center;
 
-  border-radius: 15px;
+    gap: 10px;
 
-  font-family: Warhaven;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: 0;
+    padding: 10px 60px;
 
-  white-space: nowrap;
+    border-radius: 15px;
 
-  box-shadow: 0 4px 4px 0 #00000040;
-  
-  cursor: pointer;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
+
+    white-space: nowrap;
+
+    box-shadow: 0 4px 4px 0 #00000040;
+
+    cursor: pointer;
 }
 
 .home-entered-button-primary {
-  border: 0;
+    border: 0;
 
-  background-color: var(--color-green-main);
-  color: #ffffff;
+    background-color: var(--color-green-main);
 
+    color: #ffffff;
 }
 
 .home-entered-button-secondary {
-  border: 1px solid var(--color-green-main);
+    border: 1px solid var(--color-green-main);
 
-  background-color: transparent;
-  color: var(--color-green-main);
+    background-color: transparent;
+
+    color: var(--color-green-main);
 }
