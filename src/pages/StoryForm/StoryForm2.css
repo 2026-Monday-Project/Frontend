@@ -19,13 +19,16 @@
   background-color: transparent;
   color: var(--color-text);
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 300;
   line-height: 1.6;
   outline: none;
 }
 
 .story-form2-textarea::placeholder {
   color: var(--color-text-muted);
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .story-form2-textarea:focus {
@@ -54,13 +57,18 @@
 /* 사진 업로드 */
 
 .story-form2-photo-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .story-form2-photo-thumb {
-  aspect-ratio: 1;
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
   overflow: hidden;
   border-radius: 12px;
   cursor: pointer;
@@ -73,7 +81,9 @@
 }
 
 .story-form2-photo-add-button {
-  aspect-ratio: 1;
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,9 +91,12 @@
   border-radius: 12px;
   background-color: var(--color-gray-light);
   color: var(--color-green-main);
-  font-size: 26px;
-  font-weight: 300;
   cursor: pointer;
+}
+
+.story-form2-photo-add-icon {
+  width: 23px;
+  height: 23px;
 }
 
 .story-form2-photo-add-button.story-form-input-invalid {
@@ -98,33 +111,34 @@
 
 .story-form2-footer {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-top: 8px;
 }
 
 .story-form2-prev-button {
   flex: 1;
-  height: 52px;
+  height: 44px;
   border: 1.5px solid var(--color-green-main);
-  border-radius: 16px;
+  border-radius: 15px;
   background-color: transparent;
   color: var(--color-green-main);
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: Warhaven, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
   cursor: pointer;
 }
 
 .story-form2-next-button {
-  flex: 1.4;
-  height: 52px;
+  flex: 1;
+  height: 44px;
   border: none;
-  border-radius: 16px;
-  background-color: #9caf97;
+  border-radius: 15px;
+  background-color: rgb(36 63 38 / 42%);
   color: #ffffff;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: Warhaven, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
   box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
   cursor: pointer;
 }

@@ -97,8 +97,8 @@
 .story-form3-consent-label {
   flex: 1;
   color: var(--color-text);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .story-form3-consent-chevron {
@@ -112,33 +112,34 @@
 
 .story-form3-footer {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-top: 32px;
 }
 
 .story-form3-prev-button {
   flex: 1;
-  height: 52px;
+  height: 44px;
   border: 1.5px solid var(--color-green-main);
-  border-radius: 16px;
+  border-radius: 15px;
   background-color: transparent;
   color: var(--color-green-main);
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: Warhaven, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
   cursor: pointer;
 }
 
 .story-form3-submit-button {
-  flex: 1.4;
-  height: 52px;
+  flex: 1;
+  height: 44px;
   border: none;
-  border-radius: 16px;
-  background-color: #9caf97;
+  border-radius: 15px;
+  background-color: rgb(36 63 38 / 42%);
   color: #ffffff;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 600;
+  font-family: Warhaven, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
   box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
   cursor: pointer;
 }
