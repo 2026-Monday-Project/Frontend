@@ -14,21 +14,16 @@ const FIGMA_WIDTH = 402;
 const FIGMA_HEIGHT = 874;
 const FIGMA_MAX_DRAG_DISTANCE = 146;
 
-/*
- * 전체 드래그 거리의 40% 이상 올리면 입장
- * 146px 기준 약 58px
- */
-const ENTRY_THRESHOLD = 0.4;
+const ENTRY_THRESHOLD = 0.35;
 
 const Home = () => {
     const startYRef = useRef(0);
     const dragDistanceRef = useRef(0);
+    const isDraggingRef = useRef(false);
 
     const [scale, setScale] = useState(1);
+    const [designHeight, setDesignHeight] = useState(FIGMA_HEIGHT);
     const [dragDistance, setDragDistance] = useState(0);
-    const [maxDragDistance, setMaxDragDistance] = useState(
-        FIGMA_MAX_DRAG_DISTANCE,
-    );
     const [isDragging, setIsDragging] = useState(false);
     const [isEntered, setIsEntered] = useState(false);
 
@@ -39,17 +34,26 @@ const Home = () => {
                 FIGMA_WIDTH,
             );
 
-            const widthScale =
+            const nextScale =
                 availableWidth / FIGMA_WIDTH;
 
-            const heightScale =
-                window.innerHeight / FIGMA_HEIGHT;
+            /*
+             * 다른 페이지처럼 가로 너비를 기준으로만 축소합니다.
+             */
+            setScale(nextScale);
 
-            setScale(
-                Math.min(
-                    widthScale,
-                    heightScale,
-                    1,
+            /*
+             * 화면이 874px보다 길 경우에도
+             * 홈 배경이 브라우저 맨 아래까지 이어지도록
+             * 디자인 자체의 높이를 늘립니다.
+             */
+            const requiredDesignHeight =
+                window.innerHeight / nextScale;
+
+            setDesignHeight(
+                Math.max(
+                    FIGMA_HEIGHT,
+                    requiredDesignHeight,
                 ),
             );
         };
@@ -70,21 +74,17 @@ const Home = () => {
     }, []);
 
     const resetDrag = () => {
+        isDraggingRef.current = false;
         dragDistanceRef.current = 0;
-        setDragDistance(0);
+
         setIsDragging(false);
+        setDragDistance(0);
     };
 
     const handlePointerDown = (event) => {
-        const currentMaxDragDistance =
-            FIGMA_MAX_DRAG_DISTANCE * scale;
-
         startYRef.current = event.clientY;
         dragDistanceRef.current = 0;
-
-        setMaxDragDistance(
-            currentMaxDragDistance,
-        );
+        isDraggingRef.current = true;
 
         setDragDistance(0);
         setIsDragging(true);
@@ -95,16 +95,23 @@ const Home = () => {
     };
 
     const handlePointerMove = (event) => {
-        if (!isDragging) {
+        if (!isDraggingRef.current) {
             return;
         }
 
         const movedDistance =
             startYRef.current - event.clientY;
 
+        /*
+         * 실제 브라우저에서 움직인 px을
+         * 피그마 기준 px로 변환합니다.
+         */
+        const designDistance =
+            movedDistance / scale;
+
         const limitedDistance = Math.min(
-            Math.max(movedDistance, 0),
-            maxDragDistance,
+            Math.max(designDistance, 0),
+            FIGMA_MAX_DRAG_DISTANCE,
         );
 
         dragDistanceRef.current =
@@ -114,25 +121,30 @@ const Home = () => {
     };
 
     const handlePointerUp = (event) => {
-        if (!isDragging) {
+        if (!isDraggingRef.current) {
             return;
         }
 
-        const currentMaxDragDistance =
-            FIGMA_MAX_DRAG_DISTANCE * scale;
+        /*
+         * 마지막 pointerMove가 호출되지 않았더라도
+         * pointerUp 위치를 기준으로 최종 거리를 다시 계산합니다.
+         */
+        const movedDistance =
+            startYRef.current - event.clientY;
 
-        const currentDragDistance =
-            dragDistanceRef.current;
+        const designDistance =
+            movedDistance / scale;
+
+        const finalDragDistance = Math.min(
+            Math.max(designDistance, 0),
+            FIGMA_MAX_DRAG_DISTANCE,
+        );
 
         const progress =
-            currentMaxDragDistance > 0
-                ? Math.min(
-                      currentDragDistance /
-                          currentMaxDragDistance,
-                      1,
-                  )
-                : 0;
+            finalDragDistance /
+            FIGMA_MAX_DRAG_DISTANCE;
 
+        isDraggingRef.current = false;
         setIsDragging(false);
 
         if (
@@ -145,18 +157,11 @@ const Home = () => {
             );
         }
 
-        /*
-         * 전체 거리의 40% 이상 드래그하면 입장
-         */
         if (progress >= ENTRY_THRESHOLD) {
             setIsEntered(true);
             return;
         }
 
-        /*
-         * 기준보다 적게 드래그했으면
-         * 원래 위치로 복귀
-         */
         dragDistanceRef.current = 0;
         setDragDistance(0);
     };
@@ -186,13 +191,8 @@ const Home = () => {
     };
 
     const dragProgress =
-        maxDragDistance > 0
-            ? Math.min(
-                  dragDistance /
-                      maxDragDistance,
-                  1,
-              )
-            : 0;
+        dragDistance /
+        FIGMA_MAX_DRAG_DISTANCE;
 
     if (isEntered) {
         return <HomeEntered />;
@@ -203,17 +203,14 @@ const Home = () => {
             <div
                 className="home-scale-container"
                 style={{
-                    width: `${
-                        FIGMA_WIDTH * scale
-                    }px`,
-                    height: `${
-                        FIGMA_HEIGHT * scale
-                    }px`,
+                    width: `${FIGMA_WIDTH * scale}px`,
+                    height: `${designHeight * scale}px`,
                 }}
             >
                 <div
                     className="home-design"
                     style={{
+                        height: `${designHeight}px`,
                         transform: `scale(${scale})`,
                     }}
                 >
@@ -257,16 +254,11 @@ const Home = () => {
                                 : ""
                         }`}
                         style={{
-                            transform: `translateX(-50%) translateY(-${
-                                dragDistance /
-                                scale
-                            }px)`,
+                            transform: `translateX(-50%) translateY(-${dragDistance}px)`,
                         }}
                     >
                         <p>위로 스와이프하여</p>
-                        <p>
-                            정원으로 입장하세요.
-                        </p>
+                        <p>정원으로 입장하세요.</p>
                     </div>
 
                     {isDragging &&
@@ -277,9 +269,7 @@ const Home = () => {
                             >
                                 <img
                                     className="home-entry-base-guide"
-                                    src={
-                                        homeEntryGuide
-                                    }
+                                    src={homeEntryGuide}
                                     alt=""
                                 />
 
@@ -315,10 +305,7 @@ const Home = () => {
                                 : ""
                         }`}
                         style={{
-                            transform: `translateX(-50%) translateY(-${
-                                dragDistance /
-                                scale
-                            }px)`,
+                            transform: `translateX(-50%) translateY(-${dragDistance}px)`,
                         }}
                         onPointerDown={
                             handlePointerDown
