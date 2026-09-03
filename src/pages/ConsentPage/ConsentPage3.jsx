@@ -30,8 +30,8 @@ const ConsentPage3 = () => {
         </header>
 
         <p className="consent-page-intro">
-          먼데이프로젝트는 제출된 사연을 웹사이트에 공개하기 위해 아래와 같이
-          공개 위치와 범위를 안내합니다.
+          먼데이프로젝트는 관객 사연 접수 및 운영을 위해 아래와 같이
+          개인정보를 수집·이용합니다.
         </p>
 
         <div className="consent-page-content">

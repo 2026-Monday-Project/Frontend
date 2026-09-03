@@ -1,252 +1,261 @@
 .home-page {
-  width: 100%;
-  height: 100dvh;
+    display: flex;
 
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    width: 100%;
+    min-height: 100dvh;
 
-  background-color: var(--color-background);
+    justify-content: center;
+    align-items: flex-start;
 
-  overflow: hidden;
+    background-color: var(--color-background);
+
+    overflow-x: hidden;
 }
 
 .home-scale-container {
-  position: relative;
+    position: relative;
 
-  flex-shrink: 0;
+    flex-shrink: 0;
 
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .home-design {
-  position: absolute;
-  top: 0;
-  left: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
 
-  width: 402px;
-  height: 874px;
+    width: 402px;
+    min-height: 874px;
 
-  transform-origin: top left;
+    transform-origin: top left;
 
-  background-image: url("@/assets/images/custom/home-background.svg");
-  background-size: 402px 874px;
-  background-position: top left;
-  background-repeat: no-repeat;
+    background-image: url("@/assets/images/custom/home-background.svg");
+    background-size: 402px 100%;
+    background-position: top center;
+    background-repeat: no-repeat;
 
-  overflow: hidden;
+    overflow: hidden;
 }
 
-
-/* 공연 정보 */
+/* ==============================
+    공연 정보
+   ============================== */
 
 .home-info {
-  position: absolute;
+    position: absolute;
+    top: 268px;
+    left: 91px;
 
-  top: 268px;
-  left: 91px;
+    display: flex;
+    width: 220px;
 
-  width: 220px;
+    flex-direction: column;
+    align-items: center;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    color: #605a30;
 
-  text-align: center;
-
-  color: #605a30;
+    text-align: center;
 }
 
 .home-title {
-  margin: 0;
+    margin: 0;
 
-  font-family: Warhaven;
-  font-size: 36px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0;
+    color: #605a30;
 
-  white-space: nowrap;
+    font-family: Warhaven, sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
+
+    white-space: nowrap;
 }
 
 .home-divider {
-  width: 104px;
-  height: 29px;
+    width: 104px;
+    height: 29px;
 
-  object-fit: contain;
+    flex-shrink: 0;
 
-  flex-shrink: 0;
+    object-fit: contain;
 }
 
 .home-subtitle {
-  margin: 0;
+    margin: 0;
 
-  font-family: Warhaven;
-  font-size: 20px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0;
+    font-family: Warhaven, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
 
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .home-subtitle + .home-divider {
-  margin-bottom: 7px;
+    margin-bottom: 7px;
 }
 
 .home-performance-info {
-  display: flex;
-  flex-direction: column;
+    display: flex;
 
-  gap: 6px;
+    margin: 0;
 
-  margin: 0;
+    flex-direction: column;
+    gap: 6px;
 
-  font-family: Warhaven;
-  font-size: 15px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0;
+    font-family: Warhaven, sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
 
-  text-align: center;
+    text-align: center;
 }
 
 .home-performance-info p {
-  margin: 0;
+    margin: 0;
 }
 
-
-/* 스와이프 문구 */
+/* ==============================
+    스와이프 문구
+   ============================== */
 
 .home-entry-guide-text {
-  position: absolute;
+    position: absolute;
+    bottom: 137px;
+    left: 50%;
 
-  left: 50%;
+    display: flex;
 
-  /* 이 값만 네가 피그마 보면서 조정 */
-  bottom: 137px;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    margin: 0;
 
-  gap: 5px;
+    color: #ffffff;
 
-  margin: 0;
+    font-family: Warhaven, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0;
 
-  font-family: Warhaven;
-  font-size: 14px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0;
+    text-align: center;
+    white-space: nowrap;
 
-  text-align: center;
-  white-space: nowrap;
+    pointer-events: none;
 
-  color: #ffffff;
+    z-index: 6;
 
-  pointer-events: none;
+    transition: transform 0.25s ease;
+}
 
-  z-index: 6;
+.home-entry-guide-text.is-dragging {
+    transition: none;
 }
 
 .home-entry-guide-text p {
-  margin: 0;
+    margin: 0;
 }
 
-
-/* 아치 */
+/* ==============================
+    아치
+   ============================== */
 
 .home-entry-arch {
-  position: absolute;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
 
-  left: 50%;
-  bottom: 0;
+    width: 129px;
 
-  width: 129px;
+    padding: 0;
 
-  padding: 0;
-  border: 0;
+    border: 0;
 
-  background: transparent;
+    background: transparent;
 
-  touch-action: none;
+    touch-action: none;
 
-  user-select: none;
-  -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
 
-  cursor: grab;
+    cursor: grab;
 
-  z-index: 5;
+    z-index: 5;
+
+    transition: transform 0.25s ease;
 }
 
 .home-entry-arch.is-dragging {
-  cursor: grabbing;
+    cursor: grabbing;
+
+    transition: none;
 }
 
 .home-entry-arch img {
-  display: block;
+    display: block;
 
-  width: 100%;
-  height: auto;
+    width: 100%;
+    height: auto;
+    max-width: none;
 
-  max-width: none;
+    pointer-events: none;
 
-  pointer-events: none;
-
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 
-
-/* 흰색 가이드 */
+/* ==============================
+    흰색 가이드
+   ============================== */
 
 .home-entry-trail-container {
-  position: absolute;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
 
-  left: 50%;
-  bottom: 0;
+    width: 82px;
+    height: 151px;
 
-  width: 82px;
-  height: 151px;
+    transform: translateX(-50%);
 
-  transform: translateX(-50%);
+    pointer-events: none;
 
-  pointer-events: none;
-
-  z-index: 4;
+    z-index: 4;
 }
 
 .home-entry-base-guide {
-  position: absolute;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
 
-  left: 50%;
-  bottom: 0;
+    width: 82px;
 
-  width: 82px;
-
-  transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 .home-entry-trail {
-  position: absolute;
+    position: absolute;
+    left: 50%;
 
-  left: 50%;
+    width: 12px;
 
-  width: 12px;
-
-  transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 .home-entry-trail-short {
-  bottom: 48px;
+    bottom: 48px;
 }
 
 .home-entry-trail-long {
-  bottom: 48px;
+    bottom: 48px;
 }

@@ -222,7 +222,18 @@ const StoryForm2 = ({ mode }) => {
                   onClick={handlePhotoButtonClick}
                   aria-label="사진 추가"
                 >
-                  +
+                  <svg
+                    className="story-form2-photo-add-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 5v14M5 12h14"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
                 </button>
               )}
             </div>

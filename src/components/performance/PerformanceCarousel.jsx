@@ -27,6 +27,7 @@ const PerformanceCarousel = () => {
     const [isDragging, setIsDragging] = useState(false);
 
     const dragStartX = useRef(0);
+    const dragDistanceRef = useRef(0);
     const wheelLocked = useRef(false);
 
     const handleNext = () => {
@@ -41,9 +42,18 @@ const PerformanceCarousel = () => {
         );
     };
 
+    const resetDrag = () => {
+        setDragDistance(0);
+        dragDistanceRef.current = 0;
+        setIsDragging(false);
+    };
+
     const handlePointerDown = (event) => {
         setIsDragging(true);
+
         dragStartX.current = event.clientX;
+        dragDistanceRef.current = 0;
+        setDragDistance(0);
 
         event.currentTarget.setPointerCapture(
             event.pointerId,
@@ -58,6 +68,7 @@ const PerformanceCarousel = () => {
         const distance =
             event.clientX - dragStartX.current;
 
+        dragDistanceRef.current = distance;
         setDragDistance(distance);
     };
 
@@ -66,16 +77,15 @@ const PerformanceCarousel = () => {
             return;
         }
 
-        if (dragDistance <= -DRAG_THRESHOLD) {
-            handleNext();
-        }
+        const distance = dragDistanceRef.current;
 
-        if (dragDistance >= DRAG_THRESHOLD) {
+        if (distance <= -DRAG_THRESHOLD) {
+            handleNext();
+        } else if (distance >= DRAG_THRESHOLD) {
             handlePrevious();
         }
 
-        setDragDistance(0);
-        setIsDragging(false);
+        resetDrag();
     };
 
     const handleWheel = (event) => {
@@ -109,7 +119,7 @@ const PerformanceCarousel = () => {
 
     const handlePosterChange = (index) => {
         setCurrentIndex(index);
-        setDragDistance(0);
+        resetDrag();
     };
 
     return (

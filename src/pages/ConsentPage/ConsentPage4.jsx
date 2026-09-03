@@ -30,7 +30,9 @@ const ConsentPage4 = () => {
         </header>
 
         <p className="consent-page-intro">
-          제출한 사연은 공연 중 일부 소개되거나 낭독될 수 있습니다.
+          제출한 사연은 공연 중 일부 소개되거나
+          <br />
+          낭독될 수 있습니다.
         </p>
 
         <div className="consent-page-content">
