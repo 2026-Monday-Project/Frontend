@@ -14,24 +14,20 @@
 /* 상단 */
 
 .consent-page-header {
-  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 13px;
   width: 100%;
   min-height: 40px;
   margin-bottom: 24px;
 }
 
 .consent-page-back-button {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
+  justify-content: flex-start;
+  width: 20px;
   height: 40px;
   padding: 0;
   border: none;
@@ -46,14 +42,17 @@
 }
 
 .consent-page-title {
+  flex: 1;
   margin: 0;
-  padding: 0 40px;
+  padding: 0;
   color: var(--color-green-main);
   font-family: Warhaven, sans-serif;
   font-size: 20px;
   font-weight: 400;
-  line-height: 1.35;
+  line-height: 1;
+  letter-spacing: 0;
   text-align: center;
+  white-space: nowrap;
 }
 
 .consent-page-title-tag {
@@ -71,6 +70,10 @@
   line-height: 1.2;
 }
 
+.consent-page-nowrap {
+  white-space: nowrap;
+}
+
 .consent-page-content {
   display: flex;
   flex-direction: column;
@@ -80,37 +83,49 @@
 
 .consent-page-card {
   width: 100%;
-  padding: 18px 16px;
-  border: 1.5px solid var(--color-green-main);
-  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--color-green-main);
+  border-radius: 20px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 .consent-page-card-title {
   margin: 0 0 10px;
   color: var(--color-text);
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-weight: 500;
+  line-height: 1;
 }
 
 .consent-page-card-text {
   margin: 0;
   color: var(--color-text);
-  font-size: 14px;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .consent-page-card-list {
   margin: 10px 0 0;
-  padding-left: 18px;
+  padding-left: 0;
+  list-style: none;
   color: var(--color-text);
-  font-size: 14px;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .consent-page-card-list li {
+  padding-left: 14px;
+  text-indent: -14px;
   margin-bottom: 2px;
+}
+
+.consent-page-card-list li::before {
+  content: "- ";
 }
 
 .consent-page-card-list li:last-child {

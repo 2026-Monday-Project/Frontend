@@ -61,8 +61,13 @@
   gap: 12px;
   overflow-x: auto;
   padding-bottom: 4px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+}
+
+.story-form2-photo-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .story-form2-photo-thumb {
@@ -207,6 +212,12 @@
   gap: 12px;
   padding: 20px 16px;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.story-photo-viewer-thumbs::-webkit-scrollbar {
+  display: none;
 }
 
 .story-photo-viewer-thumb {

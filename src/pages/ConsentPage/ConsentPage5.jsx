@@ -30,7 +30,9 @@ const ConsentPage5 = () => {
         </header>
 
         <p className="consent-page-intro">
-          제출한 사연 또는 사진은 공연 홍보 목적의 콘텐츠에 활용될 수 있습니다.
+          제출한 사연 또는 사진은 공연 홍보 목적의{" "}
+          <span className="consent-page-nowrap">콘텐츠에</span> 활용될 수
+          있습니다.
         </p>
 
         <div className="consent-page-content">
