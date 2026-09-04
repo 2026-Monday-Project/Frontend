@@ -16,7 +16,9 @@
     display: block;
     width: 100%;
     height: auto;
+}
 
+.monday-song-image-blurred {
     filter: blur(7.5px);
     transform: scale(1.04);
 }
@@ -66,7 +68,6 @@
     font-weight: 400;
 }
 
-/* 공개 예정 표시 */
 .monday-song-indicator {
     display: flex;
     justify-content: center;
