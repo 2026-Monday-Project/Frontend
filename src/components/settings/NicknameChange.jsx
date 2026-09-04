@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Navbar from "@/components/common/Navbar";
 import Drawer from "@/components/common/Drawer";
 import NicknameChangeCompleted from "@/components/settings/NicknameChangeCompleted";
+import {
+    checkMyNickname,
+    getMyProfile,
+    updateNickname,
+} from "@/api/accountApi";
 
 import "./NicknameChange.css";
 
@@ -10,13 +15,56 @@ const NicknameChange = ({ onBack }) => {
     const [nickname, setNickname] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const fetchMyProfile = async () => {
+            try {
+                const response = await getMyProfile();
+
+                const currentNickname =
+                    response.data.data.nickname;
+
+                setNickname(currentNickname);
+            } catch {
+                setNickname("");
+            }
+        };
+
+        fetchMyProfile();
+    }, []);
 
     const handleNicknameChange = (event) => {
         setNickname(event.target.value);
+
+        // 닉네임을 수정하면 기존 중복 확인 결과 초기화
+        setIsNicknameChecked(false);
     };
 
-    const handleDuplicateCheck = () => {
-        // TODO: 닉네임 중복 확인 API 연결
+    const handleDuplicateCheck = async () => {
+        const trimmedNickname = nickname.trim();
+
+        if (!trimmedNickname) {
+            return;
+        }
+
+        try {
+            const response =
+                await checkMyNickname(trimmedNickname);
+
+            const isAvailable =
+                response.data.data.available;
+
+            if (isAvailable) {
+                setIsNicknameChecked(true);
+                return;
+            }
+
+            setIsNicknameChecked(false);
+        } catch {
+            setIsNicknameChecked(false);
+        }
     };
 
     const handleMenuClick = () => {
@@ -27,13 +75,26 @@ const NicknameChange = ({ onBack }) => {
         setIsMenuOpen(false);
     };
 
-    const handleSubmit = () => {
-        if (!nickname.trim()) {
+    const handleSubmit = async () => {
+        const trimmedNickname = nickname.trim();
+
+        if (
+            !trimmedNickname ||
+            !isNicknameChecked ||
+            isSubmitting
+        ) {
             return;
         }
 
-        // TODO: 추후 닉네임 변경 API 성공 후 처리
-        setIsCompleted(true);
+        try {
+            setIsSubmitting(true);
+
+            await updateNickname(trimmedNickname);
+
+            setIsCompleted(true);
+        } catch {
+            setIsSubmitting(false);
+        }
     };
 
     if (isCompleted) {
@@ -84,6 +145,7 @@ const NicknameChange = ({ onBack }) => {
                         <button
                             type="button"
                             className="nickname-duplicate-button"
+                            disabled={!nickname.trim()}
                             onClick={handleDuplicateCheck}
                         >
                             중복 확인
@@ -94,7 +156,11 @@ const NicknameChange = ({ onBack }) => {
                 <button
                     type="button"
                     className="nickname-change-submit"
-                    disabled={!nickname.trim()}
+                    disabled={
+                        !nickname.trim() ||
+                        !isNicknameChecked ||
+                        isSubmitting
+                    }
                     onClick={handleSubmit}
                 >
                     변경하기
