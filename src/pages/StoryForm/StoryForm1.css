@@ -172,6 +172,15 @@
   font-weight: 500;
 }
 
+.story-form-success-message {
+  margin: 6px 0 0;
+
+  color: var(--color-green-main);
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
 /* 나이 */
 
 .story-form-age-wrapper {

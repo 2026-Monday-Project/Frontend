@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import stepIndicator from "@/assets/icons/step-indicator-2.png";
+import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm2.css";
 
@@ -10,22 +11,17 @@ const PHOTO_REQUIRED_MESSAGE = "*사진을 업로드 해주세요.";
 const MAX_PHOTOS = 5;
 const MAX_CONTENT_LENGTH = 500;
 
-// TODO: 수정 모드 진입 시 실제 사연 데이터로 교체
-const EDIT_INITIAL_DATA = {
-  title: "산책 한마디에 대소동",
-  content:
-    "‘산책 가자’ 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리에 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요. 너무 신난 나머지 제 신발 한 짝을 물고 도망간 적도 있어요. 매번 정신없지만 그 모습 때문에 꼭 웃게 되어요.",
-};
-
 const StoryForm2 = ({ mode }) => {
   const navigate = useNavigate();
+  const { storyId } = useParams();
   const isEdit = mode === "edit";
   const fileInputRef = useRef(null);
-  const photosRef = useRef([]);
+  const { story, setStory } = useStoryForm();
 
-  const [formData, setFormData] = useState(
-    isEdit ? EDIT_INITIAL_DATA : { title: "", content: "" },
-  );
+  const [formData, setFormData] = useState({
+    title: story.title,
+    content: story.content,
+  });
 
   const [errors, setErrors] = useState({
     title: "",
@@ -33,23 +29,13 @@ const StoryForm2 = ({ mode }) => {
     photos: "",
   });
 
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState(story.photos);
   const [viewerIndex, setViewerIndex] = useState(null);
 
   const isFormValid =
     formData.title.trim() &&
     formData.content.trim() &&
-    (isEdit || photos.length > 0);
-
-  useEffect(() => {
-    photosRef.current = photos;
-  }, [photos]);
-
-  useEffect(() => {
-    return () => {
-      photosRef.current.forEach((photo) => URL.revokeObjectURL(photo.url));
-    };
-  }, []);
+    photos.length > 0;
 
   useEffect(() => {
     if (viewerIndex === null) return;
@@ -83,7 +69,7 @@ const StoryForm2 = ({ mode }) => {
     const newErrors = {
       title: formData.title.trim() ? "" : REQUIRED_MESSAGE,
       content: formData.content.trim() ? "" : REQUIRED_MESSAGE,
-      photos: isEdit || photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
+      photos: photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
     };
 
     setErrors(newErrors);
@@ -91,7 +77,13 @@ const StoryForm2 = ({ mode }) => {
     const hasError = Object.values(newErrors).some((message) => message);
     if (hasError) return;
 
-    navigate(isEdit ? "/story/edit/3" : "/story/send/3");
+    setStory({
+      title: formData.title,
+      content: formData.content,
+      photos,
+    });
+
+    navigate(isEdit ? `/story/edit/${storyId}/3` : "/story/send/3");
   };
 
   const handlePhotoButtonClick = () => {
@@ -116,6 +108,7 @@ const StoryForm2 = ({ mode }) => {
     const newPhotos = files.slice(0, remainingSlots).map((file) => ({
       id: crypto.randomUUID(),
       url: URL.createObjectURL(file),
+      file,
     }));
 
     setPhotos((prev) => [...prev, ...newPhotos]);

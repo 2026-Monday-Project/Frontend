@@ -25,6 +25,9 @@ const MyStoryDetail = () => {
     const [touchEnd, setTouchEnd] = useState(null);
     
     const mockImages = [puppyRunningImg, puppyRunningImg, puppyRunningImg];
+
+    // TODO: 사연 상세 조회 API 연동 시 실제 storyId로 교체
+    const storyId = 1;
     
     const [consents, setConsents] = useState({
         performance: true,
@@ -101,7 +104,12 @@ const MyStoryDetail = () => {
             return (
                 <div className="bottom-button-area dual-buttons">
                     <button className="btn-delete-half" onClick={openDeleteModal}>삭제</button>
-                    <button className="btn-edit-half">사연 수정하기</button>
+                    <button
+                        className="btn-edit-half"
+                        onClick={() => navigate(`/story/edit/${storyId}`)}
+                    >
+                        사연 수정하기
+                    </button>
                 </div>
             );
         }

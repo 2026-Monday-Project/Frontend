@@ -1,19 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import stepIndicator from "@/assets/icons/step-indicator-1.png";
+import { checkEmailAvailable, checkNicknameAvailable } from "@/api/accountApi";
+import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
-
-// TODO: 수정 모드 진입 시 실제 사연 데이터로 교체
-const EDIT_INITIAL_DATA = {
-  petName: "루이",
-  petAge: "8",
-  petType: "골든리트리버",
-  nickname: "참쮸",
-  email: "pdjfd4844@gmail.com",
-};
 
 const EMPTY_DATA = {
   petName: "",
@@ -25,11 +18,11 @@ const EMPTY_DATA = {
 
 const StoryForm1 = ({ mode }) => {
   const navigate = useNavigate();
+  const { storyId } = useParams();
   const isEdit = mode === "edit";
+  const { info, setInfo } = useStoryForm();
 
-  const [formData, setFormData] = useState(
-    isEdit ? EDIT_INITIAL_DATA : EMPTY_DATA,
-  );
+  const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
 
   const [errors, setErrors] = useState({
     petName: "",
@@ -38,6 +31,11 @@ const StoryForm1 = ({ mode }) => {
     nickname: "",
     email: "",
   });
+
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState("");
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState("");
+  const [isCheckingNickname, setIsCheckingNickname] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -51,6 +49,14 @@ const StoryForm1 = ({ mode }) => {
       ...prev,
       [name]: "",
     }));
+
+    if (name === "email") {
+      setEmailSuccessMessage("");
+    }
+
+    if (name === "nickname") {
+      setNicknameSuccessMessage("");
+    }
   };
 
   const handleBack = () => {
@@ -71,15 +77,76 @@ const StoryForm1 = ({ mode }) => {
     const hasError = Object.values(newErrors).some((message) => message);
     if (hasError) return;
 
-    navigate(isEdit ? "/story/edit/2" : "/story/send/2");
+    setInfo(formData);
+
+    navigate(isEdit ? `/story/edit/${storyId}/2` : "/story/send/2");
   };
 
-  const handleNicknameCheck = () => {
-    // TODO: 닉네임 중복 확인 API 연결
+  const handleNicknameCheck = async () => {
+    const nickname = formData.nickname.trim();
+
+    if (!nickname) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({ ...prev, nickname: "*닉네임을 입력해주세요." }));
+      return;
+    }
+
+    setIsCheckingNickname(true);
+
+    try {
+      const { data } = await checkNicknameAvailable(nickname);
+
+      if (data.data.available) {
+        setErrors((prev) => ({ ...prev, nickname: "" }));
+        setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
+      } else {
+        setNicknameSuccessMessage("");
+        setErrors((prev) => ({
+          ...prev,
+          nickname: "이미 사용 중인 닉네임이에요.",
+        }));
+      }
+    } catch (error) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({
+        ...prev,
+        nickname: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
+      }));
+    } finally {
+      setIsCheckingNickname(false);
+    }
   };
 
-  const handleEmailCheck = () => {
-    // TODO: 이메일 중복 확인 API 연결
+  const handleEmailCheck = async () => {
+    const email = formData.email.trim();
+
+    if (!email) {
+      setEmailSuccessMessage("");
+      setErrors((prev) => ({ ...prev, email: "*이메일을 입력해주세요." }));
+      return;
+    }
+
+    setIsCheckingEmail(true);
+
+    try {
+      const { data } = await checkEmailAvailable(email);
+
+      if (data.data.available) {
+        setErrors((prev) => ({ ...prev, email: "" }));
+        setEmailSuccessMessage("사용 가능한 이메일이에요.");
+      } else {
+        setEmailSuccessMessage("");
+        setErrors((prev) => ({ ...prev, email: "이미 사용 중인 이메일이에요." }));
+      }
+    } catch (error) {
+      setEmailSuccessMessage("");
+      setErrors((prev) => ({
+        ...prev,
+        email: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
+      }));
+    } finally {
+      setIsCheckingEmail(false);
+    }
   };
 
   return (
@@ -202,6 +269,7 @@ const StoryForm1 = ({ mode }) => {
                   className="story-form-check-button"
                   type="button"
                   onClick={handleNicknameCheck}
+                  disabled={isCheckingNickname}
                 >
                   중복 확인
                 </button>
@@ -212,11 +280,13 @@ const StoryForm1 = ({ mode }) => {
               <p className="story-form-hint">
                 닉네임은 설정에서 변경할 수 있어요.
               </p>
-            ) : (
-              errors.nickname && (
-                <p className="story-form-error-message">{errors.nickname}</p>
-              )
-            )}
+            ) : errors.nickname ? (
+              <p className="story-form-error-message">{errors.nickname}</p>
+            ) : nicknameSuccessMessage ? (
+              <p className="story-form-success-message">
+                {nicknameSuccessMessage}
+              </p>
+            ) : null}
           </div>
 
           <div className="story-form-group">
@@ -249,6 +319,7 @@ const StoryForm1 = ({ mode }) => {
                   className="story-form-check-button"
                   type="button"
                   onClick={handleEmailCheck}
+                  disabled={isCheckingEmail}
                 >
                   중복 확인
                 </button>
@@ -257,11 +328,11 @@ const StoryForm1 = ({ mode }) => {
 
             {isEdit ? (
               <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
-            ) : (
-              errors.email && (
-                <p className="story-form-error-message">{errors.email}</p>
-              )
-            )}
+            ) : errors.email ? (
+              <p className="story-form-error-message">{errors.email}</p>
+            ) : emailSuccessMessage ? (
+              <p className="story-form-success-message">{emailSuccessMessage}</p>
+            ) : null}
           </div>
         </form>
 

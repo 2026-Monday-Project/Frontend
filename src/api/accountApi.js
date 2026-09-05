@@ -1,5 +1,21 @@
 import api from "@/api/axios";
 
+export const checkEmailAvailable = (email) => {
+    return api.get("/accounts/email-check", {
+        params: {
+            email,
+        },
+    });
+};
+
+export const checkNicknameAvailable = (nickname) => {
+    return api.get("/accounts/nickname-check", {
+        params: {
+            nickname,
+        },
+    });
+};
+
 export const checkMyNickname = (nickname) => {
     return api.get("/accounts/me/nickname-check", {
         params: {

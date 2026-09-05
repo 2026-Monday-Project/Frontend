@@ -12,6 +12,7 @@ import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import StoryComplete from "@/pages/StoryForm/StoryComplete";
+import StoryFormLayout from "@/pages/StoryForm/StoryFormLayout";
 import ConsentPage1 from "@/pages/ConsentPage/ConsentPage1";
 import ConsentPage2 from "@/pages/ConsentPage/ConsentPage2";
 import ConsentPage3 from "@/pages/ConsentPage/ConsentPage3";
@@ -65,54 +66,57 @@ const Router = () => {
                     element={<GardenDetail />}
                 />
 
-                {/* 사연 작성 */}
-                <Route path="/story" element={<StoryForm1 />} />
-                <Route path="/story/send/2" element={<StoryForm2 />} />
-                <Route path="/story/send/3" element={<StoryForm3 />} />
-                <Route
-                    path="/story/complete"
-                    element={<StoryComplete />}
-                />
+                {/* 사연 작성 / 수정 (스텝 간 입력값 공유를 위해 Layout으로 감쌈) */}
+                <Route element={<StoryFormLayout />}>
+                    {/* 사연 작성 */}
+                    <Route path="/story" element={<StoryForm1 />} />
+                    <Route path="/story/send/2" element={<StoryForm2 />} />
+                    <Route path="/story/send/3" element={<StoryForm3 />} />
+                    <Route
+                        path="/story/complete"
+                        element={<StoryComplete />}
+                    />
 
-                {/* 사연 수정 */}
-                <Route
-                    path="/story/edit"
-                    element={<StoryForm1 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/2"
-                    element={<StoryForm2 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/3"
-                    element={<StoryForm3 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/complete"
-                    element={<StoryComplete mode="edit" />}
-                />
+                    {/* 사연 수정 */}
+                    <Route
+                        path="/story/edit/:storyId"
+                        element={<StoryForm1 mode="edit" />}
+                    />
+                    <Route
+                        path="/story/edit/:storyId/2"
+                        element={<StoryForm2 mode="edit" />}
+                    />
+                    <Route
+                        path="/story/edit/:storyId/3"
+                        element={<StoryForm3 mode="edit" />}
+                    />
+                    <Route
+                        path="/story/edit/:storyId/complete"
+                        element={<StoryComplete mode="edit" />}
+                    />
 
-                {/* 동의서 세부내용 */}
-                <Route
-                    path="/story/consent/1"
-                    element={<ConsentPage1 />}
-                />
-                <Route
-                    path="/story/consent/2"
-                    element={<ConsentPage2 />}
-                />
-                <Route
-                    path="/story/consent/3"
-                    element={<ConsentPage3 />}
-                />
-                <Route
-                    path="/story/consent/4"
-                    element={<ConsentPage4 />}
-                />
-                <Route
-                    path="/story/consent/5"
-                    element={<ConsentPage5 />}
-                />
+                    {/* 동의서 세부내용 */}
+                    <Route
+                        path="/story/consent/1"
+                        element={<ConsentPage1 />}
+                    />
+                    <Route
+                        path="/story/consent/2"
+                        element={<ConsentPage2 />}
+                    />
+                    <Route
+                        path="/story/consent/3"
+                        element={<ConsentPage3 />}
+                    />
+                    <Route
+                        path="/story/consent/4"
+                        element={<ConsentPage4 />}
+                    />
+                    <Route
+                        path="/story/consent/5"
+                        element={<ConsentPage5 />}
+                    />
+                </Route>
 
                 {/* 로그인 */}
                 <Route path="/login" element={<Login />} />
