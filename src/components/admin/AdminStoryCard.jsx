@@ -54,7 +54,7 @@ const AdminStoryCard = ({ story }) => {
 
             <div className="admin-story-card-bottom">
                 <span className="admin-story-card-attachment">
-                    첨부 · 사진{" "}
+                    찹츄 · 사진{" "}
                     {story.imageCount !== undefined
                         ? `${story.imageCount}장`
                         : "-장"}
