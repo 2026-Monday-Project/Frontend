@@ -1,58 +1,86 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import AdminStoryCard from "@/components/admin/AdminStoryCard";
 import reviewEmptyImage from "@/assets/images/custom/admin-review-empty.svg";
 import homeDivider from "@/assets/images/custom/home-divider.svg";
 import {
-    ADMIN_STATUS,
-    adminStoryList,
-} from "@/data/adminMockData";
+    getAdminStoryList,
+    getAdminStorySummary,
+} from "@/api/adminApi";
 
 import "./AdminReview.css";
 
 const filterList = [
     {
-        value: ADMIN_STATUS.REVIEWING,
+        value: "PENDING",
         label: "검토중",
     },
     {
-        value: ADMIN_STATUS.PUBLIC,
+        value: "PUBLIC",
         label: "공개",
     },
     {
-        value: ADMIN_STATUS.PRIVATE,
+        value: "PRIVATE",
         label: "비공개",
     },
     {
-        value: "all",
+        value: "ALL",
         label: "전체",
     },
 ];
 
 const AdminReview = () => {
     const [selectedFilter, setSelectedFilter] =
-        useState(ADMIN_STATUS.REVIEWING);
+        useState("PENDING");
 
-    const reviewingCount = adminStoryList.filter(
-        (story) => story.status === ADMIN_STATUS.REVIEWING,
-    ).length;
+    const [storyList, setStoryList] = useState([]);
 
-    const publicCount = adminStoryList.filter(
-        (story) => story.status === ADMIN_STATUS.PUBLIC,
-    ).length;
+    const [summary, setSummary] = useState({
+        pendingCount: 0,
+        publicCount: 0,
+        privateCount: 0,
+        totalCount: 0,
+    });
 
-    const privateCount = adminStoryList.filter(
-        (story) => story.status === ADMIN_STATUS.PRIVATE,
-    ).length;
+    useEffect(() => {
+        const fetchSummary = async () => {
+            try {
+                const response =
+                    await getAdminStorySummary();
 
-    const filteredStoryList = useMemo(() => {
-        if (selectedFilter === "all") {
-            return adminStoryList;
-        }
+                setSummary(response.data.data);
+            } catch {
+                setSummary({
+                    pendingCount: 0,
+                    publicCount: 0,
+                    privateCount: 0,
+                    totalCount: 0,
+                });
+            }
+        };
 
-        return adminStoryList.filter(
-            (story) => story.status === selectedFilter,
-        );
+        fetchSummary();
+    }, []);
+
+    useEffect(() => {
+        const fetchStoryList = async () => {
+            try {
+                const response =
+                    await getAdminStoryList({
+                        status: selectedFilter,
+                        page: 0,
+                        size: 20,
+                    });
+
+                setStoryList(
+                    response.data.data.stories,
+                );
+            } catch {
+                setStoryList([]);
+            }
+        };
+
+        fetchStoryList();
     }, [selectedFilter]);
 
     const handleFilterClick = (filter) => {
@@ -68,21 +96,26 @@ const AdminReview = () => {
             <section className="admin-review-summary">
                 <div className="admin-review-summary-main">
                     <span>검토 중</span>
-                    <strong>{reviewingCount}</strong>
+
+                    <strong>
+                        {summary.pendingCount}
+                    </strong>
                 </div>
 
                 <div className="admin-review-summary-row">
                     <div className="admin-review-summary-small">
                         <span>공개</span>
+
                         <strong className="admin-review-public-count">
-                            {publicCount}
+                            {summary.publicCount}
                         </strong>
                     </div>
 
                     <div className="admin-review-summary-small">
                         <span>비공개</span>
+
                         <strong className="admin-review-private-count">
-                            {privateCount}
+                            {summary.privateCount}
                         </strong>
                     </div>
                 </div>
@@ -107,11 +140,11 @@ const AdminReview = () => {
                 ))}
             </div>
 
-            {filteredStoryList.length > 0 ? (
+            {storyList.length > 0 ? (
                 <div className="admin-review-story-list">
-                    {filteredStoryList.map((story) => (
+                    {storyList.map((story) => (
                         <AdminStoryCard
-                            key={story.id}
+                            key={story.storyId}
                             story={story}
                         />
                     ))}

@@ -9,7 +9,33 @@ const AdminStoryCard = ({ story }) => {
     const navigate = useNavigate();
 
     const handleReviewClick = () => {
-        navigate(`/admin/reviews/${story.id}`);
+        navigate(`/admin/reviews/${story.storyId}`);
+    };
+
+    const formatCreatedAt = (createdAt) => {
+        if (!createdAt) {
+            return "";
+        }
+
+        const date = new Date(createdAt);
+
+        const month = String(
+            date.getMonth() + 1,
+        ).padStart(2, "0");
+
+        const day = String(
+            date.getDate(),
+        ).padStart(2, "0");
+
+        const hours = String(
+            date.getHours(),
+        ).padStart(2, "0");
+
+        const minutes = String(
+            date.getMinutes(),
+        ).padStart(2, "0");
+
+        return `${month}.${day} ${hours}:${minutes}`;
     };
 
     return (
@@ -18,7 +44,7 @@ const AdminStoryCard = ({ story }) => {
                 <AdminStatusBadge status={story.status} />
 
                 <span className="admin-story-card-date">
-                    {story.submittedAt}
+                    {formatCreatedAt(story.createdAt)}
                 </span>
             </div>
 
@@ -28,7 +54,10 @@ const AdminStoryCard = ({ story }) => {
 
             <div className="admin-story-card-bottom">
                 <span className="admin-story-card-attachment">
-                    첨부 · 사진 {story.images.length || 3}장
+                    찹츄 · 사진{" "}
+                    {story.imageCount !== undefined
+                        ? `${story.imageCount}장`
+                        : "-장"}
                 </span>
 
                 <button

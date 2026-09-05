@@ -1,8 +1,15 @@
-import { useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import {
+    useNavigate,
+    useParams,
+} from "react-router-dom";
 
 import arrowBackIcon from "@/assets/icons/arrow-back.svg";
-import { adminStoryList } from "@/data/adminMockData";
+import { getAdminStoryDetail } from "@/api/adminApi";
 
 import "./AdminReviewPhotos.css";
 
@@ -12,32 +19,47 @@ const AdminReviewPhotos = () => {
     const navigate = useNavigate();
     const { storyId } = useParams();
 
-    const story = adminStoryList.find(
-        (item) => item.id === Number(storyId),
-    );
-
     const thumbnailRef = useRef(null);
     const dragStartX = useRef(0);
     const dragStartScrollLeft = useRef(0);
     const dragDistance = useRef(0);
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
+    const [photoList, setPhotoList] = useState([]);
+    const [currentIndex, setCurrentIndex] =
+        useState(0);
 
-    if (!story) {
-        return null;
-    }
+    const [scrollProgress, setScrollProgress] =
+        useState(0);
 
-    const photoList = story.images;
+    const [isDragging, setIsDragging] =
+        useState(false);
+
+    useEffect(() => {
+        const fetchStoryPhotos = async () => {
+            try {
+                const response =
+                    await getAdminStoryDetail(storyId);
+
+                setPhotoList(
+                    response.data.data.imageUrls ?? [],
+                );
+            } catch {
+                setPhotoList([]);
+            }
+        };
+
+        fetchStoryPhotos();
+    }, [storyId]);
 
     const handleBack = () => {
         navigate(`/admin/reviews/${storyId}`);
     };
 
     const handleThumbnailClick = (index) => {
-        // 마우스로 끌었던 직후 발생하는 클릭은 무시
-        if (Math.abs(dragDistance.current) > DRAG_THRESHOLD) {
+        if (
+            Math.abs(dragDistance.current) >
+            DRAG_THRESHOLD
+        ) {
             return;
         }
 
@@ -52,7 +74,8 @@ const AdminReviewPhotos = () => {
         }
 
         const maxScrollLeft =
-            element.scrollWidth - element.clientWidth;
+            element.scrollWidth -
+            element.clientWidth;
 
         if (maxScrollLeft <= 0) {
             setScrollProgress(0);
@@ -74,7 +97,9 @@ const AdminReviewPhotos = () => {
         setIsDragging(true);
 
         dragStartX.current = event.clientX;
-        dragStartScrollLeft.current = element.scrollLeft;
+        dragStartScrollLeft.current =
+            element.scrollLeft;
+
         dragDistance.current = 0;
     };
 
@@ -90,18 +115,19 @@ const AdminReviewPhotos = () => {
         }
 
         const distance =
-            event.clientX - dragStartX.current;
+            event.clientX -
+            dragStartX.current;
 
         dragDistance.current = distance;
 
         element.scrollLeft =
-            dragStartScrollLeft.current - distance;
+            dragStartScrollLeft.current -
+            distance;
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
 
-        // click 이벤트가 처리된 뒤 드래그 거리 초기화
         window.setTimeout(() => {
             dragDistance.current = 0;
         }, 0);
@@ -135,7 +161,9 @@ const AdminReviewPhotos = () => {
                 </button>
 
                 <span className="admin-review-photos-count">
-                    {currentIndex + 1}/{photoList.length}
+                    {photoList.length > 0
+                        ? `${currentIndex + 1}/${photoList.length}`
+                        : "0/0"}
                 </span>
             </header>
 
@@ -143,13 +171,13 @@ const AdminReviewPhotos = () => {
                 {photoList[currentIndex] ? (
                     <img
                         src={photoList[currentIndex]}
-                        alt={`제출 사진 ${currentIndex + 1}`}
+                        alt={`제출 사진 ${
+                            currentIndex + 1
+                        }`}
                         draggable="false"
                     />
                 ) : (
-                    <span>
-                        사진 {currentIndex + 1}
-                    </span>
+                    <span>제출 사진 없음</span>
                 )}
             </div>
 
@@ -161,38 +189,43 @@ const AdminReviewPhotos = () => {
                             ? "admin-review-photos-thumbnails-dragging"
                             : ""
                     }`}
-                    onScroll={handleThumbnailScroll}
+                    onScroll={
+                        handleThumbnailScroll
+                    }
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseLeave}
+                    onMouseLeave={
+                        handleMouseLeave
+                    }
                 >
-                    {photoList.map((photo, index) => (
-                        <button
-                            key={index}
-                            type="button"
-                            className={`admin-review-photo-thumbnail ${
-                                currentIndex === index
-                                    ? "admin-review-photo-thumbnail-active"
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                handleThumbnailClick(index)
-                            }
-                        >
-                            {photo ? (
+                    {photoList.map(
+                        (photo, index) => (
+                            <button
+                                key={photo}
+                                type="button"
+                                className={`admin-review-photo-thumbnail ${
+                                    currentIndex ===
+                                    index
+                                        ? "admin-review-photo-thumbnail-active"
+                                        : ""
+                                }`}
+                                onClick={() =>
+                                    handleThumbnailClick(
+                                        index,
+                                    )
+                                }
+                            >
                                 <img
                                     src={photo}
-                                    alt={`사진 ${index + 1}`}
+                                    alt={`사진 ${
+                                        index + 1
+                                    }`}
                                     draggable="false"
                                 />
-                            ) : (
-                                <span>
-                                    사진 {index + 1}
-                                </span>
-                            )}
-                        </button>
-                    ))}
+                            </button>
+                        ),
+                    )}
                 </div>
 
                 {photoList.length > 3 && (
@@ -205,7 +238,8 @@ const AdminReviewPhotos = () => {
                             style={{
                                 left: `${scrollProgress * 100}%`,
                                 transform: `translateX(-${
-                                    scrollProgress * 74.5
+                                    scrollProgress *
+                                    74.5
                                 }px)`,
                             }}
                         />
