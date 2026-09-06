@@ -6,6 +6,13 @@
     background-color: var(--color-background);
 }
 
+.garden-detail-status {
+    margin: 48px 20px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    text-align: center;
+}
+
 .garden-detail-content {
     position: relative;
     z-index: 1;
