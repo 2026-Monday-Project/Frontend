@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { StoryFormContext } from "@/pages/StoryForm/storyFormContext";
-import puppyRunningImg from "@/assets/images/custom/puppy-running.svg";
 
 const INITIAL_INFO = {
   petName: "",
@@ -23,24 +22,6 @@ const INITIAL_CONSENTS = {
   website: false,
   intro: false,
   sns: false,
-};
-
-// TODO: 사연 상세 조회 API가 나오면 이 목데이터를 실제 응답으로 교체
-const EDIT_MOCK_STORY = {
-  petName: "루이",
-  petAge: "8",
-  petType: "골든리트리버",
-  nickname: "참쮸",
-  email: "pdjfd4844@gmail.com",
-  title: "산책 한마디에 대소동",
-  content:
-    "‘산책 가자’ 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리에 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요.",
-  images: [
-    { imageId: 1, imageUrl: puppyRunningImg },
-    { imageId: 2, imageUrl: puppyRunningImg },
-  ],
-  introduceConsent: true,
-  snsConsent: false,
 };
 
 const buildEditState = (source) => ({
@@ -72,9 +53,12 @@ const buildEditState = (source) => ({
 const StoryFormLayout = () => {
   const location = useLocation();
 
+  // 수정 진입 시에는 진입 화면이 넘겨준 사연 데이터(location.state.editStory)로만 초기화한다.
+  // 주소로 직접 접근해 데이터가 없으면 빈 상태로 두고, 제출은 StoryForm3에서 차단한다.
   const [seed] = useState(() => {
     if (!location.pathname.startsWith("/story/edit")) return null;
-    return buildEditState(location.state?.editStory ?? EDIT_MOCK_STORY);
+    if (!location.state?.editStory) return null;
+    return buildEditState(location.state.editStory);
   });
 
   const [info, setInfo] = useState(seed ? seed.info : INITIAL_INFO);

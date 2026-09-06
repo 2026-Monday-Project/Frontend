@@ -128,6 +128,28 @@ const StoryForm3 = ({ mode }) => {
   };
 
   const handleSubmit = async () => {
+    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단
+    const infoIncomplete =
+      !info.petName?.trim() ||
+      !String(info.petAge ?? "").trim() ||
+      !info.petType?.trim() ||
+      (!isEdit && (!info.nickname?.trim() || !info.email?.trim()));
+    const storyIncomplete =
+      !story.title?.trim() ||
+      !story.content?.trim() ||
+      story.photos.length === 0;
+
+    if (infoIncomplete || storyIncomplete) {
+      if (isEdit) {
+        navigate("/my-garden", { replace: true });
+      } else {
+        navigate(infoIncomplete ? "/story" : "/story/send/2", {
+          replace: true,
+        });
+      }
+      return;
+    }
+
     const newErrors = {
       privacy: consents.privacy ? "" : REQUIRED_MESSAGE,
       content: consents.content ? "" : REQUIRED_MESSAGE,

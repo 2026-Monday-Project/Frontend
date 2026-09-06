@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import stepIndicator from "@/assets/icons/step-indicator-1.png";
@@ -23,6 +23,12 @@ const StoryForm1 = ({ mode }) => {
   const { info, setInfo } = useStoryForm();
 
   const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
+
+  // 중복 확인 응답이 도착했을 때 입력값이 그새 바뀌었는지 판별하기 위한 최신값 참조
+  const latestFormDataRef = useRef(formData);
+  useEffect(() => {
+    latestFormDataRef.current = formData;
+  }, [formData]);
 
   const [errors, setErrors] = useState({
     petName: "",
@@ -96,6 +102,8 @@ const StoryForm1 = ({ mode }) => {
     try {
       const { data } = await checkNicknameAvailable(nickname);
 
+      if (nickname !== latestFormDataRef.current.nickname.trim()) return;
+
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, nickname: "" }));
         setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
@@ -107,6 +115,8 @@ const StoryForm1 = ({ mode }) => {
         }));
       }
     } catch (error) {
+      if (nickname !== latestFormDataRef.current.nickname.trim()) return;
+
       setNicknameSuccessMessage("");
       setErrors((prev) => ({
         ...prev,
@@ -131,6 +141,8 @@ const StoryForm1 = ({ mode }) => {
     try {
       const { data } = await checkEmailAvailable(email);
 
+      if (email !== latestFormDataRef.current.email.trim()) return;
+
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, email: "" }));
         setEmailSuccessMessage("사용 가능한 이메일이에요.");
@@ -139,6 +151,8 @@ const StoryForm1 = ({ mode }) => {
         setErrors((prev) => ({ ...prev, email: "이미 사용 중인 이메일이에요." }));
       }
     } catch (error) {
+      if (email !== latestFormDataRef.current.email.trim()) return;
+
       setEmailSuccessMessage("");
       setErrors((prev) => ({
         ...prev,

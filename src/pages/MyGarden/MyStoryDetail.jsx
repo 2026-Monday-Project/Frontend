@@ -26,8 +26,24 @@ const MyStoryDetail = () => {
     
     const mockImages = [puppyRunningImg, puppyRunningImg, puppyRunningImg];
 
-    // TODO: 사연 상세 조회 API 연동 시 실제 storyId로 교체
-    const storyId = 1;
+    // TODO: 사연 상세 조회 API 연동 시 실제 응답 데이터로 교체
+    const editStory = {
+        storyId: 1,
+        petName: '루이',
+        petAge: 8,
+        petType: '골든리트리버',
+        nickname: '참쮸',
+        email: 'pdjfd4844@gmail.com',
+        title: '산책 한마디에 대소동',
+        content:
+            "'산책 가자' 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리에 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요.",
+        images: [
+            { imageId: 1, imageUrl: puppyRunningImg },
+            { imageId: 2, imageUrl: puppyRunningImg },
+        ],
+        introduceConsent: true,
+        snsConsent: false,
+    };
     
     const [consents, setConsents] = useState({
         performance: true,
@@ -106,7 +122,11 @@ const MyStoryDetail = () => {
                     <button className="btn-delete-half" onClick={openDeleteModal}>삭제</button>
                     <button
                         className="btn-edit-half"
-                        onClick={() => navigate(`/story/edit/${storyId}`)}
+                        onClick={() =>
+                            navigate(`/story/edit/${editStory.storyId}`, {
+                                state: { editStory },
+                            })
+                        }
                     >
                         사연 수정하기
                     </button>
