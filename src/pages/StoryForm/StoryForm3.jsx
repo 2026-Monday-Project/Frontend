@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import chevronRight from "@/assets/icons/Vector green.png";
 import stepIndicator from "@/assets/icons/step-indicator-3.png";
+import { createStory, updateStory } from "@/api/storyApi";
+import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm3.css";
 
@@ -86,21 +88,18 @@ const ConsentList = ({ items, consents, errors = {}, onToggle, onViewDetail }) =
 
 const StoryForm3 = ({ mode }) => {
   const navigate = useNavigate();
+  const { storyId } = useParams();
   const isEdit = mode === "edit";
-
-  const [consents, setConsents] = useState({
-    privacy: isEdit,
-    content: isEdit,
-    website: isEdit,
-    intro: isEdit,
-    sns: isEdit,
-  });
+  const { info, story, consents, setConsents, reset } = useStoryForm();
 
   const [errors, setErrors] = useState({
     privacy: "",
     content: "",
     website: "",
   });
+
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isAllRequiredChecked = REQUIRED_CONSENTS.every(
     ({ key }) => consents[key],
@@ -116,6 +115,8 @@ const StoryForm3 = ({ mode }) => {
       ...prev,
       [key]: "",
     }));
+
+    setSubmitError("");
   };
 
   const handlePrev = () => {
@@ -126,7 +127,29 @@ const StoryForm3 = ({ mode }) => {
     navigate(detailPath);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단
+    const infoIncomplete =
+      !info.petName?.trim() ||
+      !String(info.petAge ?? "").trim() ||
+      !info.petType?.trim() ||
+      (!isEdit && (!info.nickname?.trim() || !info.email?.trim()));
+    const storyIncomplete =
+      !story.title?.trim() ||
+      !story.content?.trim() ||
+      story.photos.length === 0;
+
+    if (infoIncomplete || storyIncomplete) {
+      if (isEdit) {
+        navigate("/my-garden", { replace: true });
+      } else {
+        navigate(infoIncomplete ? "/story" : "/story/send/2", {
+          replace: true,
+        });
+      }
+      return;
+    }
+
     const newErrors = {
       privacy: consents.privacy ? "" : REQUIRED_MESSAGE,
       content: consents.content ? "" : REQUIRED_MESSAGE,
@@ -138,8 +161,60 @@ const StoryForm3 = ({ mode }) => {
     const hasError = Object.values(newErrors).some((message) => message);
     if (hasError) return;
 
-    // TODO: 사연 제출 API 연결
-    navigate(isEdit ? "/story/edit/complete" : "/story/complete");
+    const newImages = story.photos
+      .map((photo) => photo.file)
+      .filter(Boolean);
+
+    const request = isEdit
+      ? {
+          petName: info.petName,
+          petType: info.petType,
+          petAge: Number(info.petAge),
+          title: story.title,
+          content: story.content,
+          keepImageIds: story.photos
+            .filter((photo) => photo.imageId != null)
+            .map((photo) => photo.imageId),
+          introduceConsent: consents.intro,
+          snsConsent: consents.sns,
+        }
+      : {
+          nickname: info.nickname,
+          email: info.email,
+          petName: info.petName,
+          petType: info.petType,
+          petAge: Number(info.petAge),
+          title: story.title,
+          content: story.content,
+          privacyConsent: consents.privacy,
+          contentPolicyConsent: consents.content,
+          publicConsent: consents.website,
+          introduceConsent: consents.intro,
+          snsConsent: consents.sns,
+        };
+
+    setSubmitError("");
+    setIsSubmitting(true);
+
+    try {
+      if (isEdit) {
+        await updateStory(storyId, request, newImages);
+      } else {
+        await createStory(request, newImages);
+      }
+
+      reset();
+      navigate(isEdit ? `/story/edit/${storyId}/complete` : "/story/complete");
+    } catch (error) {
+      setSubmitError(
+        error.response?.data?.message ??
+          (isEdit
+            ? "사연 수정에 실패했어요. 잠시 후 다시 시도해주세요."
+            : "사연 제출에 실패했어요. 잠시 후 다시 시도해주세요."),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -189,6 +264,10 @@ const StoryForm3 = ({ mode }) => {
           />
         </div>
 
+        {submitError && (
+          <p className="story-form-error-message">{submitError}</p>
+        )}
+
         <div className="story-form3-footer">
           <button
             type="button"
@@ -202,8 +281,15 @@ const StoryForm3 = ({ mode }) => {
             type="button"
             className={`story-form3-submit-button ${isAllRequiredChecked ? "is-valid" : ""}`}
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
-            {isEdit ? "수정 완료" : "사연 보내기"}
+            {isEdit
+              ? isSubmitting
+                ? "수정 중..."
+                : "수정 완료"
+              : isSubmitting
+                ? "보내는 중..."
+                : "사연 보내기"}
           </button>
         </div>
       </section>
