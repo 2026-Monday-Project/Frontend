@@ -24,10 +24,9 @@ const MyStoryDetail = () => {
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
     
-    const mockImages = [puppyRunningImg, puppyRunningImg, puppyRunningImg];
-
     // TODO: 사연 상세 조회 API 연동 시 실제 응답 데이터로 교체
-    const editStory = {
+    // 상세 화면 렌더링과 "사연 수정하기" 이동에 모두 이 단일 원본을 사용한다.
+    const story = {
         storyId: 1,
         petName: '루이',
         petAge: 8,
@@ -36,18 +35,23 @@ const MyStoryDetail = () => {
         email: 'pdjfd4844@gmail.com',
         title: '산책 한마디에 대소동',
         content:
-            "'산책 가자' 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리에 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요.",
+            "'산책 가자' 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리만 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요. 너무 신난 나머지 제 신발 한 짝을 물고 도망간 적도 있어요. 매번 정신없지만 그 모습 때문에 꼭 웃게 되어요.",
         images: [
             { imageId: 1, imageUrl: puppyRunningImg },
             { imageId: 2, imageUrl: puppyRunningImg },
+            { imageId: 3, imageUrl: puppyRunningImg },
         ],
+        viewCount: 123,
+        likeCount: 12,
         introduceConsent: true,
-        snsConsent: false,
+        snsConsent: true,
     };
-    
+
+    const storyImages = story.images.map((image) => image.imageUrl);
+
     const [consents, setConsents] = useState({
-        performance: true,
-        sns: true
+        performance: story.introduceConsent,
+        sns: story.snsConsent
     });
 
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
@@ -86,7 +90,7 @@ const MyStoryDetail = () => {
         const distance = touchStart - touchEnd;
         const minSwipeDistance = 50;
 
-        if (distance > minSwipeDistance && currentImageIndex < mockImages.length - 1) {
+        if (distance > minSwipeDistance && currentImageIndex < storyImages.length - 1) {
             setCurrentImageIndex(prev => prev + 1);
         }
         
@@ -123,8 +127,8 @@ const MyStoryDetail = () => {
                     <button
                         className="btn-edit-half"
                         onClick={() =>
-                            navigate(`/story/edit/${editStory.storyId}`, {
-                                state: { editStory },
+                            navigate(`/story/edit/${story.storyId}`, {
+                                state: { editStory: story },
                             })
                         }
                     >
@@ -165,7 +169,7 @@ const MyStoryDetail = () => {
                         type={status}
                         subText={status === '검토중' ? ' · 수정가능' : '· 수정불가능'}
                     />
-                    <h2 className="detail-title">산책 한마디에 대소동</h2>
+                    <h2 className="detail-title">{story.title}</h2>
                 </div>
 
                 <div 
@@ -181,16 +185,16 @@ const MyStoryDetail = () => {
                     style={{ cursor: 'pointer' }}
                 >
                     <img 
-                        src={mockImages[currentImageIndex]} 
+                        src={storyImages[currentImageIndex]} 
                         alt="사연 이미지" 
                         className="detail-image" 
                         onDragStart={(e) => e.preventDefault()} 
                     />
 
-                    <span className="image-indicator">{currentImageIndex + 1}/{mockImages.length}</span>
+                    <span className="image-indicator">{currentImageIndex + 1}/{storyImages.length}</span>
 
                     <div className="image-dots-wrapper">
-                        {mockImages.map((_, index) => (
+                        {storyImages.map((_, index) => (
                             <img
                                 key={index}
                                 src={index === currentImageIndex ? currentPicIcon : otherPicIcon}
@@ -202,13 +206,11 @@ const MyStoryDetail = () => {
                 </div>
 
                 <div className="detail-body">
-                    <p className="detail-text">
-                        '산책 가자' 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리만 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요. 너무 신난 나머지 제 신발 한 짝을 물고 도망간 적도 있어요. 매번 정신없지만 그 모습 때문에 꼭 웃게 되어요.
-                    </p>
+                    <p className="detail-text">{story.content}</p>
                     <div className="detail-metrics">
-                        <span className="metric">조회 123</span>
+                        <span className="metric">조회 {story.viewCount}</span>
                         <span className="metric-dot">·</span>
-                        <span className="metric">공감 12</span>
+                        <span className="metric">공감 {story.likeCount}</span>
                     </div>
                 </div>
 
@@ -279,11 +281,11 @@ const MyStoryDetail = () => {
 
             {isPhotoViewerOpen && (
                 <StoryPhotoViewer
-                    images={mockImages}
+                    images={storyImages}
                     currentIndex={currentImageIndex}
                     onChange={setCurrentImageIndex}
                     onClose={closePhotoViewer}
-                    title="산책 한마디에 대소동"
+                    title={story.title}
                 />
             )}
         </div>
