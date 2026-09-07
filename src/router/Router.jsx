@@ -121,32 +121,32 @@ const Router = () => {
                 {/* 로그인 */}
                 <Route path="/login" element={<Login />} />
                 <Route
-                    path="/login-completed"
+                    path="/login/completed"
                     element={<LoginCompleted />}
                 />
 
             {/* 내 정원 */}
-            <Route path="/my-garden" element={<MyGarden />} />
-            <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
-            <Route path="/my-stories-list" element={<MyStoriesList />} />
-            <Route path="/my-story-detail" element={<MyStoryDetail />} />
+            <Route path="/mygarden" element={<MyGarden />} />
+            <Route path="/mygarden/unlogged-in" element={<MyGardenUnLoggedIn />} />
+            <Route path="/mystories/list" element={<MyStoriesList />} />
+            <Route path="/mystories/detail" element={<MyStoryDetail />} />
 
                 {/* 편지함 */}
                 <Route path="/mailbox" element={<Mailbox />} />
                 <Route
-                    path="/mail-public"
+                    path="/mailbox/public"
                     element={<MailPublic />}
                 />
                 <Route
-                    path="/mail-under-review"
+                    path="/mailbox/under-review"
                     element={<MailUnderReview />}
                 />
                 <Route
-                    path="/mail-hidden"
+                    path="/mailbox/hidden"
                     element={<MailHidden />}
                 />
                 <Route
-                    path="/mail-deleted"
+                    path="/mailbox/deleted"
                     element={<MailDeleted />}
                 />
 

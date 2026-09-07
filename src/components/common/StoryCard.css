@@ -84,6 +84,12 @@
   background-color: var(--color-brown);
 }
 
+.story-card-common .story-card-pet-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
 .story-card-common .story-card-meta-info {
   display: flex;
   align-items: center;

@@ -19,7 +19,7 @@ const MyGarden = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleGoToMyStories = () => {
-        navigate('/my-stories-list');
+        navigate('/mystories/list');
     };
 
     const handleGoToMailbox = () => {
@@ -99,7 +99,7 @@ const MyGarden = () => {
                             date="2026.07.15"
                             views={1}
                             likes={1}
-                            onClick={() => navigate('/my-story-detail')}
+                            onClick={() => navigate('/mystories/detail')}
                         />
                         <StoryCard 
                             thumbnail={louisProfile}
@@ -108,7 +108,7 @@ const MyGarden = () => {
                             date="2026.07.15"
                             views={1}
                             likes={1}
-                            onClick={() => navigate('/my-story-detail')}
+                            onClick={() => navigate('/mystories/detail')}
                         />
                     </div>
                 </section>
@@ -129,14 +129,14 @@ const MyGarden = () => {
                             </div>
                             <img src={unreadDot} alt="" className="unread-dot" />
                         </div>
-                        <div className="mail-item" onClick={() => navigate('/login-completed')} style={{ cursor: 'pointer' }}>
+                        <div className="mail-item" onClick={() => navigate('/login/completed')} style={{ cursor: 'pointer' }}>
                             <div className="mail-content">
                                 <p className="mail-title">정원에 오신 걸 환영합니다.</p>
                                 <p className="mail-desc">따뜻한 이야기를 함께 나눠보세요.</p>
                                 <p className="mail-date">2026.07.01</p>
                             </div>
                         </div>
-                        <div className="mail-item-read" onClick={() => navigate('/login-completed')} style={{ cursor: 'pointer' }}>
+                        <div className="mail-item-read" onClick={() => navigate('/login/completed')} style={{ cursor: 'pointer' }}>
                             <div className="mail-content-read">
                                 <p className="mail-title-read">정원에 오신 걸 환영합니다.</p>
                                 <p className="mail-desc-read">따뜻한 이야기를 함께 나눠보세요.</p>
