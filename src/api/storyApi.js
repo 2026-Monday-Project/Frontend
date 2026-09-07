@@ -27,3 +27,27 @@ export const updateStory = (storyId, request, images = []) => {
         buildStoryFormData(request, images),
     );
 };
+
+export const getStories = ({ sort = "LATEST", page = 0, size = 20 } = {}) => {
+    return api.get("/stories", {
+        params: { sort, page, size },
+    });
+};
+
+export const getStoryDetail = (storyId) => {
+    return api.get(`/stories/${storyId}`, {
+        withCredentials: true,
+    });
+};
+
+export const likeStory = (storyId) => {
+    return api.post(`/stories/${storyId}/likes`, undefined, {
+        withCredentials: true,
+    });
+};
+
+export const unlikeStory = (storyId) => {
+    return api.delete(`/stories/${storyId}/likes`, {
+        withCredentials: true,
+    });
+};

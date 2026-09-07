@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import arrowDownIcon from "@/assets/icons/arrow-down.svg";
@@ -7,29 +7,74 @@ import Drawer from "@/components/common/Drawer";
 import Navbar from "@/components/common/Navbar";
 import GardenEmptyState from "@/components/garden/GardenEmptyState";
 import GardenStoryList from "@/components/garden/GardenStoryList";
-import { gardenStories } from "@/data/gardenStories";
+import { getStories } from "@/api/storyApi";
 
 import "./Garden.css";
 
 const SORT_OPTIONS = ["최신순", "조회순", "공감순"];
 
-const SORT_COMPARATORS = {
-    최신순: (firstStory, secondStory) => secondStory.date.localeCompare(firstStory.date),
-    조회순: (firstStory, secondStory) => secondStory.viewCount - firstStory.viewCount,
-    공감순: (firstStory, secondStory) => secondStory.likeCount - firstStory.likeCount,
+const SORT_VALUES = {
+    최신순: "LATEST",
+    조회순: "VIEWS",
+    공감순: "LIKES",
 };
+
+const formatDate = (createdAt) => createdAt?.slice(0, 10).replaceAll("-", ".") ?? "";
+
+const toStoryCardData = (story) => ({
+    id: story.storyId,
+    image: story.thumbnailUrl,
+    title: story.title,
+    petName: story.petName,
+    date: formatDate(story.createdAt),
+    viewCount: story.viewCount,
+    likeCount: story.likeCount,
+});
 
 const Garden = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
+    const [stories, setStories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
     const sortRef = useRef(null);
-    const stories = gardenStories;
-    const sortedStories = useMemo(
-        () => [...stories].sort(SORT_COMPARATORS[selectedSort]),
-        [selectedSort, stories],
-    );
+
+    useEffect(() => {
+        let isActive = true;
+
+        const loadStories = async () => {
+            setIsLoading(true);
+            setErrorMessage("");
+
+            try {
+                const response = await getStories({
+                    sort: SORT_VALUES[selectedSort],
+                    page: 0,
+                    size: 20,
+                });
+                const responseStories = response.data?.data?.stories;
+
+                if (isActive) {
+                    setStories(Array.isArray(responseStories) ? responseStories.map(toStoryCardData) : []);
+                }
+            } catch (error) {
+                if (isActive) {
+                    console.error("정원 사연 목록을 불러오지 못했습니다.", error);
+                    setErrorMessage("사연을 불러오지 못했어요. 잠시 후 다시 시도해주세요.");
+                }
+            } finally {
+                if (isActive) setIsLoading(false);
+            }
+        };
+
+        loadStories();
+
+        return () => {
+            isActive = false;
+        };
+    }, [selectedSort]);
 
     useEffect(() => {
         if (!isSortOpen) return undefined;
@@ -125,11 +170,15 @@ const Garden = () => {
                     )}
                 </div>
 
-                {stories.length === 0 ? (
+                {isLoading ? (
+                    <p className="garden-status" role="status">사연을 불러오는 중이에요.</p>
+                ) : errorMessage ? (
+                    <p className="garden-status" role="alert">{errorMessage}</p>
+                ) : stories.length === 0 ? (
                     <GardenEmptyState />
                 ) : (
                     <GardenStoryList
-                        stories={sortedStories}
+                        stories={stories}
                         onStoryClick={(storyId) => navigate(`/garden/${storyId}`)}
                     />
                 )}
