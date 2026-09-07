@@ -40,8 +40,20 @@ const StoryForm1 = ({ mode }) => {
 
   const [emailSuccessMessage, setEmailSuccessMessage] = useState("");
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState("");
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+  const isReadyForNext =
+    formData.petName.trim() &&
+    formData.petAge.trim() &&
+    formData.petType.trim() &&
+    (isEdit ||
+      (isNicknameChecked &&
+        isEmailChecked &&
+        !isCheckingNickname &&
+        !isCheckingEmail));
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -58,10 +70,12 @@ const StoryForm1 = ({ mode }) => {
 
     if (name === "email") {
       setEmailSuccessMessage("");
+      setIsEmailChecked(false);
     }
 
     if (name === "nickname") {
       setNicknameSuccessMessage("");
+      setIsNicknameChecked(false);
     }
   };
 
@@ -77,6 +91,19 @@ const StoryForm1 = ({ mode }) => {
       nickname: isEdit || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
       email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
+
+    if (!isEdit && (isCheckingNickname || isCheckingEmail)) {
+      return;
+    }
+
+    if (!isEdit) {
+      if (!newErrors.nickname && !isNicknameChecked) {
+        newErrors.nickname = "*닉네임 중복 확인을 해주세요.";
+      }
+      if (!newErrors.email && !isEmailChecked) {
+        newErrors.email = "*이메일 중복 확인을 해주세요.";
+      }
+    }
 
     setErrors(newErrors);
 
@@ -98,6 +125,7 @@ const StoryForm1 = ({ mode }) => {
     }
 
     setIsCheckingNickname(true);
+    setIsNicknameChecked(false);
 
     try {
       const { data } = await checkNicknameAvailable(nickname);
@@ -107,8 +135,10 @@ const StoryForm1 = ({ mode }) => {
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, nickname: "" }));
         setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
+        setIsNicknameChecked(true);
       } else {
         setNicknameSuccessMessage("");
+        setIsNicknameChecked(false);
         setErrors((prev) => ({
           ...prev,
           nickname: "이미 사용 중인 닉네임이에요.",
@@ -118,6 +148,7 @@ const StoryForm1 = ({ mode }) => {
       if (nickname !== latestFormDataRef.current.nickname.trim()) return;
 
       setNicknameSuccessMessage("");
+      setIsNicknameChecked(false);
       setErrors((prev) => ({
         ...prev,
         nickname: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
@@ -137,6 +168,7 @@ const StoryForm1 = ({ mode }) => {
     }
 
     setIsCheckingEmail(true);
+    setIsEmailChecked(false);
 
     try {
       const { data } = await checkEmailAvailable(email);
@@ -146,14 +178,17 @@ const StoryForm1 = ({ mode }) => {
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, email: "" }));
         setEmailSuccessMessage("사용 가능한 이메일이에요.");
+        setIsEmailChecked(true);
       } else {
         setEmailSuccessMessage("");
+        setIsEmailChecked(false);
         setErrors((prev) => ({ ...prev, email: "이미 사용 중인 이메일이에요." }));
       }
     } catch (error) {
       if (email !== latestFormDataRef.current.email.trim()) return;
 
       setEmailSuccessMessage("");
+      setIsEmailChecked(false);
       setErrors((prev) => ({
         ...prev,
         email: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
@@ -351,7 +386,7 @@ const StoryForm1 = ({ mode }) => {
         </form>
 
         <button
-          className="story-form-next-button"
+          className={`story-form-next-button ${isReadyForNext ? "is-valid" : ""}`}
           type="button"
           onClick={handleNext}
         >
