@@ -49,7 +49,11 @@ const StoryForm1 = ({ mode }) => {
     formData.petName.trim() &&
     formData.petAge.trim() &&
     formData.petType.trim() &&
-    (isEdit || (isNicknameChecked && isEmailChecked));
+    (isEdit ||
+      (isNicknameChecked &&
+        isEmailChecked &&
+        !isCheckingNickname &&
+        !isCheckingEmail));
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -88,6 +92,10 @@ const StoryForm1 = ({ mode }) => {
       email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
+    if (!isEdit && (isCheckingNickname || isCheckingEmail)) {
+      return;
+    }
+
     if (!isEdit) {
       if (!newErrors.nickname && !isNicknameChecked) {
         newErrors.nickname = "*닉네임 중복 확인을 해주세요.";
@@ -117,6 +125,7 @@ const StoryForm1 = ({ mode }) => {
     }
 
     setIsCheckingNickname(true);
+    setIsNicknameChecked(false);
 
     try {
       const { data } = await checkNicknameAvailable(nickname);
@@ -159,6 +168,7 @@ const StoryForm1 = ({ mode }) => {
     }
 
     setIsCheckingEmail(true);
+    setIsEmailChecked(false);
 
     try {
       const { data } = await checkEmailAvailable(email);
