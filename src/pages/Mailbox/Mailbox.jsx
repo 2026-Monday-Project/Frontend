@@ -36,7 +36,7 @@ const Mailbox = () => {
                 <div className="mailbox-banner">
                 </div>
                 <div className="mail-list">
-                    <div className="mail-item" onClick={() => navigate('/mail-under-review')} style={{ cursor: 'pointer' }}>
+                    <div className="mail-item" onClick={() => navigate('/mailbox/under-review')} style={{ cursor: 'pointer' }}>
                         <div className="mail-content">
                             <p className="mail-title">당신의 이야기가 정원에 도착했어요.</p>
                             <p className="mail-desc">운영팀 검수 후 공개여부와 상태를 내 정원에서 확인할 수...</p>

@@ -6,7 +6,7 @@ const LoginCompleted = () => {
     const navigate = useNavigate();
 
     const handleGoMyGarden = () => {
-        navigate('/my-garden');
+        navigate('/mygarden');
     };
 
     const handleLookAround = () => {

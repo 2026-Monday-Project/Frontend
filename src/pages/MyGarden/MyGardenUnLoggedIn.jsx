@@ -17,7 +17,7 @@ const MyGardenUnLoggedIn = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleGoToMyStories = () => {
-        navigate('/my-stories');
+        navigate('/my/stories/list');
     };
 
     const handleGoToMailbox = () => {

@@ -22,7 +22,7 @@ const Login = () => {
                     params: { email: email }
                 });
                 
-                if (response.data.available === false) {
+                if (response.data.data.available === false) {
                     setStatus('success');
                 } else {
                     setStatus('error');
@@ -50,11 +50,11 @@ const Login = () => {
                 email: email
             });
 
-            const token = response.data.accessToken;
-
+            const token = response.data.data.accessToken; 
+            
             if (token) {
                 localStorage.setItem('accessToken', token);
-                navigate('/login-completed');
+                navigate('/login/completed');
             } else {
                 alert('토큰 발급에 실패했습니다.');
             }
