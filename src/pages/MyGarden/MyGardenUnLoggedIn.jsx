@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
@@ -16,12 +16,15 @@ const MyGardenUnLoggedIn = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const handleGoToMyStories = () => {
-        navigate('/my/stories/list');
-    };
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            navigate('/mygarden');
+        }
+    }, [navigate]);
 
-    const handleGoToMailbox = () => {
-        navigate('/mailbox');
+    const handleLoginRedirect = () => {
+        navigate('/login');
     };
 
     const handleMenuClick = () => {
@@ -45,7 +48,7 @@ const MyGardenUnLoggedIn = () => {
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
 
             <div className="my-garden-container">
-                <section className="profile-section">
+                <section className="profile-section" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
                     <div className="profile-info">
                         <div className="profile-img-wrap">
                             <img src={footprintIcon} alt="기본 프사" className="profile-image" />
@@ -77,11 +80,11 @@ const MyGardenUnLoggedIn = () => {
                 <section className="list-section">
                     <div className="section-header">
                         <h3 className="section-title">내 사연</h3>
-                        <button className="view-all-button" onClick={handleGoToMyStories}>
+                        <button className="view-all-button" onClick={handleLoginRedirect}>
                             전체보기 <img src={arrowViewAll} alt="" />
                         </button>
                     </div>
-                    <div className="empty-state-card">
+                    <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
                         <img src={requiresStory} alt="" className="empty-state-icon" />
                         <p className="empty-state-text">사연을 보낸 후 이용할 수 있어요</p>
                         <img src={seperatePaw} alt="" className="empty-state-divider" />
@@ -92,11 +95,11 @@ const MyGardenUnLoggedIn = () => {
                 <section className="list-section">
                     <div className="section-header">
                         <h3 className="section-title">편지함</h3>
-                        <button className="view-all-button" onClick={handleGoToMailbox}>
+                        <button className="view-all-button" onClick={handleLoginRedirect}>
                             전체보기 <img src={arrowViewAll} alt="" />
                         </button>
                     </div>
-                    <div className="empty-state-card">
+                    <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
                         <img src={requiresStory} alt="" className="empty-state-icon" />
                         <p className="empty-state-text">사연을 보낸 후 이용할 수 있어요</p>
                         <img src={seperatePaw} alt="" className="empty-state-divider" />

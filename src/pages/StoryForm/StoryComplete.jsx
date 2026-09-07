@@ -7,7 +7,7 @@ const StoryComplete = ({ mode }) => {
   const isEdit = mode === "edit";
 
   const handleGoMyGarden = () => {
-    navigate("/my-garden");
+    navigate("/mygarden");
   };
 
   const handleLookAround = () => {

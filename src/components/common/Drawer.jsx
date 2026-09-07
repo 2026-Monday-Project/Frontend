@@ -24,7 +24,7 @@ const MENU_ITEMS = [
   },
   {
     label: "내 정원",
-    path: "/my-garden",
+    path: "/mygarden",
     icon: myGardenIcon,
   },
   {
