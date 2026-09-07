@@ -279,3 +279,7 @@
 
   cursor: pointer;
 }
+
+.story-form-next-button.is-valid {
+  background-color: var(--color-green-main);
+}
