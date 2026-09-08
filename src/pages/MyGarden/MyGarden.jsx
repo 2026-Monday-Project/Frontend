@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import StoryCard from '@/components/myGarden/StoryCard';
@@ -17,21 +18,64 @@ import './MyGarden.css';
 const MyGarden = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    const [profile, setProfile] = useState({ nickname: '', email: '' });
+    const [stats, setStats] = useState({ sentStoryCount: 0, receivedLikeCount: 0, likedStoryCount: 0 });
+    const [stories, setStories] = useState([]);
+    const [notifications, setNotifications] = useState([]);
 
-    const handleGoToMyStories = () => {
-        navigate('/mystories/list');
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            navigate('/mygarden/unlogged-in');
+            return;
+        }
+
+        const fetchMyGardenData = async () => {
+            const results = await Promise.allSettled([
+                api.get('/accounts/me'),
+                api.get('/my-garden/summary'),
+                api.get('/my-garden/stories/preview'),
+                api.get('/my-garden/notifications/preview')
+            ]);
+
+            const isUnauthorized = results.some(
+                result => result.status === 'rejected' && result.reason?.response?.status === 401
+            );
+
+            if (isUnauthorized) {
+                localStorage.removeItem('accessToken');
+                navigate('/mygarden/unlogged-in');
+                return;
+            }
+
+            if (results[0].status === 'fulfilled') setProfile(results[0].value.data.data);
+            if (results[1].status === 'fulfilled') setStats(results[1].value.data.data);
+            if (results[2].status === 'fulfilled') setStories(results[2].value.data.data);
+            if (results[3].status === 'fulfilled') setNotifications(results[3].value.data.data);
+        };
+
+        fetchMyGardenData();
+    }, [navigate]);
+
+    const handleGoToMyStories = () => navigate('/mystories/list');
+    const handleGoToMailbox = () => navigate('/mailbox');
+    const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
+    const handleDrawerClose = () => setIsMenuOpen(false);
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}.${month}.${day}`;
     };
 
-    const handleGoToMailbox = () => {
-        navigate('/mailbox');
-    };
-
-    const handleMenuClick = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    const handleDrawerClose = () => {
-        setIsMenuOpen(false);
+    const formatStatus = (status) => {
+        if (status === 'PENDING') return '검토중';
+        if (status === 'PUBLIC') return '공개';
+        return '비공개';
     };
 
     return (
@@ -53,8 +97,8 @@ const MyGarden = () => {
                             <img src={footprintIcon} alt="기본 프사" className="profile-image" />
                         </div>
                         <div className="profile-text">
-                            <p className="greeting">안녕하세요, 챱츄 님!</p>
-                            <p className="email">loveme@naver.com</p>
+                            <p className="greeting">안녕하세요, {profile.nickname} 님!</p>
+                            <p className="email">{profile.email}</p>
                         </div>
                     </div>
                     <img 
@@ -69,17 +113,17 @@ const MyGarden = () => {
                 <section className="stats-section">
                     <div className="stat-item">
                         <p className="stat-label">보낸 사연</p>
-                        <p className="stat-value">12</p>
+                        <p className="stat-value">{stats.sentStoryCount}</p>
                     </div>
                     <img className="seperate-line" src={seperateLine} alt="세로 구분선"></img>
                     <div className="stat-item">
                         <p className="stat-label">받은 공감</p>
-                        <p className="stat-value">4</p>
+                        <p className="stat-value">{stats.receivedLikeCount}</p>
                     </div>
                     <img className="seperate-line" src={seperateLine} alt="세로 구분선"></img>
                     <div className="stat-item">
                         <p className="stat-label">공감한 사연</p>
-                        <p className="stat-value">4</p>
+                        <p className="stat-value">{stats.likedStoryCount}</p>
                     </div>
                 </section>
 
@@ -92,24 +136,18 @@ const MyGarden = () => {
                     </div>
                     
                     <div className="story-list">
-                        <StoryCard 
-                            thumbnail={louisProfile}
-                            status="검토중"
-                            title="산책 한마디에 대소동"
-                            date="2026.07.15"
-                            views={1}
-                            likes={1}
-                            onClick={() => navigate('/mystories/detail')}
-                        />
-                        <StoryCard 
-                            thumbnail={louisProfile}
-                            status="비공개"
-                            title="산책 한마디에 대소동"
-                            date="2026.07.15"
-                            views={1}
-                            likes={1}
-                            onClick={() => navigate('/mystories/detail')}
-                        />
+                        {stories.map(story => (
+                            <StoryCard 
+                                key={story.storyId}
+                                thumbnail={louisProfile}
+                                status={formatStatus(story.status)}
+                                title={story.title}
+                                date={formatDate(story.createdAt)}
+                                views={0}
+                                likes={story.likeCount}
+                                onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
+                            />
+                        ))}
                     </div>
                 </section>
 
@@ -121,28 +159,24 @@ const MyGarden = () => {
                         </button>
                     </div>
                     <div className="mail-list">
-                        <div className="mail-item" onClick={() => navigate('/mail-under-review')} style={{ cursor: 'pointer' }}>
-                            <div className="mail-content">
-                                <p className="mail-title">당신의 이야기가 정원에 도착했어요.</p>
-                                <p className="mail-desc">운영팀 검수 후 공개여부와 상태를 내 정원에서 확인할 수 있어요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                <p className="mail-date">2026.07.05</p>
-                            </div>
-                            <img src={unreadDot} alt="" className="unread-dot" />
-                        </div>
-                        <div className="mail-item" onClick={() => navigate('/login/completed')} style={{ cursor: 'pointer' }}>
-                            <div className="mail-content">
-                                <p className="mail-title">정원에 오신 걸 환영합니다.</p>
-                                <p className="mail-desc">따뜻한 이야기를 함께 나눠보세요.</p>
-                                <p className="mail-date">2026.07.01</p>
-                            </div>
-                        </div>
-                        <div className="mail-item-read" onClick={() => navigate('/login/completed')} style={{ cursor: 'pointer' }}>
-                            <div className="mail-content-read">
-                                <p className="mail-title-read">정원에 오신 걸 환영합니다.</p>
-                                <p className="mail-desc-read">따뜻한 이야기를 함께 나눠보세요.</p>
-                                <p className="mail-date-read">2026.07.01</p>
-                            </div>
-                        </div>
+                        {notifications.map(mail => {
+                            const isExplicitlyUnread = mail.isRead === false;
+
+                            return (
+                                <div 
+                                    key={mail.notificationId} 
+                                    className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
+                                    onClick={() => navigate('/mailbox')} 
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
+                                        <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
+                                        <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
+                                    </div>
+                                    {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
+                                </div>
+                            );
+                        })}
                     </div>
                 </section>
             </div>

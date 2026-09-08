@@ -129,8 +129,8 @@ const Router = () => {
             <Route path="/mygarden" element={<MyGarden />} />
             <Route path="/mygarden/unlogged-in" element={<MyGardenUnLoggedIn />} />
             <Route path="/mystories/list" element={<MyStoriesList />} />
-            <Route path="/mystories/detail" element={<MyStoryDetail />} />
-
+            <Route path="/mystories/detail/:storyId" element={<MyStoryDetail />} />
+            
                 {/* 편지함 */}
                 <Route path="/mailbox" element={<Mailbox />} />
                 <Route
