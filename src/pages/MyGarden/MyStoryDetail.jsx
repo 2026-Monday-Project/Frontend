@@ -31,9 +31,14 @@ const MyStoryDetail = () => {
                 const response = await api.get(`/my-garden/stories/${storyId}`);
                 setStory(response.data.data);
             } catch (error) {
-                console.error(error);
-                alert('사연을 불러오는 중 오류가 발생했습니다.');
-                navigate(-1);
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('accessToken');
+                    navigate('/mygarden/unlogged-in');
+                } else {
+                    console.error(error);
+                    alert('사연을 불러오는 중 오류가 발생했습니다.');
+                    navigate(-1);
+                }
             }
         };
 
@@ -44,7 +49,7 @@ const MyStoryDetail = () => {
 
     if (!story) return null;
 
-    const storyImages = story.imageUrls || [];
+    const storyImages = Array.isArray(story.imageUrls) ? story.imageUrls : [];
 
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
@@ -58,8 +63,13 @@ const MyStoryDetail = () => {
             alert('사연이 삭제되었습니다.');
             navigate('/mystories/list', { replace: true });
         } catch (error) {
-            console.error(error);
-            alert('사연 삭제에 실패했습니다.');
+            if (error.response?.status === 401) {
+                localStorage.removeItem('accessToken');
+                navigate('/mygarden/unlogged-in');
+            } else {
+                console.error(error);
+                alert('사연 삭제에 실패했습니다.');
+            }
         } finally {
             closeDeleteModal();
         }

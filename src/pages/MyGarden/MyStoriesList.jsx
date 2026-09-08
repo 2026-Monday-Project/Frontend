@@ -30,14 +30,22 @@ const MyStoriesList = () => {
                 const params = currentStatus ? { status: currentStatus } : {};
                 
                 const response = await api.get('/my-garden/stories', { params });
-                setStories(response.data.data.content);
+                const fetchedContent = response.data?.data?.content;
+                
+                setStories(Array.isArray(fetchedContent) ? fetchedContent : []);
             } catch (error) {
-                console.error(error);
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('accessToken');
+                    navigate('/mygarden/unlogged-in');
+                } else {
+                    console.error(error);
+                    setStories([]);
+                }
             }
         };
 
         fetchStories();
-    }, [activeTab]);
+    }, [activeTab, navigate]);
 
     const handleMenuClick = () => {
         setIsMenuOpen(!isMenuOpen);
