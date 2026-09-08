@@ -96,7 +96,7 @@ const Login = () => {
                         {status === 'error' && (
                             <p className="helper-text error">
                                 아직 제출한 사연이 없어요.<br />
-                                사연을 제출한 후 로그인 할 수 있어요.
+                                사연을 제출하면 로그인 할 수 있어요.
                             </p>
                         )}
                     </div>
