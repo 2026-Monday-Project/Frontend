@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import Status from '@/components/myGarden/Status';
 import StoryPhotoViewer from '@/components/garden/StoryPhotoViewer';
-import puppyRunningImg from '@/assets/images/custom/puppy-running.svg';
 import currentPicIcon from '@/assets/images/custom/current-pic.svg';
 import otherPicIcon from '@/assets/images/custom/other-pic.svg';
 import checkedIcon from '@/assets/images/custom/checked.svg';
@@ -15,64 +15,73 @@ import './MyStoryDetail.css';
 
 const MyStoryDetail = () => {
     const navigate = useNavigate();
+    const { storyId } = useParams();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [status, setStatus] = useState('검토중');
+    const [story, setStory] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isPhotoViewerOpen, setIsPhotoViewerOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
-    
-    // TODO: 사연 상세 조회 API 연동 시 실제 응답 데이터로 교체
-    // 상세 화면 렌더링과 "사연 수정하기" 이동에 모두 이 단일 원본을 사용한다.
-    const story = {
-        storyId: 1,
-        petName: '루이',
-        petAge: 8,
-        petType: '골든리트리버',
-        nickname: '참쮸',
-        email: 'pdjfd4844@gmail.com',
-        title: '산책 한마디에 대소동',
-        content:
-            "'산책 가자' 한마디만 들으면 자다가도 벌떡 일어나요. 리드줄을 꺼내는 소리만 나도 현관을 전력 질주하고, 제가 신발을 신기도 전에 빙글빙글 돌며 꼬리를 흔들어요. 너무 신난 나머지 제 신발 한 짝을 물고 도망간 적도 있어요. 매번 정신없지만 그 모습 때문에 꼭 웃게 되어요.",
-        images: [
-            { imageId: 1, imageUrl: puppyRunningImg },
-            { imageId: 2, imageUrl: puppyRunningImg },
-            { imageId: 3, imageUrl: puppyRunningImg },
-        ],
-        viewCount: 123,
-        likeCount: 12,
-        introduceConsent: true,
-        snsConsent: true,
-    };
 
-    const storyImages = story.images.map((image) => image.imageUrl);
+    useEffect(() => {
+        const fetchStoryDetail = async () => {
+            try {
+                const response = await api.get(`/my-garden/stories/${storyId}`);
+                setStory(response.data.data);
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('accessToken');
+                    navigate('/mygarden/unlogged-in');
+                } else {
+                    console.error(error);
+                    alert('사연을 불러오는 중 오류가 발생했습니다.');
+                    navigate(-1);
+                }
+            }
+        };
 
-    const [consents, setConsents] = useState({
-        performance: story.introduceConsent,
-        sns: story.snsConsent
-    });
+        if (storyId) {
+            fetchStoryDetail();
+        }
+    }, [storyId, navigate]);
+
+    if (!story) return null;
+
+    const storyImages = Array.isArray(story.imageUrls) ? story.imageUrls : [];
 
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
 
-    const handleConsentChange = (e) => {
-        const { name, checked } = e.target;
-        setConsents(prev => ({
-            ...prev,
-            [name]: checked
-        }));
-    };
-
     const openDeleteModal = () => setIsDeleteModalOpen(true);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
-    const handleStatusToggle = () => {
-        if (status === '검토중') setStatus('공개');
-        else if (status === '공개') setStatus('비공개');
-        else setStatus('검토중');
+    const handleDeleteStory = async () => {
+        try {
+            await api.delete(`/my-garden/stories/${storyId}`);
+            alert('사연이 삭제되었습니다.');
+            navigate('/mystories/list', { replace: true });
+        } catch (error) {
+            if (error.response?.status === 401) {
+                localStorage.removeItem('accessToken');
+                navigate('/mygarden/unlogged-in');
+            } else {
+                console.error(error);
+                alert('사연 삭제에 실패했습니다.');
+            }
+        } finally {
+            closeDeleteModal();
+        }
     };
+
+    const formatStatus = (status) => {
+        if (status === 'PENDING') return '검토중';
+        if (status === 'PUBLIC') return '공개';
+        return '비공개';
+    };
+
+    const statusKorean = formatStatus(story.status);
 
     const onDragStart = (e) => {
         setTouchEnd(null);
@@ -108,6 +117,7 @@ const MyStoryDetail = () => {
     };
 
     const handleImageClick = () => {
+        if (storyImages.length === 0) return;
         if (touchStart !== null && touchEnd !== null) {
             const distance = Math.abs(touchStart - touchEnd);
             if (distance > 10) return;
@@ -120,7 +130,7 @@ const MyStoryDetail = () => {
     };
 
     const renderBottomButtons = () => {
-        if (status === '검토중') {
+        if (statusKorean === '검토중') {
             return (
                 <div className="bottom-button-area dual-buttons">
                     <button className="btn-delete-half" onClick={openDeleteModal}>삭제</button>
@@ -156,54 +166,49 @@ const MyStoryDetail = () => {
             />
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
 
-            <button
-                onClick={handleStatusToggle}
-                style={{ padding: '8px', background: '#333', color: '#fff', fontSize: '12px' }}
-            >
-                현재 상태: {status} (클릭해서 변경 테스트 - 백엔드 연동 시 삭제 예정)
-            </button>
-
             <div className="detail-scroll-area">
                 <div className="detail-header">
                     <Status
-                        type={status}
-                        subText={status === '검토중' ? ' · 수정가능' : '· 수정불가능'}
+                        type={statusKorean}
+                        subText={statusKorean === '검토중' ? ' · 수정가능' : '· 수정불가능'}
                     />
                     <h2 className="detail-title">{story.title}</h2>
                 </div>
 
-                <div 
-                    className="detail-image-container" 
-                    onClick={handleImageClick}
-                    onTouchStart={onDragStart}
-                    onTouchMove={onDragMove}
-                    onTouchEnd={onDragEnd}
-                    onMouseDown={onDragStart}
-                    onMouseMove={onDragMove}
-                    onMouseUp={onDragEnd}
-                    onMouseLeave={onMouseLeave}
-                    style={{ cursor: 'pointer' }}
-                >
-                    <img 
-                        src={storyImages[currentImageIndex]} 
-                        alt="사연 이미지" 
-                        className="detail-image" 
-                        onDragStart={(e) => e.preventDefault()} 
-                    />
+                {storyImages.length > 0 && (
+                    <div 
+                        className="detail-image-container" 
+                        onClick={handleImageClick}
+                        onTouchStart={onDragStart}
+                        onTouchMove={onDragMove}
+                        onTouchEnd={onDragEnd}
+                        onMouseDown={onDragStart}
+                        onMouseMove={onDragMove}
+                        onMouseUp={onDragEnd}
+                        onMouseLeave={onMouseLeave}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <img 
+                            src={storyImages[currentImageIndex]} 
+                            alt="사연 이미지" 
+                            className="detail-image" 
+                            onDragStart={(e) => e.preventDefault()} 
+                        />
 
-                    <span className="image-indicator">{currentImageIndex + 1}/{storyImages.length}</span>
+                        <span className="image-indicator">{currentImageIndex + 1}/{storyImages.length}</span>
 
-                    <div className="image-dots-wrapper">
-                        {storyImages.map((_, index) => (
-                            <img
-                                key={index}
-                                src={index === currentImageIndex ? currentPicIcon : otherPicIcon}
-                                alt={`indicator-${index}`}
-                                className="dot-icon"
-                            />
-                        ))}
+                        <div className="image-dots-wrapper">
+                            {storyImages.map((_, index) => (
+                                <img
+                                    key={index}
+                                    src={index === currentImageIndex ? currentPicIcon : otherPicIcon}
+                                    alt={`indicator-${index}`}
+                                    className="dot-icon"
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div className="detail-body">
                     <p className="detail-text">{story.content}</p>
@@ -222,7 +227,7 @@ const MyStoryDetail = () => {
                         <span className="consent-desc">이 사연에 적용된 동의 항목</span>
                     </div>
                     <div className="consent-list">
-                        <label className="consent-item">
+                        <label className="consent-item" style={{ cursor: 'default' }}>
                             <div className="consent-label">
                                 <img src={micIcon} alt="" className="consent-icon" />
                                 공연 중 소개·낭독 동의
@@ -230,18 +235,18 @@ const MyStoryDetail = () => {
                             <input
                                 type="checkbox"
                                 name="performance"
-                                checked={consents.performance}
-                                onChange={handleConsentChange}
+                                checked={story.introduceConsent}
+                                readOnly
                                 className="hidden-checkbox"
                             />
                             <img
-                                src={consents.performance ? checkedIcon : uncheckedIcon}
+                                src={story.introduceConsent ? checkedIcon : uncheckedIcon}
                                 alt="동의 체크"
-                                className={consents.performance ? 'checked-icon' : 'unchecked-icon'}
+                                className={story.introduceConsent ? 'checked-icon' : 'unchecked-icon'}
                             />
                         </label>
 
-                        <label className="consent-item">
+                        <label className="consent-item" style={{ cursor: 'default' }}>
                             <div className="consent-label">
                                 <img src={phoneIcon} alt="" className="consent-icon" />
                                 SNS·홍보물 활용 동의
@@ -249,14 +254,14 @@ const MyStoryDetail = () => {
                             <input
                                 type="checkbox"
                                 name="sns"
-                                checked={consents.sns}
-                                onChange={handleConsentChange}
+                                checked={story.snsConsent}
+                                readOnly
                                 className="hidden-checkbox"
                             />
                             <img
-                                src={consents.sns ? checkedIcon : uncheckedIcon}
+                                src={story.snsConsent ? checkedIcon : uncheckedIcon}
                                 alt="동의 체크"
-                                className={consents.sns ? 'checked-icon' : 'unchecked-icon'}
+                                className={story.snsConsent ? 'checked-icon' : 'unchecked-icon'}
                             />
                         </label>
                     </div>
@@ -273,13 +278,13 @@ const MyStoryDetail = () => {
 
                         <div className="modal-button-area">
                             <button className="btn-delete-half" onClick={closeDeleteModal}>취소</button>
-                            <button className="btn-edit-half">사연 삭제하기</button>
+                            <button className="btn-edit-half" onClick={handleDeleteStory}>사연 삭제하기</button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {isPhotoViewerOpen && (
+            {isPhotoViewerOpen && storyImages.length > 0 && (
                 <StoryPhotoViewer
                     images={storyImages}
                     currentIndex={currentImageIndex}
