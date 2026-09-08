@@ -55,7 +55,7 @@ const MyGardenUnLoggedIn = () => {
                         </div>
                         <div className="profile-text-wrap">
                             <div className="profile-text">내가 보낸 사연을 이곳에서 확인할 수 있어요</div>
-                            <div className="profile-text">사연을 보내고 나만의 정원을 만들어 보세요</div>
+                            <div className="profile-text">로그인하고 내 정원을 확인해 보세요</div>
                         </div>
                     </div>
                 </section>    
@@ -86,9 +86,9 @@ const MyGardenUnLoggedIn = () => {
                     </div>
                     <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
                         <img src={requiresStory} alt="" className="empty-state-icon" />
-                        <p className="empty-state-text">사연을 보낸 후 이용할 수 있어요</p>
+                        <p className="empty-state-text">로그인하고 내 정원을 확인해 보세요.</p>
                         <img src={seperatePaw} alt="" className="empty-state-divider" />
-                        <p className="empty-state-subtext">사연을 보내고 나만의 정원을 만들어보세요.</p>
+                        <p className="empty-state-subtext">모든 이용 기록을 확인할 수 있어요.</p>
                     </div>
                 </section>
 
@@ -101,9 +101,9 @@ const MyGardenUnLoggedIn = () => {
                     </div>
                     <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
                         <img src={requiresStory} alt="" className="empty-state-icon" />
-                        <p className="empty-state-text">사연을 보낸 후 이용할 수 있어요</p>
+                        <p className="empty-state-text">로그인하고 내 정원을 확인해 보세요.</p>
                         <img src={seperatePaw} alt="" className="empty-state-divider" />
-                        <p className="empty-state-subtext">사연을 보내고 나만의 정원을 만들어보세요.</p>
+                        <p className="empty-state-subtext">모든 이용 기록을 확인할 수 있어요.</p>
                     </div>
                 </section>
             </div>

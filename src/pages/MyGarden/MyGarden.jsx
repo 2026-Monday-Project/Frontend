@@ -32,24 +32,27 @@ const MyGarden = () => {
         }
 
         const fetchMyGardenData = async () => {
-            try {
-                const [profileRes, statsRes, storiesRes, notificationsRes] = await Promise.all([
-                    api.get('/accounts/me'),
-                    api.get('/my-garden/summary'),
-                    api.get('/my-garden/stories/preview'),
-                    api.get('/my-garden/notifications/preview')
-                ]);
+            const results = await Promise.allSettled([
+                api.get('/accounts/me'),
+                api.get('/my-garden/summary'),
+                api.get('/my-garden/stories/preview'),
+                api.get('/my-garden/notifications/preview')
+            ]);
 
-                setProfile(profileRes.data.data);
-                setStats(statsRes.data.data);
-                setStories(storiesRes.data.data);
-                setNotifications(notificationsRes.data.data);
-            } catch (error) {
-                if (error.response?.status === 401) {
-                    localStorage.removeItem('accessToken');
-                    navigate('/mygarden/unlogged-in');
-                }
+            const isUnauthorized = results.some(
+                result => result.status === 'rejected' && result.reason?.response?.status === 401
+            );
+
+            if (isUnauthorized) {
+                localStorage.removeItem('accessToken');
+                navigate('/mygarden/unlogged-in');
+                return;
             }
+
+            if (results[0].status === 'fulfilled') setProfile(results[0].value.data.data);
+            if (results[1].status === 'fulfilled') setStats(results[1].value.data.data);
+            if (results[2].status === 'fulfilled') setStories(results[2].value.data.data);
+            if (results[3].status === 'fulfilled') setNotifications(results[3].value.data.data);
         };
 
         fetchMyGardenData();
@@ -142,7 +145,7 @@ const MyGarden = () => {
                                 date={formatDate(story.createdAt)}
                                 views={0}
                                 likes={story.likeCount}
-                                onClick={() => navigate('/mystories/detail')}
+                                onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
                             />
                         ))}
                     </div>
@@ -156,20 +159,24 @@ const MyGarden = () => {
                         </button>
                     </div>
                     <div className="mail-list">
-                        {notifications.map(mail => (
-                            <div 
-                                key={mail.notificationId} 
-                                className={mail.isRead ? "mail-item-read" : "mail-item"} 
-                                onClick={() => navigate('/mailbox')} 
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <div className={mail.isRead ? "mail-content-read" : "mail-content"}>
-                                    <p className={mail.isRead ? "mail-title-read" : "mail-title"}>{mail.title}</p>
-                                    <p className={mail.isRead ? "mail-date-read" : "mail-date"}>{formatDate(mail.createdAt)}</p>
+                        {notifications.map(mail => {
+                            const isExplicitlyUnread = mail.isRead === false;
+
+                            return (
+                                <div 
+                                    key={mail.notificationId} 
+                                    className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
+                                    onClick={() => navigate('/mailbox')} 
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
+                                        <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
+                                        <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
+                                    </div>
+                                    {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
                                 </div>
-                                {!mail.isRead && <img src={unreadDot} alt="" className="unread-dot" />}
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </section>
             </div>
