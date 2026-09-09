@@ -1,7 +1,6 @@
 .my-story-detail-page {
     display: flex;
     flex-direction: column;
-    height: 100vh;
 }
 
 .detail-scroll-area {
@@ -256,7 +255,7 @@
     transform: translateX(-50%);
     width: 100%;
     max-width: var(--max-mobile-width);
-    height: 100dvh;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.25);
     z-index: 1000;
     display: flex;

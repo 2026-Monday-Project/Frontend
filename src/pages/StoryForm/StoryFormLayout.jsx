@@ -24,6 +24,12 @@ const INITIAL_CONSENTS = {
   sns: false,
 };
 
+// 닉네임/이메일 중복 확인 통과 여부. 스텝 이동(이전/다음)에도 유지되도록 컨텍스트에 보관한다.
+const INITIAL_VERIFIED = {
+  nickname: false,
+  email: false,
+};
+
 // 사연 상세 응답의 이미지 표현이 두 가지라 모두 흡수한다.
 //  1) images: [{ imageId, imageUrl }]
 //  2) imageUrls: string[]  (+ 있으면 imageIds: number[])
@@ -86,6 +92,7 @@ const StoryFormLayout = () => {
   const [consents, setConsents] = useState(
     seed ? seed.consents : INITIAL_CONSENTS,
   );
+  const [verified, setVerified] = useState(INITIAL_VERIFIED);
 
   const value = useMemo(
     () => ({
@@ -95,6 +102,8 @@ const StoryFormLayout = () => {
       setStory,
       consents,
       setConsents,
+      verified,
+      setVerified,
       reset: () => {
         story.photos.forEach((photo) => {
           if (photo.file && photo.url) URL.revokeObjectURL(photo.url);
@@ -103,9 +112,10 @@ const StoryFormLayout = () => {
         setInfo(INITIAL_INFO);
         setStory(INITIAL_STORY);
         setConsents(INITIAL_CONSENTS);
+        setVerified(INITIAL_VERIFIED);
       },
     }),
-    [info, story, consents],
+    [info, story, consents, verified],
   );
 
   return (

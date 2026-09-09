@@ -49,7 +49,12 @@ const MyStoryDetail = () => {
 
     if (!story) return null;
 
-    const storyImages = Array.isArray(story.imageUrls) ? story.imageUrls : [];
+    // 상세 응답의 이미지 표현이 두 가지: images: [{ imageId, imageUrl }] 또는 imageUrls: string[]
+    const storyImages = Array.isArray(story.images)
+        ? story.images.map((image) => image.imageUrl)
+        : Array.isArray(story.imageUrls)
+          ? story.imageUrls
+          : [];
 
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
