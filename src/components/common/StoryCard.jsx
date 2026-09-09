@@ -14,6 +14,12 @@ const StoryCard = ({
   likeCount,
   onClick,
 }) => {
+  const petDetails = [
+    petName,
+    breed,
+    age != null ? `${age}살` : null,
+  ].filter(Boolean);
+
   const content = (
     <>
       <img
@@ -27,11 +33,14 @@ const StoryCard = ({
           <h2 className="story-card-title">{title}</h2>
 
           <p className="story-card-pet-info">
-            <span>{petName}</span>
-            <span className="story-card-pet-separator" aria-hidden="true" />
-            <span>{breed}</span>
-            <span className="story-card-pet-separator" aria-hidden="true" />
-            <span>{age}살</span>
+            {petDetails.map((detail, index) => (
+              <span key={detail} className="story-card-pet-detail">
+                {index > 0 && (
+                  <span className="story-card-pet-separator" aria-hidden="true" />
+                )}
+                <span>{detail}</span>
+              </span>
+            ))}
           </p>
         </div>
 

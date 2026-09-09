@@ -1,8 +1,4 @@
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route,} from "react-router-dom";
 
 import Home from "@/pages/Home/Home";
 import Performance from "@/pages/Performance/Performance";
@@ -12,6 +8,7 @@ import StoryForm1 from "@/pages/StoryForm/StoryForm1";
 import StoryForm2 from "@/pages/StoryForm/StoryForm2";
 import StoryForm3 from "@/pages/StoryForm/StoryForm3";
 import StoryComplete from "@/pages/StoryForm/StoryComplete";
+import StoryFormLayout from "@/pages/StoryForm/StoryFormLayout";
 import ConsentPage1 from "@/pages/ConsentPage/ConsentPage1";
 import ConsentPage2 from "@/pages/ConsentPage/ConsentPage2";
 import ConsentPage3 from "@/pages/ConsentPage/ConsentPage3";
@@ -36,6 +33,7 @@ import AdminReviewDetail from "@/pages/Admin/AdminReviewDetail";
 import AdminReviewPhotos from "@/pages/Admin/AdminReviewPhotos";
 import AdminNotification from "@/pages/Admin/AdminNotification";
 import AdminCompleted from "@/pages/Admin/AdminCompleted";
+import AdminLogin from "@/pages/Admin/AdminLogin";
 
 import ScrollToTop from "@/components/common/ScrollToTop";
 
@@ -60,116 +58,57 @@ const Router = () => {
 
                 {/* 정원 둘러보기 */}
                 <Route path="/garden" element={<Garden />} />
-                <Route
-                    path="/garden/:storyId"
-                    element={<GardenDetail />}
-                />
+                <Route path="/garden/:storyId" element={<GardenDetail />} />
 
-                {/* 사연 작성 */}
-                <Route path="/story" element={<StoryForm1 />} />
-                <Route path="/story/send/2" element={<StoryForm2 />} />
-                <Route path="/story/send/3" element={<StoryForm3 />} />
-                <Route
-                    path="/story/complete"
-                    element={<StoryComplete />}
-                />
+                {/* 사연 작성 / 수정 (스텝 간 입력값 공유를 위해 Layout으로 감쌈) */}
+                <Route element={<StoryFormLayout />}>
+                    {/* 사연 작성 */}
+                    <Route path="/story" element={<StoryForm1 />} />
+                    <Route path="/story/send/2" element={<StoryForm2 />} />
+                    <Route path="/story/send/3" element={<StoryForm3 />} />
+                    <Route path="/story/complete" element={<StoryComplete />}/>
 
-                {/* 사연 수정 */}
-                <Route
-                    path="/story/edit"
-                    element={<StoryForm1 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/2"
-                    element={<StoryForm2 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/3"
-                    element={<StoryForm3 mode="edit" />}
-                />
-                <Route
-                    path="/story/edit/complete"
-                    element={<StoryComplete mode="edit" />}
-                />
+                    {/* 사연 수정 */}
+                    <Route path="/story/edit/:storyId" element={<StoryForm1 mode="edit" />}/>
+                    <Route path="/story/edit/:storyId/2" element={<StoryForm2 mode="edit" />}/>
+                    <Route path="/story/edit/:storyId/3" element={<StoryForm3 mode="edit" />} />
+                    <Route path="/story/edit/:storyId/complete" element={<StoryComplete mode="edit" />}/>
 
                 {/* 동의서 세부내용 */}
-                <Route
-                    path="/story/consent/1"
-                    element={<ConsentPage1 />}
-                />
-                <Route
-                    path="/story/consent/2"
-                    element={<ConsentPage2 />}
-                />
-                <Route
-                    path="/story/consent/3"
-                    element={<ConsentPage3 />}
-                />
-                <Route
-                    path="/story/consent/4"
-                    element={<ConsentPage4 />}
-                />
-                <Route
-                    path="/story/consent/5"
-                    element={<ConsentPage5 />}
-                />
+                <Route path="/story/consent/1" element={<ConsentPage1 />} />
+                <Route path="/story/consent/2" element={<ConsentPage2 />}/>
+                <Route path="/story/consent/3" element={<ConsentPage3 />}/>
+                <Route path="/story/consent/4" element={<ConsentPage4 />}/>
+                <Route path="/story/consent/5" element={<ConsentPage5 />}/>
+                </Route>
 
                 {/* 로그인 */}
                 <Route path="/login" element={<Login />} />
-                <Route
-                    path="/login-completed"
-                    element={<LoginCompleted />}
-                />
+                <Route path="/login/completed" element={<LoginCompleted />}/>
 
-            {/* 내 정원 */}
-            <Route path="/my-garden" element={<MyGarden />} />
-            <Route path="/my-garden-unlogged-in" element={<MyGardenUnLoggedIn />} />
-            <Route path="/my-stories-list" element={<MyStoriesList />} />
-            <Route path="/my-story-detail" element={<MyStoryDetail />} />
-
+                {/* 내 정원 */}
+                <Route path="/mygarden" element={<MyGarden />} />
+                <Route path="/mygarden/unlogged-in" element={<MyGardenUnLoggedIn />} />
+                <Route path="/mystories/list" element={<MyStoriesList />} />
+                <Route path="/mystories/detail/:storyId" element={<MyStoryDetail />} />
+            
                 {/* 편지함 */}
                 <Route path="/mailbox" element={<Mailbox />} />
-                <Route
-                    path="/mail-public"
-                    element={<MailPublic />}
-                />
-                <Route
-                    path="/mail-under-review"
-                    element={<MailUnderReview />}
-                />
-                <Route
-                    path="/mail-hidden"
-                    element={<MailHidden />}
-                />
-                <Route
-                    path="/mail-deleted"
-                    element={<MailDeleted />}
-                />
+                <Route path="/mailbox/public" element={<MailPublic />} />
+                <Route path="/mailbox/under-review" element={<MailUnderReview />} />
+                <Route path="/mailbox/hidden" element={<MailHidden />}/>
+                <Route path="/mailbox/deleted" element={<MailDeleted />}/>
 
                 {/* 설정 */}
                 <Route path="/settings" element={<Settings />} />
 
                 {/* 관리자 */}
-                <Route
-                    path="/admin/reviews"
-                    element={<AdminReview />}
-                />
-                <Route
-                    path="/admin/reviews/:storyId"
-                    element={<AdminReviewDetail />}
-                />
-                <Route
-                    path="/admin/reviews/:storyId/photos"
-                    element={<AdminReviewPhotos />}
-                />
-                <Route
-                    path="/admin/notifications/:storyId"
-                    element={<AdminNotification />}
-                />
-                <Route
-                    path="/admin/completed"
-                    element={<AdminCompleted />}
-                />
+                <Route path="/admin/login" element={<AdminLogin />}/>
+                <Route path="/admin/reviews" element={<AdminReview />}/>
+                <Route path="/admin/reviews/:storyId" element={<AdminReviewDetail />}/>
+                <Route path="/admin/reviews/:storyId/photos" element={<AdminReviewPhotos />}/>
+                <Route path="/admin/notifications/:storyId" element={<AdminNotification />}/>
+                <Route  path="/admin/completed" element={<AdminCompleted />}/>
 
                 {/* 존재하지 않는 주소 */}
                 <Route path="*" element={<NotFound />} />

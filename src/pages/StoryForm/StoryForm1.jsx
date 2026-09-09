@@ -1,19 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import stepIndicator from "@/assets/icons/step-indicator-1.png";
+import { checkEmailAvailable, checkNicknameAvailable } from "@/api/accountApi";
+import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
-
-// TODO: 수정 모드 진입 시 실제 사연 데이터로 교체
-const EDIT_INITIAL_DATA = {
-  petName: "루이",
-  petAge: "8",
-  petType: "골든리트리버",
-  nickname: "참쮸",
-  email: "pdjfd4844@gmail.com",
-};
 
 const EMPTY_DATA = {
   petName: "",
@@ -25,11 +18,17 @@ const EMPTY_DATA = {
 
 const StoryForm1 = ({ mode }) => {
   const navigate = useNavigate();
+  const { storyId } = useParams();
   const isEdit = mode === "edit";
+  const { info, setInfo } = useStoryForm();
 
-  const [formData, setFormData] = useState(
-    isEdit ? EDIT_INITIAL_DATA : EMPTY_DATA,
-  );
+  const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
+
+  // 중복 확인 응답이 도착했을 때 입력값이 그새 바뀌었는지 판별하기 위한 최신값 참조
+  const latestFormDataRef = useRef(formData);
+  useEffect(() => {
+    latestFormDataRef.current = formData;
+  }, [formData]);
 
   const [errors, setErrors] = useState({
     petName: "",
@@ -38,6 +37,23 @@ const StoryForm1 = ({ mode }) => {
     nickname: "",
     email: "",
   });
+
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState("");
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState("");
+  const [isCheckingNickname, setIsCheckingNickname] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+  const isReadyForNext =
+    formData.petName.trim() &&
+    formData.petAge.trim() &&
+    formData.petType.trim() &&
+    (isEdit ||
+      (isNicknameChecked &&
+        isEmailChecked &&
+        !isCheckingNickname &&
+        !isCheckingEmail));
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -51,6 +67,16 @@ const StoryForm1 = ({ mode }) => {
       ...prev,
       [name]: "",
     }));
+
+    if (name === "email") {
+      setEmailSuccessMessage("");
+      setIsEmailChecked(false);
+    }
+
+    if (name === "nickname") {
+      setNicknameSuccessMessage("");
+      setIsNicknameChecked(false);
+    }
   };
 
   const handleBack = () => {
@@ -66,20 +92,110 @@ const StoryForm1 = ({ mode }) => {
       email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
+    if (!isEdit && (isCheckingNickname || isCheckingEmail)) {
+      return;
+    }
+
+    if (!isEdit) {
+      if (!newErrors.nickname && !isNicknameChecked) {
+        newErrors.nickname = "*닉네임 중복 확인을 해주세요.";
+      }
+      if (!newErrors.email && !isEmailChecked) {
+        newErrors.email = "*이메일 중복 확인을 해주세요.";
+      }
+    }
+
     setErrors(newErrors);
 
     const hasError = Object.values(newErrors).some((message) => message);
     if (hasError) return;
 
-    navigate(isEdit ? "/story/edit/2" : "/story/send/2");
+    setInfo(formData);
+
+    navigate(isEdit ? `/story/edit/${storyId}/2` : "/story/send/2");
   };
 
-  const handleNicknameCheck = () => {
-    // TODO: 닉네임 중복 확인 API 연결
+  const handleNicknameCheck = async () => {
+    const nickname = formData.nickname.trim();
+
+    if (!nickname) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({ ...prev, nickname: "*닉네임을 입력해주세요." }));
+      return;
+    }
+
+    setIsCheckingNickname(true);
+    setIsNicknameChecked(false);
+
+    try {
+      const { data } = await checkNicknameAvailable(nickname);
+
+      if (nickname !== latestFormDataRef.current.nickname.trim()) return;
+
+      if (data.data.available) {
+        setErrors((prev) => ({ ...prev, nickname: "" }));
+        setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
+        setIsNicknameChecked(true);
+      } else {
+        setNicknameSuccessMessage("");
+        setIsNicknameChecked(false);
+        setErrors((prev) => ({
+          ...prev,
+          nickname: "이미 사용 중인 닉네임이에요.",
+        }));
+      }
+    } catch (error) {
+      if (nickname !== latestFormDataRef.current.nickname.trim()) return;
+
+      setNicknameSuccessMessage("");
+      setIsNicknameChecked(false);
+      setErrors((prev) => ({
+        ...prev,
+        nickname: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
+      }));
+    } finally {
+      setIsCheckingNickname(false);
+    }
   };
 
-  const handleEmailCheck = () => {
-    // TODO: 이메일 중복 확인 API 연결
+  const handleEmailCheck = async () => {
+    const email = formData.email.trim();
+
+    if (!email) {
+      setEmailSuccessMessage("");
+      setErrors((prev) => ({ ...prev, email: "*이메일을 입력해주세요." }));
+      return;
+    }
+
+    setIsCheckingEmail(true);
+    setIsEmailChecked(false);
+
+    try {
+      const { data } = await checkEmailAvailable(email);
+
+      if (email !== latestFormDataRef.current.email.trim()) return;
+
+      if (data.data.available) {
+        setErrors((prev) => ({ ...prev, email: "" }));
+        setEmailSuccessMessage("사용 가능한 이메일이에요.");
+        setIsEmailChecked(true);
+      } else {
+        setEmailSuccessMessage("");
+        setIsEmailChecked(false);
+        setErrors((prev) => ({ ...prev, email: "이미 사용 중인 이메일이에요." }));
+      }
+    } catch (error) {
+      if (email !== latestFormDataRef.current.email.trim()) return;
+
+      setEmailSuccessMessage("");
+      setIsEmailChecked(false);
+      setErrors((prev) => ({
+        ...prev,
+        email: error.response?.data?.message ?? "잠시 후 다시 시도해주세요.",
+      }));
+    } finally {
+      setIsCheckingEmail(false);
+    }
   };
 
   return (
@@ -202,6 +318,7 @@ const StoryForm1 = ({ mode }) => {
                   className="story-form-check-button"
                   type="button"
                   onClick={handleNicknameCheck}
+                  disabled={isCheckingNickname}
                 >
                   중복 확인
                 </button>
@@ -212,11 +329,13 @@ const StoryForm1 = ({ mode }) => {
               <p className="story-form-hint">
                 닉네임은 설정에서 변경할 수 있어요.
               </p>
-            ) : (
-              errors.nickname && (
-                <p className="story-form-error-message">{errors.nickname}</p>
-              )
-            )}
+            ) : errors.nickname ? (
+              <p className="story-form-error-message">{errors.nickname}</p>
+            ) : nicknameSuccessMessage ? (
+              <p className="story-form-success-message">
+                {nicknameSuccessMessage}
+              </p>
+            ) : null}
           </div>
 
           <div className="story-form-group">
@@ -249,6 +368,7 @@ const StoryForm1 = ({ mode }) => {
                   className="story-form-check-button"
                   type="button"
                   onClick={handleEmailCheck}
+                  disabled={isCheckingEmail}
                 >
                   중복 확인
                 </button>
@@ -257,16 +377,16 @@ const StoryForm1 = ({ mode }) => {
 
             {isEdit ? (
               <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
-            ) : (
-              errors.email && (
-                <p className="story-form-error-message">{errors.email}</p>
-              )
-            )}
+            ) : errors.email ? (
+              <p className="story-form-error-message">{errors.email}</p>
+            ) : emailSuccessMessage ? (
+              <p className="story-form-success-message">{emailSuccessMessage}</p>
+            ) : null}
           </div>
         </form>
 
         <button
-          className="story-form-next-button"
+          className={`story-form-next-button ${isReadyForNext ? "is-valid" : ""}`}
           type="button"
           onClick={handleNext}
         >

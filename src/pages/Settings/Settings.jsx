@@ -5,6 +5,7 @@ import Navbar from "@/components/common/Navbar";
 import Drawer from "@/components/common/Drawer";
 import NicknameChange from "@/components/settings/NicknameChange";
 import settingsFlower from "@/assets/images/custom/settings-flower.svg";
+import { logout } from "@/api/accountApi";
 
 import "@/pages/Settings/Settings.css";
 
@@ -12,7 +13,8 @@ const Settings = () => {
     const navigate = useNavigate();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isNicknameChangeOpen, setIsNicknameChangeOpen] = useState(false);
+    const [isNicknameChangeOpen, setIsNicknameChangeOpen] =
+        useState(false);
 
     const handleBack = () => {
         navigate(-1);
@@ -34,8 +36,16 @@ const Settings = () => {
         setIsNicknameChangeOpen(false);
     };
 
-    const handleLogout = () => {
-        navigate("/");
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch {
+            // 서버 로그아웃 실패 여부와 관계없이
+            // 클라이언트 로그인 정보는 제거
+        } finally {
+            localStorage.removeItem("accessToken");
+            navigate("/");
+        }
     };
 
     if (isNicknameChangeOpen) {

@@ -64,10 +64,12 @@
 .consent-page-intro {
   margin: 0 0 24px;
   padding: 0 10px;
-  color: var(--color-text);
+  color: #000;
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
+  font-style: normal;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: normal;
 }
 
 .consent-page-nowrap {
@@ -100,22 +102,24 @@
 
 .consent-page-card-text {
   margin: 0;
-  color: var(--color-text);
+  color: #000;
   font-family: Pretendard, sans-serif;
   font-size: 16px;
+  font-style: normal;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: normal;
 }
 
 .consent-page-card-list {
   margin: 10px 0 0;
   padding-left: 0;
   list-style: none;
-  color: var(--color-text);
+  color: #000;
   font-family: Pretendard, sans-serif;
   font-size: 16px;
+  font-style: normal;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: normal;
 }
 
 .consent-page-card-list li {

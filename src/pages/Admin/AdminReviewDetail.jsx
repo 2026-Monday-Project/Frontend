@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -8,7 +8,10 @@ import caretRight from "@/assets/icons/caret-right.svg";
 import checkboxUnchecked from "@/assets/icons/checkbox-unchecked.svg";
 import checkboxChecked from "@/assets/icons/checkbox-checked.svg";
 
-import { adminStoryList } from "@/data/adminMockData";
+import {
+    getAdminStoryDetail,
+    updateAdminStoryReview,
+} from "@/api/adminApi";
 
 import "./AdminReviewDetail.css";
 
@@ -34,16 +37,17 @@ const AdminReviewDetail = () => {
     const navigate = useNavigate();
     const { storyId } = useParams();
 
-    const story = adminStoryList.find(
-        (item) => item.id === Number(storyId),
-    );
-
     const photoListRef = useRef(null);
     const dragStartX = useRef(0);
     const dragStartScrollLeft = useRef(0);
 
-    const [isPhotoDragging, setIsPhotoDragging] = useState(false);
-    const [photoScrollProgress, setPhotoScrollProgress] = useState(0);
+    const [story, setStory] = useState(null);
+
+    const [isPhotoDragging, setIsPhotoDragging] =
+        useState(false);
+
+    const [photoScrollProgress, setPhotoScrollProgress] =
+        useState(0);
 
     const [reviewChecks, setReviewChecks] = useState({
         policy: false,
@@ -54,9 +58,23 @@ const AdminReviewDetail = () => {
     const [selectedVisibility, setSelectedVisibility] =
         useState(null);
 
-    if (!story) {
-        return null;
-    }
+    const [isSubmitting, setIsSubmitting] =
+        useState(false);
+
+    useEffect(() => {
+        const fetchStoryDetail = async () => {
+            try {
+                const response =
+                    await getAdminStoryDetail(storyId);
+
+                setStory(response.data.data);
+            } catch {
+                setStory(null);
+            }
+        };
+
+        fetchStoryDetail();
+    }, [storyId]);
 
     const handleBack = () => {
         navigate("/admin/reviews");
@@ -70,7 +88,9 @@ const AdminReviewDetail = () => {
     };
 
     const handlePhotosClick = () => {
-        navigate(`/admin/reviews/${story.id}/photos`);
+        navigate(
+            `/admin/reviews/${story.storyId}/photos`,
+        );
     };
 
     const handleVisibilityClick = (visibility) => {
@@ -107,7 +127,8 @@ const AdminReviewDetail = () => {
         setIsPhotoDragging(true);
 
         dragStartX.current = event.clientX;
-        dragStartScrollLeft.current = element.scrollLeft;
+        dragStartScrollLeft.current =
+            element.scrollLeft;
 
         element.setPointerCapture(event.pointerId);
     };
@@ -127,7 +148,8 @@ const AdminReviewDetail = () => {
             event.clientX - dragStartX.current;
 
         element.scrollLeft =
-            dragStartScrollLeft.current - dragDistance;
+            dragStartScrollLeft.current -
+            dragDistance;
     };
 
     const handlePhotoPointerUp = (event) => {
@@ -137,7 +159,9 @@ const AdminReviewDetail = () => {
             element &&
             element.hasPointerCapture(event.pointerId)
         ) {
-            element.releasePointerCapture(event.pointerId);
+            element.releasePointerCapture(
+                event.pointerId,
+            );
         }
 
         setIsPhotoDragging(false);
@@ -147,20 +171,43 @@ const AdminReviewDetail = () => {
         Object.values(reviewChecks).every(Boolean);
 
     const isConfirmEnabled =
-        allChecked && selectedVisibility !== null;
+        allChecked &&
+        selectedVisibility !== null &&
+        !isSubmitting;
 
-    const handleConfirm = () => {
-        if (!isConfirmEnabled) {
+    const handleConfirm = async () => {
+        if (!isConfirmEnabled || !story) {
             return;
         }
 
-        navigate(`/admin/notifications/${story.id}`, {
-            state: {
-                previousStatus: story.status,
-                nextStatus: selectedVisibility,
-            },
-        });
+        try {
+            setIsSubmitting(true);
+
+            await updateAdminStoryReview(
+                story.storyId,
+                selectedVisibility,
+            );
+
+            navigate(
+                `/admin/notifications/${story.storyId}`,
+                {
+                    state: {
+                        previousStatus: story.status,
+                        nextStatus:
+                            selectedVisibility,
+                    },
+                },
+            );
+        } catch {
+            setIsSubmitting(false);
+        }
     };
+
+    if (!story) {
+        return null;
+    }
+
+    const photoList = story.imageUrls ?? [];
 
     return (
         <main className="admin-review-detail-page">
@@ -170,21 +217,24 @@ const AdminReviewDetail = () => {
             />
 
             <div className="admin-review-detail-content">
-                <AdminStatusBadge status={story.status} />
+                <AdminStatusBadge
+                    status={story.status}
+                />
 
                 <h2 className="admin-review-detail-title">
                     {story.title}
                 </h2>
 
                 <p className="admin-review-detail-author">
-                    {story.author} · {story.email}
+                    {story.nickname} · {story.email}
                 </p>
 
                 <section className="admin-review-submission">
                     <h3>제출 내용</h3>
 
                     <p className="admin-review-pet">
-                        {story.petName} · {story.petAge} · {story.petType}
+                        {story.petName} · {story.petAge} ·{" "}
+                        {story.petType}
                     </p>
 
                     <p className="admin-review-story-content">
@@ -196,17 +246,21 @@ const AdminReviewDetail = () => {
                     <div className="admin-review-photo-heading">
                         <h3>제출 사진</h3>
 
-                        <button
-                            type="button"
-                            onClick={handlePhotosClick}
-                        >
-                            사진 자세히 보기
+                        {photoList.length > 0 && (
+                            <button
+                                type="button"
+                                onClick={
+                                    handlePhotosClick
+                                }
+                            >
+                                사진 자세히 보기
 
-                            <img
-                                src={caretRight}
-                                alt=""
-                            />
-                        </button>
+                                <img
+                                    src={caretRight}
+                                    alt=""
+                                />
+                            </button>
+                        )}
                     </div>
 
                     <div
@@ -217,32 +271,38 @@ const AdminReviewDetail = () => {
                                 : ""
                         }`}
                         onScroll={handlePhotoScroll}
-                        onPointerDown={handlePhotoPointerDown}
-                        onPointerMove={handlePhotoPointerMove}
-                        onPointerUp={handlePhotoPointerUp}
-                        onPointerCancel={handlePhotoPointerUp}
+                        onPointerDown={
+                            handlePhotoPointerDown
+                        }
+                        onPointerMove={
+                            handlePhotoPointerMove
+                        }
+                        onPointerUp={
+                            handlePhotoPointerUp
+                        }
+                        onPointerCancel={
+                            handlePhotoPointerUp
+                        }
                     >
-                        {story.images.map((image, index) => (
-                            <div
-                                key={index}
-                                className="admin-review-photo-item"
-                            >
-                                {image ? (
+                        {photoList.map(
+                            (image, index) => (
+                                <div
+                                    key={image}
+                                    className="admin-review-photo-item"
+                                >
                                     <img
                                         src={image}
-                                        alt={`제출 사진 ${index + 1}`}
+                                        alt={`제출 사진 ${
+                                            index + 1
+                                        }`}
                                         draggable="false"
                                     />
-                                ) : (
-                                    <span>
-                                        사진 {index + 1}
-                                    </span>
-                                )}
-                            </div>
-                        ))}
+                                </div>
+                            ),
+                        )}
                     </div>
 
-                    {story.images.length > 3 && (
+                    {photoList.length > 3 && (
                         <div
                             className="admin-review-photo-scroll"
                             aria-hidden="true"
@@ -252,7 +312,8 @@ const AdminReviewDetail = () => {
                                 style={{
                                     left: `${photoScrollProgress * 100}%`,
                                     transform: `translateX(-${
-                                        photoScrollProgress * 74.5
+                                        photoScrollProgress *
+                                        74.5
                                     }px)`,
                                 }}
                             />
@@ -271,7 +332,9 @@ const AdminReviewDetail = () => {
                                 type="button"
                                 className="admin-review-check-item"
                                 onClick={() =>
-                                    handleCheckClick(item.key)
+                                    handleCheckClick(
+                                        item.key,
+                                    )
                                 }
                             >
                                 <img
@@ -302,12 +365,15 @@ const AdminReviewDetail = () => {
                         <button
                             type="button"
                             className={`admin-review-visibility ${
-                                selectedVisibility === "public"
+                                selectedVisibility ===
+                                "PUBLIC"
                                     ? "admin-review-visibility-active"
                                     : ""
                             }`}
                             onClick={() =>
-                                handleVisibilityClick("public")
+                                handleVisibilityClick(
+                                    "PUBLIC",
+                                )
                             }
                         >
                             공개
@@ -316,12 +382,15 @@ const AdminReviewDetail = () => {
                         <button
                             type="button"
                             className={`admin-review-visibility ${
-                                selectedVisibility === "private"
+                                selectedVisibility ===
+                                "PRIVATE"
                                     ? "admin-review-visibility-active"
                                     : ""
                             }`}
                             onClick={() =>
-                                handleVisibilityClick("private")
+                                handleVisibilityClick(
+                                    "PRIVATE",
+                                )
                             }
                         >
                             비공개
