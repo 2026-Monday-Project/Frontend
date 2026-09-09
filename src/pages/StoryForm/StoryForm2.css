@@ -5,17 +5,31 @@
 /* 사연 본문 */
 
 .story-form2-textarea-wrapper {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 220px;
+  border: 1px solid var(--color-green-main);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.story-form2-textarea-wrapper:focus-within {
+  border-width: 2px;
+}
+
+.story-form2-textarea-wrapper.story-form-input-invalid {
+  border-color: #e03131;
 }
 
 .story-form2-textarea {
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  height: 220px;
-  padding: 14px 14px 28px;
+  padding: 14px 14px 4px;
   resize: none;
-  border: 1px solid var(--color-green-main);
-  border-radius: 12px;
+  border: none;
   background-color: transparent;
   color: var(--color-text);
   font-family: inherit;
@@ -31,22 +45,10 @@
   font-weight: 400;
 }
 
-.story-form2-textarea:focus {
-  border-width: 2px;
-}
-
-.story-form2-textarea.story-form-input-invalid {
-  border-color: #e03131;
-}
-
-.story-form2-textarea.story-form-input-invalid:focus {
-  border-width: 2px;
-}
-
 .story-form2-textarea-count {
-  position: absolute;
-  right: 14px;
-  bottom: 12px;
+  flex-shrink: 0;
+  align-self: flex-end;
+  padding: 4px 14px 10px;
   color: var(--color-text-muted);
   font-size: 13px;
   pointer-events: none;

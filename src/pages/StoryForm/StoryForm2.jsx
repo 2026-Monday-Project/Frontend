@@ -169,9 +169,11 @@ const StoryForm2 = ({ mode }) => {
               사연 본문
             </label>
 
-            <div className="story-form2-textarea-wrapper">
+            <div
+              className={`story-form2-textarea-wrapper ${errors.content ? "story-form-input-invalid" : ""}`}
+            >
               <textarea
-                className={`story-form2-textarea ${errors.content ? "story-form-input-invalid" : ""}`}
+                className="story-form2-textarea"
                 id="story-content"
                 name="content"
                 maxLength={MAX_CONTENT_LENGTH}
