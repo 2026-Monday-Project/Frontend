@@ -32,8 +32,18 @@ const StoryForm1 = ({ mode }) => {
   const [isLoggedIn] = useState(() =>
     Boolean(localStorage.getItem("accessToken")),
   );
-  const isLockedByLogin = isLoggedIn && !isEdit;
-  const lockIdentity = isEdit || isLoggedIn;
+
+  // "n/a"(비로그인·수정) | "loading" | "ready" | "failed"
+  const [profileState, setProfileState] = useState(
+    isLoggedIn && !isEdit ? "loading" : "n/a",
+  );
+
+  // 프로필을 성공적으로 불러온 뒤에만 identity lock을 활성화한다.
+  // 로딩 중엔 진행 차단, 실패 시엔 잠금을 풀어 직접 입력 + 중복 확인으로 폴백한다.
+  const isLockedByLogin =
+    isLoggedIn && !isEdit && profileState !== "failed";
+  const lockIdentity = isEdit || isLockedByLogin;
+  const isProfileLoading = isLockedByLogin && profileState !== "ready";
 
   const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
 
@@ -46,9 +56,14 @@ const StoryForm1 = ({ mode }) => {
   // 로그인 상태 & 아직 계정 정보가 없으면 프로필을 불러와 닉네임/이메일을 채운다.
   useEffect(() => {
     if (isEdit || !isLoggedIn) return;
-    if (info.nickname || info.email) return;
+
+    if (info.nickname || info.email) {
+      setProfileState("ready");
+      return;
+    }
 
     let cancelled = false;
+    setProfileState("loading");
 
     getMyProfile()
       .then(({ data }) => {
@@ -60,12 +75,20 @@ const StoryForm1 = ({ mode }) => {
           email: profile.email ?? "",
         };
 
+        if (!identity.nickname && !identity.email) {
+          setProfileState("failed");
+          return;
+        }
+
         setFormData((prev) => ({ ...prev, ...identity }));
         setInfo((prev) => ({ ...prev, ...identity }));
         setVerified({ nickname: true, email: true });
+        setProfileState("ready");
       })
       .catch(() => {
-        // 프로필 조회 실패(토큰 만료 등) 시엔 일반 입력 모드로 둔다.
+        if (cancelled) return;
+        // 프로필 조회 실패(토큰 만료 등) → 잠금 해제, 직접 입력 모드로 폴백
+        setProfileState("failed");
       });
 
     return () => {
@@ -99,7 +122,8 @@ const StoryForm1 = ({ mode }) => {
     setVerified((prev) => ({ ...prev, nickname: value }));
 
   const identityReady = lockIdentity
-    ? Boolean(formData.nickname.trim() && formData.email.trim())
+    ? !isProfileLoading &&
+      Boolean(formData.nickname.trim() && formData.email.trim())
     : isNicknameChecked &&
       isEmailChecked &&
       !isCheckingNickname &&
@@ -140,6 +164,9 @@ const StoryForm1 = ({ mode }) => {
   };
 
   const handleNext = () => {
+    // 로그인 계정 정보 로딩 중엔 identity가 아직 비어 있으므로 진행 차단
+    if (isProfileLoading) return;
+
     const newErrors = {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
       petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
