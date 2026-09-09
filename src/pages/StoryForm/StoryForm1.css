@@ -1,6 +1,5 @@
 .story-form-page {
   width: 100%;
-  min-height: 100dvh;
 
   background-color: var(--color-background);
 }
@@ -9,7 +8,6 @@
   position: relative;
 
   width: 100%;
-  min-height: 100dvh;
 
   padding: 32px 28px 110px;
 

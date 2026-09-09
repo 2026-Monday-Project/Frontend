@@ -4,6 +4,7 @@ import arrowLeft from "@/assets/icons/arrow-left.png";
 import chevronRight from "@/assets/icons/Vector green.png";
 import stepIndicator from "@/assets/icons/step-indicator-3.png";
 import { createStory, updateStory } from "@/api/storyApi";
+import { login } from "@/api/accountApi";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm3.css";
@@ -201,6 +202,18 @@ const StoryForm3 = ({ mode }) => {
         await updateStory(storyId, request, newImages);
       } else {
         await createStory(request, newImages);
+
+        // 사연 제출 직후 방금 입력한 이메일로 자동 로그인 → 내 정원 진입 가능하도록 토큰 저장.
+        // 로그인이 실패해도 사연은 이미 등록됐으므로 완료 화면으로는 이동한다.
+        try {
+          const { data } = await login(info.email);
+          const token = data?.data?.accessToken;
+          if (token) {
+            localStorage.setItem("accessToken", token);
+          }
+        } catch (loginError) {
+          console.error("사연 제출 후 자동 로그인 실패:", loginError);
+        }
       }
 
       reset();

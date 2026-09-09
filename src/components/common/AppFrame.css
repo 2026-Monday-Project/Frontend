@@ -1,0 +1,28 @@
+.app-frame-viewport {
+    position: relative;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 0 22px rgba(0, 0, 0, 0.16);
+
+    overflow: hidden;
+}
+
+.app-frame {
+    position: relative;
+
+    width: 402px;
+    height: 874px;
+
+    transform-origin: top left;
+
+    background-color: var(--color-background);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.app-frame.is-scroll-locked {
+    overflow-y: hidden;
+}
