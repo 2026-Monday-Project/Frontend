@@ -35,7 +35,7 @@ const StoryForm2 = ({ mode }) => {
   const isFormValid =
     formData.title.trim() &&
     formData.content.trim() &&
-    photos.length > 0;
+    (isEdit || photos.length > 0);
 
   useEffect(() => {
     if (viewerIndex === null) return;
@@ -69,7 +69,7 @@ const StoryForm2 = ({ mode }) => {
     const newErrors = {
       title: formData.title.trim() ? "" : REQUIRED_MESSAGE,
       content: formData.content.trim() ? "" : REQUIRED_MESSAGE,
-      photos: photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
+      photos: isEdit || photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
     };
 
     setErrors(newErrors);
