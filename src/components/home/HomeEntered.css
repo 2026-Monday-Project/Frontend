@@ -1,47 +1,39 @@
 .home-entered-page {
-    display: flex;
-
     width: 100%;
-    min-height: 100dvh;
-
-    justify-content: center;
-    align-items: flex-start;
+    height: 100%;
 
     background-color: var(--color-background);
-
-    overflow-x: hidden;
-}
-
-.home-entered-scale-container {
-    position: relative;
-
-    flex-shrink: 0;
 
     overflow: hidden;
 }
 
 .home-entered-design {
+    position: relative;
+
+    width: 402px;
+    height: 874px;
+
+    overflow: hidden;
+}
+
+/* ==============================
+    배경 이미지
+   ============================== */
+
+.home-entered-background {
     position: absolute;
     top: 0;
     left: 0;
 
     width: 402px;
-    min-height: 874px;
+    height: 874px;
+    max-width: none;
 
-    transform-origin: top left;
+    object-fit: fill;
 
-    background-image:
-        url("@/assets/images/custom/home-entered-background.svg");
+    pointer-events: none;
 
-    /*
-     * SVG 자체 하단의 빈 영역을 화면 밖으로 밀어내기 위해
-     * 배경을 세로로 조금 더 크게 렌더링
-     */
-    background-size: 402px calc(100% + 30px);
-    background-position: top center;
-    background-repeat: no-repeat;
-
-    overflow: hidden;
+    z-index: 0;
 }
 
 /* ==============================
@@ -51,11 +43,7 @@
 .home-entered-text {
     position: absolute;
 
-    /*
-     * 기존 292px 위치에
-     * 배경이 늘어난 만큼 약 10px 보정
-     */
-    top: 302px;
+    top: 292px;
     left: 0;
 
     display: flex;
@@ -65,6 +53,8 @@
     align-items: center;
 
     text-align: center;
+
+    z-index: 1;
 }
 
 .home-entered-text-title {
@@ -84,7 +74,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     text-align: center;
 }
@@ -110,7 +99,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     text-align: center;
 }
@@ -126,21 +114,18 @@
 .home-entered-buttons {
     position: absolute;
 
-    /*
-     * 기존 491px에서
-     * 배경 늘어난 비율만큼 약 17px 보정
-     */
-    top: 508px;
+    top: 491px;
     left: 50%;
 
     display: flex;
     width: 239px;
 
     flex-direction: column;
-
     gap: 20px;
 
     transform: translateX(-50%);
+
+    z-index: 1;
 }
 
 .home-entered-button {
@@ -163,7 +148,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     white-space: nowrap;
 
