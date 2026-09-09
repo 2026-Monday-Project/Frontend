@@ -104,3 +104,20 @@
     background: rgba(36, 63, 38, 0.42);
     cursor: default;
 }
+.nickname-change-input-box-error {
+    border-color: #e53935;
+}
+
+.nickname-change-message {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.nickname-change-message-success {
+    color: var(--color-green-main);
+}
+
+.nickname-change-message-error {
+    color: #e53935;
+}
