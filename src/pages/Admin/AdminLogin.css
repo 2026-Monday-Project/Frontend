@@ -1,0 +1,185 @@
+.admin-login-page {
+    width: 100%;
+    min-height: 100dvh;
+
+    background: var(--color-background);
+}
+
+.admin-login-form {
+    width: 100%;
+    min-height: 100dvh;
+
+    padding: 74px 29px 40px;
+}
+
+.admin-login-title {
+    margin: 0;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.admin-login-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    margin-top: 40px;
+}
+
+.admin-login-input-box {
+    display: flex;
+
+    width: 344px;
+    padding: 16px;
+
+    justify-content: space-between;
+    align-items: center;
+
+    border: 2px solid #d5d6d7;
+    border-radius: 10px;
+
+    background: transparent;
+
+    transition: border-color 0.15s ease;
+}
+
+.admin-login-input-box:focus-within {
+    border-color: #315338;
+}
+
+.admin-login-input-box-error {
+    border-color: #fe332e;
+}
+
+.admin-login-input-box-error:focus-within {
+    border-color: #fe332e;
+}
+
+.admin-login-input {
+    flex: 1;
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.admin-login-input::placeholder {
+    color: #686866;
+    opacity: 1;
+}
+
+.admin-login-password-toggle {
+    display: flex;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 12px;
+    padding: 0;
+
+    background: transparent;
+}
+
+.admin-login-password-toggle img {
+    width: 24px;
+    height: 24px;
+}
+
+.admin-login-keep {
+    display: flex;
+
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 24px;
+    padding: 0;
+
+    background: transparent;
+}
+
+.admin-login-keep img {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+}
+
+.admin-login-keep span {
+    color: #686866;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+/*
+ * 로그인 상태 유지 아래에
+ * 에러 문구 + 로그인 버튼 배치
+ */
+.admin-login-action {
+    width: 344px;
+
+    margin-top: 34px;
+}
+
+.admin-login-error {
+    margin: 0 0 11px;
+
+    color: #c62b2b;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.admin-login-submit {
+    display: inline-flex;
+
+    width: 344px;
+    padding: 16px 146px;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+
+    border-radius: 10px;
+
+    background: #315338;
+
+    color: #fff;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    white-space: nowrap;
+}
+
+.admin-login-submit:disabled {
+    background: #a0a998;
+
+    cursor: default;
+}

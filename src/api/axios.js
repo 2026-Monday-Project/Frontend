@@ -8,9 +8,19 @@ api.interceptors.request.use((config) => {
     const isAdminRequest =
         config.url?.startsWith("/admin");
 
-    const accessToken = isAdminRequest
-        ? localStorage.getItem("adminAccessToken")
-        : localStorage.getItem("accessToken");
+    const isAdminLoginRequest =
+        config.url === "/admin/login";
+
+    let accessToken = null;
+
+    if (isAdminRequest && !isAdminLoginRequest) {
+        accessToken =
+            localStorage.getItem("adminAccessToken") ||
+            sessionStorage.getItem("adminAccessToken");
+    } else if (!isAdminRequest) {
+        accessToken =
+            localStorage.getItem("accessToken");
+    }
 
     if (accessToken) {
         config.headers.Authorization =

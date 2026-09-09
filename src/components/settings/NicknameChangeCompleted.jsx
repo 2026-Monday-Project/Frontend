@@ -8,7 +8,7 @@ const NicknameChangeCompleted = () => {
     const navigate = useNavigate();
 
     const handleMyGardenClick = () => {
-        navigate("/my-garden");
+        navigate("/mygarden");
     };
 
     const handleGardenClick = () => {
