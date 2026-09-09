@@ -108,6 +108,7 @@
     line-height: normal;
     color: var(--color-text);
     margin: 0;
+    white-space: pre-wrap;
     word-break: break-all;
 }
 
