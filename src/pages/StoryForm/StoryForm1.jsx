@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/arrow-left.png";
 import stepIndicator from "@/assets/icons/step-indicator-1.png";
-import { checkEmailAvailable, checkNicknameAvailable } from "@/api/accountApi";
+import {
+  checkEmailAvailable,
+  checkNicknameAvailable,
+  getMyProfile,
+} from "@/api/accountApi";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 
@@ -24,6 +28,13 @@ const StoryForm1 = ({ mode }) => {
   const isEdit = mode === "edit";
   const { info, setInfo, verified, setVerified } = useStoryForm();
 
+  // 로그인 상태에서 새 사연을 보내는 경우: 닉네임/이메일은 계정 정보로 고정, 중복 확인 생략
+  const [isLoggedIn] = useState(() =>
+    Boolean(localStorage.getItem("accessToken")),
+  );
+  const isLockedByLogin = isLoggedIn && !isEdit;
+  const lockIdentity = isEdit || isLoggedIn;
+
   const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
 
   // 중복 확인 응답이 도착했을 때 입력값이 그새 바뀌었는지 판별하기 위한 최신값 참조
@@ -31,6 +42,36 @@ const StoryForm1 = ({ mode }) => {
   useEffect(() => {
     latestFormDataRef.current = formData;
   }, [formData]);
+
+  // 로그인 상태 & 아직 계정 정보가 없으면 프로필을 불러와 닉네임/이메일을 채운다.
+  useEffect(() => {
+    if (isEdit || !isLoggedIn) return;
+    if (info.nickname || info.email) return;
+
+    let cancelled = false;
+
+    getMyProfile()
+      .then(({ data }) => {
+        if (cancelled) return;
+
+        const profile = data?.data ?? {};
+        const identity = {
+          nickname: profile.nickname ?? "",
+          email: profile.email ?? "",
+        };
+
+        setFormData((prev) => ({ ...prev, ...identity }));
+        setInfo((prev) => ({ ...prev, ...identity }));
+        setVerified({ nickname: true, email: true });
+      })
+      .catch(() => {
+        // 프로필 조회 실패(토큰 만료 등) 시엔 일반 입력 모드로 둔다.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isEdit, isLoggedIn, info.nickname, info.email, setInfo, setVerified]);
 
   const [errors, setErrors] = useState({
     petName: "",
@@ -57,15 +98,18 @@ const StoryForm1 = ({ mode }) => {
   const setIsNicknameChecked = (value) =>
     setVerified((prev) => ({ ...prev, nickname: value }));
 
+  const identityReady = lockIdentity
+    ? Boolean(formData.nickname.trim() && formData.email.trim())
+    : isNicknameChecked &&
+      isEmailChecked &&
+      !isCheckingNickname &&
+      !isCheckingEmail;
+
   const isReadyForNext =
     formData.petName.trim() &&
     formData.petAge.trim() &&
     formData.petType.trim() &&
-    (isEdit ||
-      (isNicknameChecked &&
-        isEmailChecked &&
-        !isCheckingNickname &&
-        !isCheckingEmail));
+    identityReady;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -100,15 +144,16 @@ const StoryForm1 = ({ mode }) => {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
       petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
       petType: formData.petType.trim() ? "" : REQUIRED_MESSAGE,
-      nickname: isEdit || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
-      email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
+      nickname:
+        lockIdentity || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
+      email: lockIdentity || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
-    if (!isEdit && (isCheckingNickname || isCheckingEmail)) {
+    if (!lockIdentity && (isCheckingNickname || isCheckingEmail)) {
       return;
     }
 
-    if (!isEdit) {
+    if (!lockIdentity) {
       if (!newErrors.nickname && !isNicknameChecked) {
         newErrors.nickname = "*닉네임 중복 확인을 해주세요.";
       }
@@ -304,14 +349,15 @@ const StoryForm1 = ({ mode }) => {
               공개 닉네임
             </label>
 
-            {isEdit ? (
+            {lockIdentity ? (
               <input
                 className="story-form-input"
                 id="nickname"
                 name="nickname"
                 type="text"
                 value={formData.nickname}
-                disabled
+                disabled={isEdit}
+                readOnly={isLockedByLogin}
               />
             ) : (
               <div className="story-form-input-button-wrapper">
@@ -341,7 +387,7 @@ const StoryForm1 = ({ mode }) => {
               <p className="story-form-hint">
                 닉네임은 설정에서 변경할 수 있어요.
               </p>
-            ) : errors.nickname ? (
+            ) : isLockedByLogin ? null : errors.nickname ? (
               <p className="story-form-error-message">{errors.nickname}</p>
             ) : nicknameSuccessMessage ? (
               <p className="story-form-success-message">
@@ -355,14 +401,15 @@ const StoryForm1 = ({ mode }) => {
               이메일
             </label>
 
-            {isEdit ? (
+            {lockIdentity ? (
               <input
                 className="story-form-input"
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
-                disabled
+                disabled={isEdit}
+                readOnly={isLockedByLogin}
               />
             ) : (
               <div className="story-form-input-button-wrapper">
@@ -389,7 +436,7 @@ const StoryForm1 = ({ mode }) => {
 
             {isEdit ? (
               <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
-            ) : errors.email ? (
+            ) : isLockedByLogin ? null : errors.email ? (
               <p className="story-form-error-message">{errors.email}</p>
             ) : emailSuccessMessage ? (
               <p className="story-form-success-message">{emailSuccessMessage}</p>
