@@ -91,6 +91,7 @@ const StoryForm3 = ({ mode }) => {
   const navigate = useNavigate();
   const { storyId } = useParams();
   const isEdit = mode === "edit";
+  const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
   const { info, story, consents, setConsents, reset } = useStoryForm();
 
   const [errors, setErrors] = useState({
@@ -180,8 +181,10 @@ const StoryForm3 = ({ mode }) => {
           snsConsent: consents.sns,
         }
       : {
-          nickname: info.nickname,
-          email: info.email,
+          // 로그인 상태면 Authorization 헤더로 사용자를 식별하므로 닉네임/이메일은 보내지 않는다.
+          ...(isLoggedIn
+            ? {}
+            : { nickname: info.nickname, email: info.email }),
           petName: info.petName,
           petType: info.petType,
           petAge: Number(info.petAge),
@@ -203,16 +206,18 @@ const StoryForm3 = ({ mode }) => {
       } else {
         await createStory(request, newImages);
 
-        // 사연 제출 직후 방금 입력한 이메일로 자동 로그인 → 내 정원 진입 가능하도록 토큰 저장.
+        // 비로그인 제출이면 방금 입력한 이메일로 자동 로그인 → 내 정원 진입 가능하도록 토큰 저장.
         // 로그인이 실패해도 사연은 이미 등록됐으므로 완료 화면으로는 이동한다.
-        try {
-          const { data } = await login(info.email);
-          const token = data?.data?.accessToken;
-          if (token) {
-            localStorage.setItem("accessToken", token);
+        if (!isLoggedIn) {
+          try {
+            const { data } = await login(info.email);
+            const token = data?.data?.accessToken;
+            if (token) {
+              localStorage.setItem("accessToken", token);
+            }
+          } catch (loginError) {
+            console.error("사연 제출 후 자동 로그인 실패:", loginError);
           }
-        } catch (loginError) {
-          console.error("사연 제출 후 자동 로그인 실패:", loginError);
         }
       }
 

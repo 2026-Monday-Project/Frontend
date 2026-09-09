@@ -147,6 +147,15 @@
   cursor: not-allowed;
 }
 
+/* 로그인 상태 고정 필드: 회색 처리 없이 검은 글씨 그대로, 편집만 불가 */
+.story-form-input:read-only:not(:disabled) {
+  cursor: default;
+}
+
+.story-form-input:read-only:not(:disabled):focus {
+  border-width: 1px;
+}
+
 .story-form-input-invalid {
   border-color: #e03131;
 }
