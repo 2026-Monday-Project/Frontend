@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import mailboxImg from '@/assets/images/custom/mailbox.svg';
@@ -10,6 +11,27 @@ import './Mailbox.css';
 const Mailbox = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const response = await api.get('/my-garden/notifications');
+                const fetchedContent = response.data?.data?.content;
+                setNotifications(Array.isArray(fetchedContent) ? fetchedContent : []);
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('accessToken');
+                    navigate('/mygarden/unlogged-in');
+                } else {
+                    console.error(error);
+                    setNotifications([]);
+                }
+            }
+        };
+
+        fetchNotifications();
+    }, [navigate]);
 
     const handleMenuClick = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -17,6 +39,15 @@ const Mailbox = () => {
 
     const handleDrawerClose = () => {
         setIsMenuOpen(false);
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}.${month}.${day}`;
     };
 
     return (
@@ -36,21 +67,24 @@ const Mailbox = () => {
                 <div className="mailbox-banner">
                 </div>
                 <div className="mail-list">
-                    <div className="mail-item" onClick={() => navigate('/mailbox/under-review')} style={{ cursor: 'pointer' }}>
-                        <div className="mail-content">
-                            <p className="mail-title">당신의 이야기가 정원에 도착했어요.</p>
-                            <p className="mail-desc">운영팀 검수 후 공개여부와 상태를 내 정원에서 확인할 수...</p>
-                            <p className="mail-date">2026.07.05</p>
-                        </div>
-                        <img src={unreadDot} alt="" className="unread-dot" />
-                    </div>
-                    <div className="mail-item-read" onClick={() => navigate('/mail-public')} style={{ cursor: 'pointer' }}>
-                        <div className="mail-content-read">
-                            <p className="mail-title-read">정원에 오신 것을 환영합니다.</p>
-                            <p className="mail-desc-read">따뜻한 이야기를 함께 나눠보세요.</p>
-                            <p className="mail-date-read">2026.07.01</p>
-                        </div>
-                    </div>
+                    {notifications.map(mail => {
+                        const isExplicitlyUnread = mail.isRead === false;
+
+                        return (
+                            <div 
+                                key={mail.notificationId} 
+                                className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
+                                onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
+                                    <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
+                                    <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
+                                </div>
+                                {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
