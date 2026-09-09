@@ -1,14 +1,13 @@
 .admin-login-page {
     width: 100%;
-    min-height: 100dvh;
-
+    height: 100%;
     background: var(--color-background);
+    overflow: hidden;
 }
 
 .admin-login-form {
     width: 100%;
-    min-height: 100dvh;
-
+    height: 100%;
     padding: 74px 29px 40px;
 }
 
