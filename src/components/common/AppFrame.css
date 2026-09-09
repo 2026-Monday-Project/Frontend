@@ -10,6 +10,8 @@
 }
 
 .app-frame {
+    position: relative;
+
     width: 402px;
     height: 874px;
 
@@ -19,4 +21,8 @@
 
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.app-frame.is-scroll-locked {
+    overflow-y: hidden;
 }
