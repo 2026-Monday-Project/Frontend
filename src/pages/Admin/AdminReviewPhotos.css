@@ -1,11 +1,13 @@
 .admin-review-photos {
     display: flex;
     width: 100%;
-    min-height: 100dvh;
+    height: 100%;
 
     flex-direction: column;
 
     background: var(--color-background);
+
+    overflow: hidden;
 }
 
 
@@ -84,26 +86,23 @@
 
 /* ==============================
     Thumbnail Area
-
-    화면 높이에 따라 무조건 맨 아래로
-    끌려 올라오지 않도록 별도 영역으로 관리
 ============================== */
 
 .admin-review-photos-bottom {
     width: 100%;
 
-    /*
-     * 기본 디자인에서는 충분한 여백을 유지하고,
-     * 작은 화면에서도 60px 아래로는 줄어들지 않음.
-     */
-    margin-top: clamp(60px, 12dvh, 110px);
+    /* 메인 사진과 썸네일 사이 간격 */
+    margin-top: 72px;
 
     padding-bottom: 28px;
+
+    flex-shrink: 0;
 }
 
 .admin-review-photos-thumbnails {
     display: flex;
     width: 100%;
+
     padding: 0 16px;
 
     gap: 12px;
@@ -111,17 +110,11 @@
     overflow-x: auto;
     overflow-y: hidden;
 
-    cursor: grab;
     user-select: none;
 
     overscroll-behavior-x: contain;
-    scroll-behavior: auto;
 
     scrollbar-width: none;
-}
-
-.admin-review-photos-thumbnails-dragging {
-    cursor: grabbing;
 }
 
 .admin-review-photos-thumbnails::-webkit-scrollbar {
