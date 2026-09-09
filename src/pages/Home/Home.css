@@ -1,41 +1,39 @@
 .home-page {
-    display: flex;
-
     width: 100%;
-    min-height: 100dvh;
-
-    justify-content: center;
-    align-items: flex-start;
+    height: 100%;
 
     background-color: var(--color-background);
-
-    overflow-x: hidden;
-}
-
-.home-scale-container {
-    position: relative;
-
-    flex-shrink: 0;
 
     overflow: hidden;
 }
 
 .home-design {
+    position: relative;
+
+    width: 402px;
+    height: 874px;
+
+    overflow: hidden;
+}
+
+/* ==============================
+    배경 이미지
+   ============================== */
+
+.home-background {
     position: absolute;
     top: 0;
     left: 0;
 
     width: 402px;
-    min-height: 874px;
+    height: 874px;
+    max-width: none;
 
-    transform-origin: top left;
+    object-fit: fill;
 
-    background-image: url("@/assets/images/custom/home-background.svg");
-    background-size: 402px 100%;
-    background-position: top center;
-    background-repeat: no-repeat;
+    pointer-events: none;
 
-    overflow: hidden;
+    z-index: 0;
 }
 
 /* ==============================
@@ -56,6 +54,8 @@
     color: #605a30;
 
     text-align: center;
+
+    z-index: 2;
 }
 
 .home-title {
@@ -68,7 +68,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     white-space: nowrap;
 }
@@ -90,7 +89,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     white-space: nowrap;
 }
@@ -112,7 +110,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     text-align: center;
 }
@@ -127,6 +124,7 @@
 
 .home-entry-guide-text {
     position: absolute;
+
     bottom: 137px;
     left: 50%;
 
@@ -145,7 +143,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 0;
 
     text-align: center;
     white-space: nowrap;
@@ -166,11 +163,12 @@
 }
 
 /* ==============================
-    아치
+    스와이프 아치
    ============================== */
 
 .home-entry-arch {
     position: absolute;
+
     bottom: 0;
     left: 50%;
 
@@ -215,11 +213,12 @@
 }
 
 /* ==============================
-    흰색 가이드
+    스와이프 가이드
    ============================== */
 
 .home-entry-trail-container {
     position: absolute;
+
     bottom: 0;
     left: 50%;
 
@@ -235,6 +234,7 @@
 
 .home-entry-base-guide {
     position: absolute;
+
     bottom: 0;
     left: 50%;
 
@@ -245,6 +245,7 @@
 
 .home-entry-trail {
     position: absolute;
+
     left: 50%;
 
     width: 12px;

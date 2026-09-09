@@ -110,9 +110,11 @@ html,
 body,
 #root {
     margin: 0;
-    min-height: 100%;
     width: 100%;
+    min-height: 100%;
+    height: 100%;
 }
+
 
 
 /*
@@ -174,27 +176,23 @@ img {
  * 해당 페이지 CSS에서 background를 따로 지정합니다.
  */
 body {
+    margin: 0;
+
     background-color: var(--color-page-backgroud);
+
     color: var(--color-text);
     font-family: Pretendard, sans-serif;
+
+    overflow: hidden;
 }
-
-/* ==============================
-    모바일 웹 공통 레이아웃
-
-    - Figma 디자인 기준 너비: 402px
-    - 402px 이하: 기기 화면 너비에 맞게 표시
-    - 402px 초과: 최대 402px로 유지하고 가운데 정렬
-
-    모든 페이지에 자동 적용되므로
-    페이지별로 width: 402px을 다시 지정하지 않습니다.
-============================== */
-
 #root {
-    width: 100%;
-    max-width: var(--max-mobile-width);
-    min-height: 100dvh;
-    margin: 0 auto;
-    background-color: var(--color-background);
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+
+    width: 100vw;
+    height: 100dvh;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--color-page-backgroud);
 }
