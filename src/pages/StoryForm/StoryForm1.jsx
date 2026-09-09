@@ -7,6 +7,8 @@ import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
+const NICKNAME_OK_MESSAGE = "사용 가능한 닉네임이에요.";
+const EMAIL_OK_MESSAGE = "사용 가능한 이메일이에요.";
 
 const EMPTY_DATA = {
   petName: "",
@@ -20,7 +22,7 @@ const StoryForm1 = ({ mode }) => {
   const navigate = useNavigate();
   const { storyId } = useParams();
   const isEdit = mode === "edit";
-  const { info, setInfo } = useStoryForm();
+  const { info, setInfo, verified, setVerified } = useStoryForm();
 
   const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
 
@@ -38,12 +40,22 @@ const StoryForm1 = ({ mode }) => {
     email: "",
   });
 
-  const [emailSuccessMessage, setEmailSuccessMessage] = useState("");
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState(
+    verified.email ? EMAIL_OK_MESSAGE : "",
+  );
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState("");
+  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState(
+    verified.nickname ? NICKNAME_OK_MESSAGE : "",
+  );
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+  // 중복 확인 통과 여부는 컨텍스트에 저장 → 이전/다음으로 스텝을 오가도 유지된다.
+  const isEmailChecked = verified.email;
+  const isNicknameChecked = verified.nickname;
+  const setIsEmailChecked = (value) =>
+    setVerified((prev) => ({ ...prev, email: value }));
+  const setIsNicknameChecked = (value) =>
+    setVerified((prev) => ({ ...prev, nickname: value }));
 
   const isReadyForNext =
     formData.petName.trim() &&
@@ -134,7 +146,7 @@ const StoryForm1 = ({ mode }) => {
 
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, nickname: "" }));
-        setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
+        setNicknameSuccessMessage(NICKNAME_OK_MESSAGE);
         setIsNicknameChecked(true);
       } else {
         setNicknameSuccessMessage("");
@@ -177,7 +189,7 @@ const StoryForm1 = ({ mode }) => {
 
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, email: "" }));
-        setEmailSuccessMessage("사용 가능한 이메일이에요.");
+        setEmailSuccessMessage(EMAIL_OK_MESSAGE);
         setIsEmailChecked(true);
       } else {
         setEmailSuccessMessage("");
