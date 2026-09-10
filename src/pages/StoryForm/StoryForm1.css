@@ -142,8 +142,6 @@
 }
 
 .story-form-input:disabled {
-  border-color: var(--color-green-muted);
-  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 

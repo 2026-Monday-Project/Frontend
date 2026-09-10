@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
-import stepIndicator from "@/assets/icons/step-indicator-2.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
+import stepIndicator from "@/assets/icons/step-indicator-2.svg";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm2.css";
