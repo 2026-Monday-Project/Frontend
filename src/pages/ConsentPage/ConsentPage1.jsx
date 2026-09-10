@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
-import mondayProjectLogo from "@/assets/icons/ConsentPage logo.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
+import mondayProjectLogo from "@/assets/icons/ConsentPage logo.svg";
 import "@/pages/ConsentPage/ConsentPage.css";
 
 const ConsentPage1 = () => {

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
 import chevronRight from "@/assets/icons/Vector green.png";
-import stepIndicator from "@/assets/icons/step-indicator-3.png";
+import stepIndicator from "@/assets/icons/step-indicator-3.svg";
 import { createStory, updateStory } from "@/api/storyApi";
 import { login } from "@/api/accountApi";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
