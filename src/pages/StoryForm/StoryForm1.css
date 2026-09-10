@@ -174,12 +174,17 @@
 }
 
 .story-form-hint {
+  width: 339px;
+  max-width: 100%;
   margin: 6px 0 0;
 
-  color: var(--color-text-muted);
+  color: var(--color-green-main);
 
-  font-size: 12px;
-  font-weight: 500;
+  font-family: Pretendard, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .story-form-success-message {

@@ -121,13 +121,16 @@ const StoryForm1 = ({ mode }) => {
   const setIsNicknameChecked = (value) =>
     setVerified((prev) => ({ ...prev, nickname: value }));
 
-  const identityReady = lockIdentity
-    ? !isProfileLoading &&
-      Boolean(formData.nickname.trim() && formData.email.trim())
-    : isNicknameChecked &&
-      isEmailChecked &&
-      !isCheckingNickname &&
-      !isCheckingEmail;
+  // 수정 모드에선 닉네임/이메일을 수정·전송하지 않으므로 identity 검증이 필요 없다.
+  const identityReady = isEdit
+    ? true
+    : lockIdentity
+      ? !isProfileLoading &&
+        Boolean(formData.nickname.trim() && formData.email.trim())
+      : isNicknameChecked &&
+        isEmailChecked &&
+        !isCheckingNickname &&
+        !isCheckingEmail;
 
   const isReadyForNext =
     formData.petName.trim() &&
@@ -410,11 +413,11 @@ const StoryForm1 = ({ mode }) => {
               </div>
             )}
 
-            {isEdit ? (
+            {lockIdentity ? (
               <p className="story-form-hint">
                 닉네임은 설정에서 변경할 수 있어요.
               </p>
-            ) : isLockedByLogin ? null : errors.nickname ? (
+            ) : errors.nickname ? (
               <p className="story-form-error-message">{errors.nickname}</p>
             ) : nicknameSuccessMessage ? (
               <p className="story-form-success-message">
@@ -461,9 +464,9 @@ const StoryForm1 = ({ mode }) => {
               </div>
             )}
 
-            {isEdit ? (
+            {lockIdentity ? (
               <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
-            ) : isLockedByLogin ? null : errors.email ? (
+            ) : errors.email ? (
               <p className="story-form-error-message">{errors.email}</p>
             ) : emailSuccessMessage ? (
               <p className="story-form-success-message">{emailSuccessMessage}</p>
