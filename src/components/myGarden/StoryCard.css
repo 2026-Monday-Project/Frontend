@@ -26,12 +26,14 @@
     align-items: flex-start;
     flex: 1;
     gap: 27.5px;
+    min-width: 0;
 }
 
 .status-title {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    width: 100%;
 }
 
 .story-title {
@@ -39,6 +41,9 @@
     font-weight: 500;
     color: var(--color-text);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .story-date {
