@@ -11,6 +11,16 @@ const PHOTO_REQUIRED_MESSAGE = "*사진을 업로드 해주세요.";
 const MAX_PHOTOS = 5;
 const MAX_CONTENT_LENGTH = 500;
 
+// 백엔드 허용 확장자
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "heic"];
+const PHOTO_EXTENSION_MESSAGE =
+  "*jpg, jpeg, png, gif, webp, heic 형식만 업로드할 수 있어요.";
+
+const getExtension = (fileName) =>
+  fileName.includes(".")
+    ? fileName.split(".").pop().toLowerCase()
+    : "";
+
 const StoryForm2 = ({ mode }) => {
   const navigate = useNavigate();
   const { storyId } = useParams();
@@ -104,8 +114,21 @@ const StoryForm2 = ({ mode }) => {
 
     if (files.length === 0) return;
 
+    const hasUnsupported = files.some(
+      (file) => !ALLOWED_EXTENSIONS.includes(getExtension(file.name)),
+    );
+
+    const supportedFiles = files.filter((file) =>
+      ALLOWED_EXTENSIONS.includes(getExtension(file.name)),
+    );
+
+    if (supportedFiles.length === 0) {
+      setErrors((prev) => ({ ...prev, photos: PHOTO_EXTENSION_MESSAGE }));
+      return;
+    }
+
     const remainingSlots = MAX_PHOTOS - photos.length;
-    const newPhotos = files.slice(0, remainingSlots).map((file) => ({
+    const newPhotos = supportedFiles.slice(0, remainingSlots).map((file) => ({
       id: crypto.randomUUID(),
       url: URL.createObjectURL(file),
       file,
@@ -115,7 +138,7 @@ const StoryForm2 = ({ mode }) => {
 
     setErrors((prev) => ({
       ...prev,
-      photos: "",
+      photos: hasUnsupported ? PHOTO_EXTENSION_MESSAGE : "",
     }));
   };
 
@@ -241,7 +264,7 @@ const StoryForm2 = ({ mode }) => {
               ref={fileInputRef}
               className="story-form2-photo-input"
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png,.gif,.webp,.heic,image/jpeg,image/png,image/gif,image/webp,image/heic"
               multiple
               onChange={handlePhotoChange}
             />
