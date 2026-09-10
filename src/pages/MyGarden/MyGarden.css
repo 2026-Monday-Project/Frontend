@@ -1,7 +1,7 @@
 .my-garden-page {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
     overflow-y: hidden;
     position: relative
 }
@@ -37,7 +37,7 @@
 }
 
 .my-garden-container {
-    padding: 16px 18px 15px 17px;
+    padding: 16px 18px 43px 17px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -142,6 +142,10 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 48px;
+}
+
+.list-section:last-child {
+    margin-bottom: 0;
 }
 
 .section-header {

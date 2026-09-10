@@ -37,7 +37,7 @@
 }
 
 .my-garden-container {
-    padding: 16px 18px 15px 17px;
+    padding: 16px 18px 30px 17px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -125,11 +125,14 @@
     margin: 0;
 }
 
+.list-section + .list-section {
+    margin-top: 48px;
+}
+
 .list-section {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 48px;
 }
 
 .section-header {
