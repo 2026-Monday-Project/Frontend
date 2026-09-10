@@ -130,12 +130,15 @@ const StoryForm3 = ({ mode }) => {
   };
 
   const handleSubmit = async () => {
-    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단
+    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단.
+    // 닉네임/이메일은 비로그인 신규 작성에서만 필수(로그인 시엔 토큰으로 식별하고 전송하지 않음).
     const infoIncomplete =
       !info.petName?.trim() ||
       !String(info.petAge ?? "").trim() ||
       !info.petType?.trim() ||
-      (!isEdit && (!info.nickname?.trim() || !info.email?.trim()));
+      (!isEdit &&
+        !isLoggedIn &&
+        (!info.nickname?.trim() || !info.email?.trim()));
     const storyIncomplete =
       !story.title?.trim() ||
       !story.content?.trim() ||
@@ -181,10 +184,10 @@ const StoryForm3 = ({ mode }) => {
           snsConsent: consents.sns,
         }
       : {
-          // 로그인 상태면 Authorization 헤더로 사용자를 식별하므로 닉네임/이메일은 보내지 않는다.
-          ...(isLoggedIn
-            ? {}
-            : { nickname: info.nickname, email: info.email }),
+          // POST /stories는 로그인 여부와 무관하게 nickname/email을 요구한다.
+          // 로그인 사용자는 프로필에서 가져온 값(기존 계정 값과 동일 → no-op)을 그대로 보낸다.
+          nickname: info.nickname,
+          email: info.email,
           petName: info.petName,
           petType: info.petType,
           petAge: Number(info.petAge),
