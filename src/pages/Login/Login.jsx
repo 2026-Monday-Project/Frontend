@@ -109,6 +109,13 @@ const Login = () => {
                     >
                         내 정원으로 가기
                     </button>
+                    <button
+                        className="go-send-button"
+                        disabled={status !== 'success'}
+                        onClick={handleSubmit}
+                    >
+                        사연 보내러 가기
+                    </button>
                 </footer>
             </div>
         </div>
