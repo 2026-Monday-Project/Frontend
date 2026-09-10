@@ -39,6 +39,9 @@
     font-weight: 500;
     color: var(--color-text);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .story-date {
