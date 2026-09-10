@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/common/Navbar';
+import Drawer from '@/components/common/Drawer';
 import api from '@/api/axios';
 import './Login.css';
 
@@ -8,10 +9,11 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('default');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
+    const handleDrawerClose = () => setIsMenuOpen(false);
 
     useEffect(() => {
-        // 이메일이 비어있거나 '@'가 없으면 API 호출을 하지 않고 조용히 종료
-        // (상태는 이미 위 핸들러에서 'default'로 변경되었음)
         if (email === '' || !email.includes('@')) {
             return;
         }
@@ -54,7 +56,7 @@ const Login = () => {
             
             if (token) {
                 localStorage.setItem('accessToken', token);
-                navigate('/login/completed');
+                navigate('/mygarden');
             } else {
                 alert('토큰 발급에 실패했습니다.');
             }
@@ -71,7 +73,12 @@ const Login = () => {
                 showBackButton={true}
                 onBack={() => navigate(-1)}
                 showMenuButton={true}
+                isMenuOpen={isMenuOpen}
+                onMenuClick={handleMenuClick}
             />
+
+            <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
+
             <div className="login-container">
                 <main className="login-main">
                     <h2 className="main-title">
@@ -102,21 +109,21 @@ const Login = () => {
                     </div>
                 </main>
                 <footer className="login-footer">
-                    <button
-                        className="submit-button"
-                        disabled={status !== 'success'}
-                        onClick={handleSubmit}
-                    >
-                        내 정원으로 가기
-                    </button>
-                    <button
-                        className="go-send-button"
-                        disabled={status !== 'success'}
-                        onClick={handleSubmit}
-                    >
-                        사연 보내러 가기
-                    </button>
-                </footer>
+                <button
+                    className="submit-button"
+                    disabled={status !== 'success'}
+                    onClick={handleSubmit}
+                >
+                    내 정원으로 가기
+                </button>
+                <button
+                    className="go-send-button"
+                    disabled={status === 'default'}
+                    onClick={() => navigate('/story')}
+                >
+                    사연 보내러 가기
+                </button>
+            </footer>
             </div>
         </div>
     );

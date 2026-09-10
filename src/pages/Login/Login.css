@@ -129,3 +129,8 @@
     cursor: pointer;
     margin-top: 22px;
 }
+
+.go-send-button:disabled {
+    color: rgba(36, 63, 38, 0.30);
+    cursor: not-allowed;
+}
