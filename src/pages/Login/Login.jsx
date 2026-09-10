@@ -78,7 +78,7 @@ const Login = () => {
             />
 
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
-            
+
             <div className="login-container">
                 <main className="login-main">
                     <h2 className="main-title">
@@ -109,21 +109,21 @@ const Login = () => {
                     </div>
                 </main>
                 <footer className="login-footer">
-                    <button
-                        className="submit-button"
-                        disabled={status !== 'success'}
-                        onClick={handleSubmit}
-                    >
-                        내 정원으로 가기
-                    </button>
-                    <button
-                        className="go-send-button"
-                        disabled={status !== 'success'}
-                        onClick={() => navigate('/story')}
-                    >
-                        사연 보내러 가기
-                    </button>
-                </footer>
+                <button
+                    className="submit-button"
+                    disabled={status !== 'success'}
+                    onClick={handleSubmit}
+                >
+                    내 정원으로 가기
+                </button>
+                <button
+                    className="go-send-button"
+                    disabled={status === 'default'}
+                    onClick={() => navigate('/story')}
+                >
+                    사연 보내러 가기
+                </button>
+            </footer>
             </div>
         </div>
     );
