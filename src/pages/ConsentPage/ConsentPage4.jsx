@@ -29,6 +29,7 @@ const ConsentPage4 = () => {
           </h1>
         </header>
 
+        <div className="consent-page-scroll-area">
         <p className="consent-page-intro">
           제출한 사연은 공연 중 일부 소개되거나
           <br />
@@ -67,6 +68,7 @@ const ConsentPage4 = () => {
           src={mondayProjectLogo}
           alt="Monday Project"
         />
+        </div>
       </section>
     </main>
   );

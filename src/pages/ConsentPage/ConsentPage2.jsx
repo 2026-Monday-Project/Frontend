@@ -29,6 +29,7 @@ const ConsentPage2 = () => {
           </h1>
         </header>
 
+        <div className="consent-page-scroll-area">
         <p className="consent-page-intro">
           먼데이프로젝트는 안전한 사연 공간 운영을 위해 제출된 콘텐츠를 아래
           기준에 따라 검토합니다.
@@ -85,6 +86,7 @@ const ConsentPage2 = () => {
           src={mondayProjectLogo}
           alt="Monday Project"
         />
+        </div>
       </section>
     </main>
   );
