@@ -43,9 +43,7 @@ const StoryForm2 = ({ mode }) => {
   const [viewerIndex, setViewerIndex] = useState(null);
 
   const isFormValid =
-    formData.title.trim() &&
-    formData.content.trim() &&
-    (isEdit || photos.length > 0);
+    formData.title.trim() && formData.content.trim() && photos.length > 0;
 
   useEffect(() => {
     if (viewerIndex === null) return;
@@ -79,7 +77,7 @@ const StoryForm2 = ({ mode }) => {
     const newErrors = {
       title: formData.title.trim() ? "" : REQUIRED_MESSAGE,
       content: formData.content.trim() ? "" : REQUIRED_MESSAGE,
-      photos: isEdit || photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
+      photos: photos.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
     };
 
     setErrors(newErrors);
@@ -102,6 +100,34 @@ const StoryForm2 = ({ mode }) => {
 
   const handlePhotoThumbClick = (index) => {
     setViewerIndex(index);
+  };
+
+  const handlePhotoRemove = (event, index) => {
+    event.stopPropagation();
+
+    setPhotos((prev) => {
+      const target = prev[index];
+      // 새로 추가한 사진(objectURL)만 해제. 기존(수정 진입 시) 사진은 URL을 만든 적이 없다.
+      if (target?.file && target.url) {
+        URL.revokeObjectURL(target.url);
+      }
+
+      const next = prev.filter((_, i) => i !== index);
+
+      // 사진은 작성/수정 모두 필수 항목 → 마지막 한 장을 지우면 즉시 에러를 띄운다.
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        photos: next.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
+      }));
+
+      return next;
+    });
+
+    setViewerIndex((prev) => {
+      if (prev === null) return prev;
+      if (prev === index) return null;
+      return prev > index ? prev - 1 : prev;
+    });
   };
 
   const handleViewerClose = () => {
@@ -223,15 +249,36 @@ const StoryForm2 = ({ mode }) => {
 
             <div className="story-form2-photo-grid">
               {photos.map((photo, index) => (
-                <button
-                  type="button"
-                  className="story-form2-photo-thumb"
-                  key={photo.id}
-                  onClick={() => handlePhotoThumbClick(index)}
-                  aria-label={`${index + 1}번째 사진 자세히 보기`}
-                >
-                  <img src={photo.url} alt="" />
-                </button>
+                <div className="story-form2-photo-thumb-wrapper" key={photo.id}>
+                  <button
+                    type="button"
+                    className="story-form2-photo-thumb"
+                    onClick={() => handlePhotoThumbClick(index)}
+                    aria-label={`${index + 1}번째 사진 자세히 보기`}
+                  >
+                    <img src={photo.url} alt="" />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="story-form2-photo-remove-button"
+                    onClick={(event) => handlePhotoRemove(event, index)}
+                    aria-label={`${index + 1}번째 사진 삭제`}
+                  >
+                    <svg
+                      className="story-form2-photo-remove-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M6 6l12 12M18 6L6 18"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
               ))}
 
               {photos.length < MAX_PHOTOS && (
