@@ -301,6 +301,7 @@ const StoryForm1 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -473,6 +474,7 @@ const StoryForm1 = ({ mode }) => {
             ) : null}
           </div>
         </form>
+        </div>
 
         <button
           className={`story-form-next-button ${isReadyForNext ? "is-valid" : ""}`}

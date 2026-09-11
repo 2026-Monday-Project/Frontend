@@ -29,6 +29,7 @@ const ConsentPage5 = () => {
           </h1>
         </header>
 
+        <div className="consent-page-scroll-area">
         <p className="consent-page-intro">
           제출한 사연 또는 사진은 공연 홍보 목적의{" "}
           <span className="consent-page-nowrap">콘텐츠에</span> 활용될 수
@@ -59,6 +60,7 @@ const ConsentPage5 = () => {
           src={mondayProjectLogo}
           alt="Monday Project"
         />
+        </div>
       </section>
     </main>
   );

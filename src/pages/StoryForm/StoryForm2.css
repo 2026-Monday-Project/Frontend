@@ -1,6 +1,3 @@
-.story-form2-container {
-  padding-bottom: 40px;
-}
 
 /* 사연 본문 */
 
@@ -112,12 +109,15 @@
   display: none;
 }
 
-/* 이전 / 다음 */
+/* 이전 / 다음 (내용이 길어져도 항상 하단에 고정) */
 
 .story-form2-footer {
+  flex-shrink: 0;
+
   display: flex;
   gap: 40px;
-  margin-top: 8px;
+
+  padding: 8px 28px 32px;
 }
 
 .story-form2-prev-button {
@@ -209,12 +209,15 @@
 .story-photo-viewer-main {
   flex: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .story-photo-viewer-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .story-photo-viewer-thumbs {

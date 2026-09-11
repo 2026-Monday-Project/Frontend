@@ -254,6 +254,7 @@ const StoryForm3 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -288,6 +289,7 @@ const StoryForm3 = ({ mode }) => {
         {submitError && (
           <p className="story-form-error-message">{submitError}</p>
         )}
+        </div>
 
         <div className="story-form3-footer">
           <button

@@ -158,6 +158,7 @@ const StoryForm2 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -270,6 +271,7 @@ const StoryForm2 = ({ mode }) => {
             />
           </div>
         </form>
+        </div>
 
         <div className="story-form2-footer">
           <button

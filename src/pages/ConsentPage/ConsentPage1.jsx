@@ -29,6 +29,7 @@ const ConsentPage1 = () => {
           </h1>
         </header>
 
+        <div className="consent-page-scroll-area">
         <p className="consent-page-intro">
           먼데이프로젝트는 관객 사연 접수 및 운영을 위해 아래와 같이
           개인정보를 수집·이용합니다.
@@ -77,6 +78,7 @@ const ConsentPage1 = () => {
           src={mondayProjectLogo}
           alt="Monday Project"
         />
+        </div>
       </section>
     </main>
   );
