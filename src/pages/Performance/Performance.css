@@ -1,10 +1,22 @@
 .performance-page {
-    min-height: 100dvh;
+    width: 100%;
+    min-height: 100%;
+
+    background-color: var(--color-background);
+}
+
+.performance-page > .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
     background-color: var(--color-background);
 }
 
 .performance-content {
     display: flex;
+
     flex-direction: column;
+
     padding: 12px 20px 80px;
 }
