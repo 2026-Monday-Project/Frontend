@@ -64,8 +64,6 @@ const Mailbox = () => {
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
             <img src={mailboxImg} alt="우체통" className="mailbox-image" />
             <div className="mailbox-container">
-                <div className="mailbox-banner">
-                </div>
                 <div className="mail-list">
                     {notifications.map(mail => {
                         const isExplicitlyUnread = mail.isRead === false;
