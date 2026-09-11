@@ -10,13 +10,26 @@ import AdminStatusBadge from "@/components/admin/AdminStatusBadge";
 import arrowRight from "@/assets/icons/arrow-right.svg";
 
 import {
-    getAdminNotificationDraft,
     sendAdminNotification,
+    updateAdminStoryReview,
 } from "@/api/adminApi";
 
 import "./AdminNotification.css";
 
 const AUTO_REASON_PREFIX = "위반항목:";
+
+const AUTO_NOTIFICATION = {
+    PUBLIC: {
+        title: "당신의 이야기가 정원에 공개되었어요.",
+        content:
+            "운영팀 검수 후 사연이 정원에 공개되었어요. 다른 사용자가 당신의 사연을 읽고 공감할 수 있어요.",
+    },
+    PRIVATE: {
+        title: "당신의 이야기가 숨겨졌어요",
+        content:
+            "운영팀 검수 결과, 사연 방침에 어긋나 공개하지 못했어요. 사연을 수정하고 다시 제출해 보세요.",
+    },
+};
 
 const AdminNotification = () => {
     const navigate = useNavigate();
@@ -24,10 +37,11 @@ const AdminNotification = () => {
     const { storyId } = useParams();
 
     const previousStatus =
-        location.state?.previousStatus ?? "PENDING";
+        location.state?.previousStatus ??
+        "PENDING";
 
     const nextStatus =
-        location.state?.nextStatus ?? "PUBLIC";
+        location.state?.nextStatus ?? null;
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -46,10 +60,12 @@ const AdminNotification = () => {
         nextStatus === "PRIVATE";
 
     const handleBack = () => {
-        navigate(`/admin/reviews/${storyId}`);
+        navigate(
+            `/admin/reviews/${storyId}`,
+        );
     };
 
-    const handleAutoComplete = async () => {
+    const handleAutoComplete = () => {
         if (isAutoFilled) {
             setTitle("");
             setContent("");
@@ -60,31 +76,28 @@ const AdminNotification = () => {
             return;
         }
 
-        try {
-            const response =
-                await getAdminNotificationDraft(
-                    storyId,
-                );
-
-            const draft =
-                response.data.data;
-
-            setTitle(draft.title ?? "");
-            setContent(draft.content ?? "");
-
-            if (needsReason) {
-                setReason(AUTO_REASON_PREFIX);
-            }
-
-            setIsAutoFilled(true);
-            setIsConfirmed(false);
-        } catch {
-            setTitle("");
-            setContent("");
-            setReason("");
-            setIsAutoFilled(false);
-            setIsConfirmed(false);
+        if (!nextStatus) {
+            return;
         }
+
+        const draft =
+            AUTO_NOTIFICATION[nextStatus];
+
+        if (!draft) {
+            return;
+        }
+
+        setTitle(draft.title);
+        setContent(draft.content);
+
+        if (needsReason) {
+            setReason(AUTO_REASON_PREFIX);
+        } else {
+            setReason("");
+        }
+
+        setIsAutoFilled(true);
+        setIsConfirmed(false);
     };
 
     const isReasonValid = (() => {
@@ -96,38 +109,38 @@ const AdminNotification = () => {
             return false;
         }
 
-        if (isAutoFilled) {
-            const reasonDetail = reason
-                .replace(
-                    AUTO_REASON_PREFIX,
-                    "",
-                )
-                .trim();
+        const reasonDetail = reason
+            .replace(
+                AUTO_REASON_PREFIX,
+                "",
+            )
+            .trim();
 
-            return reasonDetail.length >= 2;
-        }
-
-        return true;
+        return reasonDetail.length >= 2;
     })();
 
     const isFormFilled =
         title.trim() !== "" &&
         content.trim() !== "" &&
-        isReasonValid;
+        isReasonValid &&
+        nextStatus !== null;
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
         setIsConfirmed(false);
+        setIsAutoFilled(false);
     };
 
     const handleContentChange = (event) => {
         setContent(event.target.value);
         setIsConfirmed(false);
+        setIsAutoFilled(false);
     };
 
     const handleReasonChange = (event) => {
         setReason(event.target.value);
         setIsConfirmed(false);
+        setIsAutoFilled(false);
     };
 
     const handleConfirm = () => {
@@ -141,7 +154,8 @@ const AdminNotification = () => {
     const handleNotificationSend = async () => {
         if (
             !isConfirmed ||
-            isSending
+            isSending ||
+            !nextStatus
         ) {
             return;
         }
@@ -158,6 +172,11 @@ const AdminNotification = () => {
                 storyId,
                 title.trim(),
                 notificationContent,
+            );
+
+            await updateAdminStoryReview(
+                storyId,
+                nextStatus,
             );
 
             navigate("/admin/completed", {
@@ -188,9 +207,11 @@ const AdminNotification = () => {
                         alt=""
                     />
 
-                    <AdminStatusBadge
-                        status={nextStatus}
-                    />
+                    {nextStatus && (
+                        <AdminStatusBadge
+                            status={nextStatus}
+                        />
+                    )}
                 </div>
 
                 <div className="admin-notification-field">
@@ -244,11 +265,14 @@ const AdminNotification = () => {
                         <button
                             type="button"
                             className="admin-notification-auto"
+                            disabled={!nextStatus}
                             onClick={
                                 handleAutoComplete
                             }
                         >
-                            자동완성
+                            {isAutoFilled
+                                ? "자동완성 취소"
+                                : "자동완성"}
                         </button>
 
                         <button
@@ -284,7 +308,9 @@ const AdminNotification = () => {
                             handleNotificationSend
                         }
                     >
-                        알림 발송
+                        {isSending
+                            ? "발송 중"
+                            : "알림 발송"}
                     </button>
                 </div>
             </div>
