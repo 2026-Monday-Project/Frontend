@@ -1,7 +1,7 @@
 .story-card.story-card-common {
   position: relative;
   width: 345px;
-  height: 129px;
+  min-height: 129px;
   align-self: center;
   display: flex;
   gap: 16px;
@@ -44,8 +44,8 @@
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 35px;
+  justify-content: space-between;
+  gap: 4px;
   padding-bottom: 4px;
 }
 
@@ -64,16 +64,16 @@
 .story-card-common .story-card-pet-info {
   margin: 8px 0 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 3px;
-  overflow: hidden;
   color: var(--color-text);
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .story-card-common .story-card-pet-separator {
@@ -86,8 +86,13 @@
 
 .story-card-common .story-card-pet-detail {
   display: inline-flex;
+  max-width: 100%;
   align-items: center;
   gap: 3px;
+}
+
+.story-card-common .story-card-pet-detail > span:last-child {
+  min-width: 0;
 }
 
 .story-card-common .story-card-meta-info {
