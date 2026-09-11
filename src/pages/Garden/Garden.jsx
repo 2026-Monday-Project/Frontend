@@ -26,6 +26,8 @@ const toStoryCardData = (story) => ({
     image: story.thumbnailUrl,
     title: story.title,
     petName: story.petName,
+    breed: story.petType,
+    age: story.petAge,
     date: formatDate(story.createdAt),
     viewCount: story.viewCount,
     likeCount: story.likeCount,
