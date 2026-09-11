@@ -166,7 +166,7 @@ const MyGarden = () => {
                                 <div 
                                     key={mail.notificationId} 
                                     className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
-                                    onClick={() => navigate('/mailbox')} 
+                                    onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
