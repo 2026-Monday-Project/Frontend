@@ -139,7 +139,7 @@ const MyGarden = () => {
                         {stories.map(story => (
                             <StoryCard 
                                 key={story.storyId}
-                                thumbnail={louisProfile}
+                                thumbnail={story.thumbnailUrl || story.imageUrl || louisProfile}
                                 status={formatStatus(story.status)}
                                 title={story.title}
                                 date={formatDate(story.createdAt)}
