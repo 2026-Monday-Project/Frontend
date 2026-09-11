@@ -34,9 +34,9 @@
     border-radius: 5px;
     background-color: var(--color-background);
 
-    color: var(--color-green-main);
+    color: #000;
     font-family: Pretendard, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -82,7 +82,7 @@
 
     background-color: var(--color-background);
 
-    color: var(--color-text);
+    color: #000;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-style: normal;
@@ -92,8 +92,13 @@
 }
 
 .garden-sort-option-selected {
-    background-color: var(--color-green-main);
-    color: #ffffff;
+    height: 32px;
+    padding: 7px 20px 7px 19px;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 3.5px 3.5px 0 0;
+    background-color: #315338;
+    color: #FFFFFF;
 }
 
 .garden-sort:focus-visible,
