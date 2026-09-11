@@ -79,6 +79,7 @@ const Mailbox = () => {
                             >
                                 <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
                                     <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
+                                    <p className={isExplicitlyUnread ? "mail-desc" : "mail-desc-read"}>{mail.content}</p>
                                     <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
                                 </div>
                                 {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
