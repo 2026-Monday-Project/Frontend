@@ -1,6 +1,5 @@
 import {
     useEffect,
-    useRef,
     useState,
 } from "react";
 
@@ -11,43 +10,24 @@ const FRAME_HEIGHT = 874;
 
 const AppFrame = ({ children }) => {
     const [scale, setScale] = useState(1);
+
     const [isMobile, setIsMobile] =
         useState(false);
 
-    const maxHeightRef = useRef(0);
-    const lastWidthRef = useRef(0);
+    const [isTablet, setIsTablet] =
+        useState(false);
 
     useEffect(() => {
         const handleResize = () => {
             const width =
+                window.visualViewport
+                    ?.width ??
                 window.innerWidth;
 
             const height =
+                window.visualViewport
+                    ?.height ??
                 window.innerHeight;
-
-            if (
-                width !==
-                lastWidthRef.current
-            ) {
-                lastWidthRef.current =
-                    width;
-
-                maxHeightRef.current =
-                    height;
-            } else {
-                maxHeightRef.current =
-                    Math.max(
-                        maxHeightRef.current,
-                        height,
-                    );
-            }
-
-            const widthScale =
-                width / FRAME_WIDTH;
-
-            const heightScale =
-                maxHeightRef.current /
-                FRAME_HEIGHT;
 
             const mobile =
                 width <= FRAME_WIDTH;
@@ -61,6 +41,7 @@ const AppFrame = ({ children }) => {
                 isTouchDevice;
 
             setIsMobile(mobile);
+            setIsTablet(tablet);
 
             /* =========================
                 모바일
@@ -78,18 +59,16 @@ const AppFrame = ({ children }) => {
 
             if (tablet) {
                 /*
-                 * 태블릿에서는 화면 안에서
-                 * 402x874 비율을 유지하면서
-                 * 가능한 최대 크기로 확대
-                 *
-                 * 세로가 충분하면 위아래를
-                 * 정확히 채우게 됨
+                 * 태블릿은 세로 화면을
+                 * 무조건 꽉 채우도록
+                 * 실제 보이는 viewport 높이를 기준으로 확대
                  */
+                const tabletScale =
+                    height /
+                    FRAME_HEIGHT;
+
                 setScale(
-                    Math.min(
-                        widthScale,
-                        heightScale,
-                    ),
+                    tabletScale,
                 );
 
                 return;
@@ -98,6 +77,14 @@ const AppFrame = ({ children }) => {
             /* =========================
                 PC
                ========================= */
+
+            const widthScale =
+                width /
+                FRAME_WIDTH;
+
+            const heightScale =
+                height /
+                FRAME_HEIGHT;
 
             setScale(
                 Math.min(
@@ -115,9 +102,29 @@ const AppFrame = ({ children }) => {
             handleResize,
         );
 
+        window.visualViewport?.addEventListener(
+            "resize",
+            handleResize,
+        );
+
+        window.visualViewport?.addEventListener(
+            "scroll",
+            handleResize,
+        );
+
         return () => {
             window.removeEventListener(
                 "resize",
+                handleResize,
+            );
+
+            window.visualViewport?.removeEventListener(
+                "resize",
+                handleResize,
+            );
+
+            window.visualViewport?.removeEventListener(
+                "scroll",
                 handleResize,
             );
         };
@@ -128,6 +135,10 @@ const AppFrame = ({ children }) => {
             className={`app-frame-viewport ${
                 isMobile
                     ? "app-frame-viewport-mobile"
+                    : ""
+            } ${
+                isTablet
+                    ? "app-frame-viewport-tablet"
                     : ""
             }`}
             style={
@@ -144,13 +155,17 @@ const AppFrame = ({ children }) => {
                     isMobile
                         ? "app-frame-mobile"
                         : ""
+                } ${
+                    isTablet
+                        ? "app-frame-tablet"
+                        : ""
                 }`}
                 style={
                     isMobile
                         ? undefined
                         : {
-                            transform: `scale(${scale})`,
-                        }
+                              transform: `scale(${scale})`,
+                          }
                 }
             >
                 {children}
