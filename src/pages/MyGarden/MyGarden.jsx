@@ -110,32 +110,32 @@ const MyGarden = () => {
                 </section>    
 
                 <section className="stats-section">
-                    <div 
+                    <button 
                         className="stat-item" 
                         onClick={() => navigate('/mystories/list')} 
-                        style={{ cursor: 'pointer' }}
+                        type="button"
                     >
                         <p className="stat-label">보낸 사연</p>
                         <p className="stat-value">{stats.sentStoryCount}</p>
-                    </div>
+                    </button>
                     <div className="seperate-line"></div>
-                    <div 
+                    <button 
                         className="stat-item" 
                         onClick={() => navigate('/mygarden/earned-likes')} 
-                        style={{ cursor: 'pointer' }}
+                        type="button"
                     >
                         <p className="stat-label">받은 공감</p>
                         <p className="stat-value">{stats.receivedLikeCount}</p>
-                    </div>
+                    </button>
                     <div className="seperate-line"></div>
-                    <div 
+                    <button 
                         className="stat-item" 
                         onClick={() => navigate('/mygarden/liked-stories')} 
-                        style={{ cursor: 'pointer' }}
+                        type="button"
                     >
                         <p className="stat-label">공감한 사연</p>
                         <p className="stat-value">{stats.likedStoryCount}</p>
-                    </div>
+                    </button>
                 </section>
 
                 <section className="list-section">

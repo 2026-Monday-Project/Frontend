@@ -31,6 +31,8 @@ const LikedStories = () => {
     const sortRef = useRef(null);
 
     useEffect(() => {
+        let isCurrentRequest = true;
+
         const fetchLikedStories = async () => {
             try {
                 setIsLoading(true);
@@ -39,21 +41,28 @@ const LikedStories = () => {
                 });
                 
                 const fetchedContent = response.data?.data?.content || [];
-                setStories(fetchedContent);
+                
+                if (isCurrentRequest) {
+                    setStories(fetchedContent);
+                }
             } catch (error) {
                 if (error.response?.status === 401) {
                     localStorage.removeItem('accessToken');
                     navigate('/mygarden/unlogged-in');
                 } else {
                     console.error('공감한 사연 목록을 불러오지 못했습니다.', error);
-                    setStories([]);
+                    if (isCurrentRequest) setStories([]);
                 }
             } finally {
-                setIsLoading(false);
+                if (isCurrentRequest) setIsLoading(false);
             }
         };
 
         fetchLikedStories();
+
+        return () => {
+            isCurrentRequest = false;
+        };
     }, [selectedSort, navigate]);
 
     useEffect(() => {
