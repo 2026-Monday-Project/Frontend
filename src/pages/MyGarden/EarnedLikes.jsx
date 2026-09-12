@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
-import StoryCard from '@/components/myGarden/StoryCard';
+import StoryCard from '@/components/common/StoryCard';
 import grassesImg from '@/assets/images/custom/grasses.svg';
+import earnedLikesTotal from '@/assets/images/custom/earned-likes-total.svg';
 import louisProfile from '@/assets/images/custom/louis-profile.svg';
 import './EarnedLikes.css';
 
@@ -19,7 +20,7 @@ const EarnedLikes = () => {
         const fetchEarnedLikes = async () => {
             try {
                 setIsLoading(true);
-                const response = await api.get('/my-garden/stories/preview');
+                const response = await api.get('/my-garden/received-likes');
                 const fetchedContent = response.data?.data?.content || [];
                 
                 setStories(fetchedContent);
@@ -29,7 +30,6 @@ const EarnedLikes = () => {
                     localStorage.removeItem('accessToken');
                     navigate('/mygarden/unlogged-in');
                 } else {
-                    console.error('받은 공감 목록을 불러오지 못했습니다.', error);
                     setStories([]);
                     setTotalLikes(0);
                 }
@@ -53,12 +53,6 @@ const EarnedLikes = () => {
         return `${year}.${month}.${day}`;
     };
 
-    const formatStatus = (status) => {
-        if (status === 'PENDING') return '검토중';
-        if (status === 'PUBLIC') return '공개';
-        return '비공개';
-    };
-
     return (
         <div className="earned-likes-page">
             <img src={grassesImg} alt="" className="grasses-bottom" />
@@ -74,8 +68,10 @@ const EarnedLikes = () => {
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
 
             <div className="earned-likes-header">
-                <span className="total-count-text">총 {totalLikes}개</span>
+                <img src={earnedLikesTotal} alt="하트" className="heart-icon" />
+                <div className="total-count-text">{totalLikes}</div>
             </div>
+
 
             <div className="story-list-scroll">
                 {!isLoading && totalLikes === 0 ? (
@@ -86,12 +82,14 @@ const EarnedLikes = () => {
                     stories.map(story => (
                         <StoryCard 
                             key={story.storyId}
-                            thumbnail={story.thumbnailUrl || story.imageUrl || louisProfile}
-                            status={formatStatus(story.status)}
+                            image={story.thumbnailUrl || story.imageUrl || louisProfile}
                             title={story.title}
+                            petName={story.petName}
+                            breed={story.petType}
+                            age={story.petAge}
                             date={formatDate(story.createdAt)}
-                            views={story.viewCount}
-                            likes={story.likeCount}
+                            viewCount={story.viewCount}
+                            likeCount={story.likeCount}
                             onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
                         />
                     ))

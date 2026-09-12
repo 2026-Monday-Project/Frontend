@@ -121,7 +121,7 @@ const MyGarden = () => {
                     <div className="seperate-line"></div>
                     <div 
                         className="stat-item" 
-                        onClick={() => navigate('/mystories/earned-likes')} 
+                        onClick={() => navigate('/mygarden/earned-likes')} 
                         style={{ cursor: 'pointer' }}
                     >
                         <p className="stat-label">받은 공감</p>
@@ -130,7 +130,7 @@ const MyGarden = () => {
                     <div className="seperate-line"></div>
                     <div 
                         className="stat-item" 
-                        onClick={() => navigate('/mystories/liked-stories')} 
+                        onClick={() => navigate('/mygarden/liked-stories')} 
                         style={{ cursor: 'pointer' }}
                     >
                         <p className="stat-label">공감한 사연</p>

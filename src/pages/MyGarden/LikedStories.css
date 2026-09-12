@@ -1,4 +1,4 @@
-.earned-likes-page {
+.liked-stories-page {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -17,29 +17,20 @@
     pointer-events: none;
 }
 
-.earned-likes-header {
-    display: flex;
-    align-items: center;
+.liked-stories-header {
     padding: 24px 28px 16px 28px;
     flex-shrink: 0;
-    z-index: 1;
+    z-index: 20;
 }
 
-.total-count-text {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text);
-}
-
-.earned-likes-page .story-list-scroll {
+.liked-stories-page .story-list-scroll {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 16px;
     z-index: 1;
-    padding: 0 28px;
-    padding-bottom: 120px;
+    padding: 0 28px 120px 28px;
     min-height: 0;
 }
 
@@ -65,29 +56,4 @@
     color: var(--color-green-main);
     margin: 0;
     font-family: "Warhaven", sans-serif;
-}
-
-.earned-likes-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    z-index: 1;
-    gap: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--color-green-main);
-    width: 51px;
-    height: 25px;
-    margin: 20px 0 16px 29px;
-    padding: 10px 5px;
-}
-
-.total-count-text {
-    font-size: 11px;
-    color: var(--color-text);
-}
-
-.heart-icon {
-    width: 12px;
-    height: 12px;
 }
