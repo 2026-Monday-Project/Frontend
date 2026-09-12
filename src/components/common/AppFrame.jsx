@@ -12,27 +12,22 @@ const AppFrame = ({ children }) => {
 
     useEffect(() => {
         const handleResize = () => {
-            const widthScale =
-                window.innerWidth / FRAME_WIDTH;
-
-            const heightScale =
-                window.innerHeight / FRAME_HEIGHT;
-
             const mobile =
                 window.innerWidth <= FRAME_WIDTH;
 
             setIsMobile(mobile);
 
             if (mobile) {
-                // 모바일에서는 가로폭 기준으로만 맞춤
-                setScale(
-                    Math.min(widthScale, 1),
-                );
-
+                setScale(1);
                 return;
             }
 
-            // 데스크톱에서는 기존처럼 화면 안에 전부 보이도록
+            const widthScale =
+                window.innerWidth / FRAME_WIDTH;
+
+            const heightScale =
+                window.innerHeight / FRAME_HEIGHT;
+
             setScale(
                 Math.min(
                     widthScale,
@@ -64,12 +59,14 @@ const AppFrame = ({ children }) => {
                     ? "app-frame-viewport-mobile"
                     : ""
             }`}
-            style={{
-                width: `${FRAME_WIDTH * scale}px`,
-                height: isMobile
-                    ? "100dvh"
-                    : `${FRAME_HEIGHT * scale}px`,
-            }}
+            style={
+                isMobile
+                    ? undefined
+                    : {
+                          width: `${FRAME_WIDTH * scale}px`,
+                          height: `${FRAME_HEIGHT * scale}px`,
+                      }
+            }
         >
             <div
                 className={`app-frame ${
@@ -77,9 +74,13 @@ const AppFrame = ({ children }) => {
                         ? "app-frame-mobile"
                         : ""
                 }`}
-                style={{
-                    transform: `scale(${scale})`,
-                }}
+                style={
+                    isMobile
+                        ? undefined
+                        : {
+                              transform: `scale(${scale})`,
+                          }
+                }
             >
                 {children}
             </div>
