@@ -26,3 +26,17 @@
 .app-frame.is-scroll-locked {
     overflow-y: hidden;
 }
+
+
+/* 모바일 */
+
+.app-frame-viewport-mobile {
+    width: 100% !important;
+    height: 100dvh;
+
+    box-shadow: none;
+}
+
+.app-frame-mobile {
+    overflow-y: hidden;
+}

@@ -302,20 +302,33 @@
     line-height: normal;
 }
 
-.performance-map-link {
-    display: block;
+.performance-map-container {
     width: 100%;
+    height: 280px;
     margin-top: 26px;
 
     overflow: hidden;
 
     border-radius: 10px;
-
-    cursor: pointer;
 }
 
 .performance-map {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+
+    border: 0;
+}
+
+.performance-map-link {
+    display: inline-block;
+    margin-top: 12px;
+
+    color: var(--color-green-main);
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
