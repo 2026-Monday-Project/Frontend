@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./AppFrame.css";
 
@@ -10,16 +10,35 @@ const AppFrame = ({ children }) => {
     const [isMobile, setIsMobile] =
         useState(false);
 
+    // 카카오톡 인앱 브라우저 등 일부 브라우저는 키보드가 올라올 때
+    // window.innerHeight 자체가 줄어들면서 resize 이벤트가 발생한다(크롬은 그대로 유지).
+    // 이걸 그대로 반영하면 입력 중 화면 전체가 찌그러지므로, 폭은 그대로인데 높이만
+    // 작아진 경우(=키보드일 가능성)는 무시하고 지금까지 관측된 가장 큰 높이를 기준으로 삼는다.
+    const maxHeightRef = useRef(0);
+    const lastWidthRef = useRef(0);
+
     useEffect(() => {
         const handleResize = () => {
-            const widthScale =
-                window.innerWidth / FRAME_WIDTH;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            if (width !== lastWidthRef.current) {
+                // 폭이 바뀌었다는 건 화면 회전 등 실제 화면 크기 변경 → 기준을 새로 잡는다.
+                lastWidthRef.current = width;
+                maxHeightRef.current = height;
+            } else {
+                maxHeightRef.current = Math.max(
+                    maxHeightRef.current,
+                    height,
+                );
+            }
+
+            const widthScale = width / FRAME_WIDTH;
 
             const heightScale =
-                window.innerHeight / FRAME_HEIGHT;
+                maxHeightRef.current / FRAME_HEIGHT;
 
-            const mobile =
-                window.innerWidth <= FRAME_WIDTH;
+            const mobile = width <= FRAME_WIDTH;
 
             setIsMobile(mobile);
 
