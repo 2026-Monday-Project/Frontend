@@ -30,13 +30,24 @@
 
 /* 모바일 */
 
-.app-frame-viewport-mobile {
-    width: 100% !important;
-    height: 100dvh;
+@media (max-width: 402px) {
+    .app-frame-viewport,
+    .app-frame-viewport-mobile {
+        width: 100vw;
+        height: 100dvh;
 
-    box-shadow: none;
-}
+        box-shadow: none;
 
-.app-frame-mobile {
-    overflow-y: hidden;
+        overflow: hidden;
+    }
+
+    .app-frame,
+    .app-frame-mobile {
+        width: 100%;
+        height: 100%;
+
+        transform: none;
+
+        overflow: hidden;
+    }
 }
