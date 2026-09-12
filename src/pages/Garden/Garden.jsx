@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import arrowDownIcon from "@/assets/icons/arrow-down.svg";
 import plusIcon from "@/assets/icons/plus.svg";
@@ -35,9 +35,11 @@ const toStoryCardData = (story) => ({
 
 const Garden = () => {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSortOpen, setIsSortOpen] = useState(false);
-    const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
+    const selectedSort = SORT_OPTIONS.find((option) => SORT_VALUES[option] === searchParams.get("sort"))
+        ?? SORT_OPTIONS[0];
     const [stories, setStories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
@@ -115,7 +117,11 @@ const Garden = () => {
     };
 
     const handleSortSelect = (option) => {
-        setSelectedSort(option);
+        setSearchParams((previousParams) => {
+            const nextParams = new URLSearchParams(previousParams);
+            nextParams.set("sort", SORT_VALUES[option]);
+            return nextParams;
+        }, { replace: true });
         setIsSortOpen(false);
     };
 
