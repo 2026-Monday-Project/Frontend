@@ -175,19 +175,13 @@
 .home-entry-arch {
     position: absolute;
 
-    /*
-     * SVG 내부 하단 투명 여백을 화면 밖으로 빼서
-     * 실제 초록색 부분의 끝이 화면 하단에 붙도록 함
-     */
-    bottom: -56px;
+    bottom: -2px;
     left: 50%;
 
     width: 137px;
 
     padding: 0;
-
     border: 0;
-
     background: transparent;
 
     touch-action: none;
