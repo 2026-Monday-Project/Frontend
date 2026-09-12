@@ -5,7 +5,6 @@ import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import StoryCard from '@/components/myGarden/StoryCard';
 import footprintIcon from '@/assets/images/custom/footprint.svg';
-import seperateLine from '@/assets/images/custom/seperate-line.svg';
 import settingsIcon from '@/assets/images/custom/settings.svg';
 import arrowViewAll from '@/assets/images/custom/arrow-view-all.svg';
 import louisProfile from '@/assets/images/custom/louis-profile.svg';
@@ -111,20 +110,32 @@ const MyGarden = () => {
                 </section>    
 
                 <section className="stats-section">
-                    <div className="stat-item">
+                    <button 
+                        className="stat-item" 
+                        onClick={() => navigate('/mystories/list')} 
+                        type="button"
+                    >
                         <p className="stat-label">보낸 사연</p>
                         <p className="stat-value">{stats.sentStoryCount}</p>
-                    </div>
-                    <img className="seperate-line" src={seperateLine} alt="세로 구분선"></img>
-                    <div className="stat-item">
+                    </button>
+                    <div className="seperate-line"></div>
+                    <button 
+                        className="stat-item" 
+                        onClick={() => navigate('/mygarden/earned-likes')} 
+                        type="button"
+                    >
                         <p className="stat-label">받은 공감</p>
                         <p className="stat-value">{stats.receivedLikeCount}</p>
-                    </div>
-                    <img className="seperate-line" src={seperateLine} alt="세로 구분선"></img>
-                    <div className="stat-item">
+                    </button>
+                    <div className="seperate-line"></div>
+                    <button 
+                        className="stat-item" 
+                        onClick={() => navigate('/mygarden/liked-stories')} 
+                        type="button"
+                    >
                         <p className="stat-label">공감한 사연</p>
                         <p className="stat-value">{stats.likedStoryCount}</p>
-                    </div>
+                    </button>
                 </section>
 
                 <section className="list-section">
@@ -143,7 +154,7 @@ const MyGarden = () => {
                                 status={formatStatus(story.status)}
                                 title={story.title}
                                 date={formatDate(story.createdAt)}
-                                views={0}
+                                views={story.viewCount}
                                 likes={story.likeCount}
                                 onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
                             />
