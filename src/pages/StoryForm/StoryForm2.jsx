@@ -11,15 +11,76 @@ const PHOTO_REQUIRED_MESSAGE = "*사진을 업로드 해주세요.";
 const MAX_PHOTOS = 5;
 const MAX_CONTENT_LENGTH = 500;
 
-// 백엔드 허용 확장자
-const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "heic"];
+// 백엔드는 허용하지만 크롬/안드로이드에서 렌더링이 잘 안 되는 경우가 있어 HEIC는 프론트에서 막는다.
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp"];
 const PHOTO_EXTENSION_MESSAGE =
-  "*jpg, jpeg, png, gif, webp, heic 형식만 업로드할 수 있어요.";
+  "*jpg, jpeg, png, gif, webp 형식만 업로드할 수 있어요.";
+
+// 업로드 용량 절감을 위해 긴 변이 이 값을 넘는 이미지는 축소해서 올린다.
+const MAX_IMAGE_DIMENSION = 1600;
+const RESIZE_JPEG_QUALITY = 0.85;
 
 const getExtension = (fileName) =>
   fileName.includes(".")
     ? fileName.split(".").pop().toLowerCase()
     : "";
+
+// 큰 이미지를 캔버스로 축소해 업로드 용량을 줄인다. (긴 변이 기준값 이하이면 원본 그대로 사용)
+// GIF는 캔버스를 거치면 애니메이션이 깨지므로 리사이즈 대상에서 제외한다.
+const resizeImageFile = (file) =>
+  new Promise((resolve) => {
+    // handlePhotoChange의 허용 목록과 동일하게 "확장자" 기준으로 GIF를 판별한다.
+    // file.type(MIME)은 브라우저/OS에 따라 비거나 다르게 들어올 수 있어 신뢰할 수 없다.
+    if (getExtension(file.name) === "gif") {
+      resolve(file);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+
+    const finish = (result) => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(result);
+    };
+
+    image.onload = () => {
+      const { width, height } = image;
+      const longSide = Math.max(width, height);
+
+      if (longSide <= MAX_IMAGE_DIMENSION) {
+        finish(file);
+        return;
+      }
+
+      const scale = MAX_IMAGE_DIMENSION / longSide;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(width * scale);
+      canvas.height = Math.round(height * scale);
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            finish(file);
+            return;
+          }
+
+          const resizedName = `${file.name.replace(/\.[^./]+$/, "")}.jpg`;
+          finish(new File([blob], resizedName, { type: "image/jpeg" }));
+        },
+        "image/jpeg",
+        RESIZE_JPEG_QUALITY,
+      );
+    };
+
+    // 디코딩 실패 시 원본 그대로 업로드 시도
+    image.onerror = () => finish(file);
+
+    image.src = objectUrl;
+  });
 
 const StoryForm2 = ({ mode }) => {
   const navigate = useNavigate();
@@ -41,6 +102,10 @@ const StoryForm2 = ({ mode }) => {
 
   const [photos, setPhotos] = useState(story.photos);
   const [viewerIndex, setViewerIndex] = useState(null);
+
+  // handlePhotoChange는 리사이즈(await) 동안 photos state가 바뀔 수 있어, MAX_PHOTOS 슬롯을
+  // await 이전에 동기적으로 "예약"하기 위한 카운터. state와 별개로 항상 최신 개수를 반영한다.
+  const photosCountRef = useRef(story.photos.length);
 
   const isFormValid =
     formData.title.trim() && formData.content.trim() && photos.length > 0;
@@ -105,6 +170,8 @@ const StoryForm2 = ({ mode }) => {
   const handlePhotoRemove = (event, index) => {
     event.stopPropagation();
 
+    photosCountRef.current = Math.max(photosCountRef.current - 1, 0);
+
     setPhotos((prev) => {
       const target = prev[index];
       // 새로 추가한 사진(objectURL)만 해제. 기존(수정 진입 시) 사진은 URL을 만든 적이 없다.
@@ -134,7 +201,7 @@ const StoryForm2 = ({ mode }) => {
     setViewerIndex(null);
   };
 
-  const handlePhotoChange = (event) => {
+  const handlePhotoChange = async (event) => {
     const files = Array.from(event.target.files ?? []);
     event.target.value = "";
 
@@ -153,8 +220,15 @@ const StoryForm2 = ({ mode }) => {
       return;
     }
 
-    const remainingSlots = MAX_PHOTOS - photos.length;
-    const newPhotos = supportedFiles.slice(0, remainingSlots).map((file) => ({
+    // 리사이즈(await)에 시간이 걸리는 동안 다른 선택이 겹쳐도 정원을 넘기지 않도록,
+    // await 이전에 남은 슬롯만큼 동기적으로 먼저 "예약"한다.
+    const remainingSlots = Math.max(MAX_PHOTOS - photosCountRef.current, 0);
+    const filesToAdd = supportedFiles.slice(0, remainingSlots);
+    photosCountRef.current += filesToAdd.length;
+
+    const resizedFiles = await Promise.all(filesToAdd.map(resizeImageFile));
+
+    const newPhotos = resizedFiles.map((file) => ({
       id: crypto.randomUUID(),
       url: URL.createObjectURL(file),
       file,
@@ -312,7 +386,7 @@ const StoryForm2 = ({ mode }) => {
               ref={fileInputRef}
               className="story-form2-photo-input"
               type="file"
-              accept=".jpg,.jpeg,.png,.gif,.webp,.heic,image/jpeg,image/png,image/gif,image/webp,image/heic"
+              accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp"
               multiple
               onChange={handlePhotoChange}
             />

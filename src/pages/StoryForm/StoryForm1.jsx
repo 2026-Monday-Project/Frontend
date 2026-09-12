@@ -141,9 +141,13 @@ const StoryForm1 = ({ mode }) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
+    // 나이는 정수만 허용 (소수점 "." / 음수 "-" / 지수 표기 "e" 등을 즉시 제거)
+    const nextValue =
+      name === "petAge" ? value.replace(/[^0-9]/g, "") : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: nextValue,
     }));
 
     setErrors((prev) => ({
@@ -342,6 +346,9 @@ const StoryForm1 = ({ mode }) => {
                 id="pet-age"
                 name="petAge"
                 type="number"
+                min="0"
+                step="1"
+                inputMode="numeric"
                 value={formData.petAge}
                 onChange={handleInputChange}
                 placeholder="나이를 입력해주세요."
