@@ -29,7 +29,7 @@
     max-width: none;
 
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
 
     pointer-events: none;
 
