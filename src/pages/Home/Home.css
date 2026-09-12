@@ -130,7 +130,7 @@
 .home-entry-guide-text {
     position: absolute;
 
-    bottom: 137px;
+    bottom: 171px;
     left: 50%;
 
     display: flex;
@@ -287,7 +287,7 @@
     }
 
     .home-entry-guide-text {
-        bottom: 120px;
+        bottom: 154px;
     }
 
     .home-entry-trail-container {
