@@ -1,6 +1,8 @@
-import { useState } from "react";
 import {
-    useLocation,
+    useEffect,
+    useState,
+} from "react";
+import {
     useNavigate,
     useParams,
 } from "react-router-dom";
@@ -10,6 +12,7 @@ import AdminStatusBadge from "@/components/admin/AdminStatusBadge";
 import arrowRight from "@/assets/icons/arrow-right.svg";
 
 import {
+    getAdminStoryDetail,
     sendAdminNotification,
 } from "@/api/adminApi";
 
@@ -32,15 +35,10 @@ const AUTO_NOTIFICATION = {
 
 const AdminNotification = () => {
     const navigate = useNavigate();
-    const location = useLocation();
     const { storyId } = useParams();
 
-    const previousStatus =
-        location.state?.previousStatus ??
-        "PENDING";
-
-    const nextStatus =
-        location.state?.nextStatus ?? null;
+    const [nextStatus, setNextStatus] =
+        useState(null);
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -54,6 +52,37 @@ const AdminNotification = () => {
 
     const [isSending, setIsSending] =
         useState(false);
+
+    useEffect(() => {
+        const fetchStoryStatus = async () => {
+            try {
+                const response =
+                    await getAdminStoryDetail(storyId);
+
+                const currentStatus =
+                    response.data.data.status;
+
+                if (
+                    currentStatus !== "PUBLIC" &&
+                    currentStatus !== "PRIVATE"
+                ) {
+                    navigate("/admin/reviews", {
+                        replace: true,
+                    });
+
+                    return;
+                }
+
+                setNextStatus(currentStatus);
+            } catch {
+                navigate("/admin/reviews", {
+                    replace: true,
+                });
+            }
+        };
+
+        fetchStoryStatus();
+    }, [storyId, navigate]);
 
     const needsReason =
         nextStatus === "PRIVATE";
@@ -168,6 +197,7 @@ const AdminNotification = () => {
             );
 
             navigate("/admin/completed", {
+                replace: true,
                 state: {
                     type: "notification",
                 },
@@ -177,16 +207,21 @@ const AdminNotification = () => {
         }
     };
 
+    if (!nextStatus) {
+        return null;
+    }
+
     return (
         <main className="admin-notification-page">
             <AdminHeader
-                title="알림 발송" showBackButton={false}
+                title="알림 발송"
+                showBackButton={false}
             />
 
             <div className="admin-notification-content">
                 <div className="admin-notification-status">
                     <AdminStatusBadge
-                        status={previousStatus}
+                        status="PENDING"
                     />
 
                     <img
@@ -194,11 +229,9 @@ const AdminNotification = () => {
                         alt=""
                     />
 
-                    {nextStatus && (
-                        <AdminStatusBadge
-                            status={nextStatus}
-                        />
-                    )}
+                    <AdminStatusBadge
+                        status={nextStatus}
+                    />
                 </div>
 
                 <div className="admin-notification-field">
@@ -210,9 +243,7 @@ const AdminNotification = () => {
                         id="notification-title"
                         type="text"
                         value={title}
-                        onChange={
-                            handleTitleChange
-                        }
+                        onChange={handleTitleChange}
                     />
                 </div>
 
@@ -224,16 +255,16 @@ const AdminNotification = () => {
                     <textarea
                         id="notification-content"
                         value={content}
-                        onChange={
-                            handleContentChange
-                        }
+                        onChange={handleContentChange}
                     />
                 </div>
 
                 {needsReason && (
                     <div className="admin-notification-field">
-                        <label className="admin-notification-reason-label"
-                            htmlFor="notification-reason">
+                        <label
+                            className="admin-notification-reason-label"
+                            htmlFor="notification-reason"
+                        >
                             <span>사유</span>
 
                             <small>
@@ -245,9 +276,7 @@ const AdminNotification = () => {
                             id="notification-reason"
                             type="text"
                             value={reason}
-                            onChange={
-                                handleReasonChange
-                            }
+                            onChange={handleReasonChange}
                         />
                     </div>
                 )}
@@ -274,12 +303,8 @@ const AdminNotification = () => {
                                     ? "admin-notification-button-active"
                                     : ""
                             }`}
-                            disabled={
-                                !isFormFilled
-                            }
-                            onClick={
-                                handleConfirm
-                            }
+                            disabled={!isFormFilled}
+                            onClick={handleConfirm}
                         >
                             확인
                         </button>
