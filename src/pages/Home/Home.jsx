@@ -11,7 +11,6 @@ import homeEntryTrailLong from "@/assets/images/custom/home-entry-trail-long.svg
 
 import "./Home.css";
 
-const FIGMA_WIDTH = 402;
 const FIGMA_MAX_DRAG_DISTANCE = 146;
 const ENTRY_THRESHOLD = 0.35;
 
@@ -19,23 +18,14 @@ const Home = () => {
     const startYRef = useRef(0);
     const isDraggingRef = useRef(false);
 
-    const [dragDistance, setDragDistance] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const [isEntered, setIsEntered] = useState(false);
+    const [dragDistance, setDragDistance] =
+        useState(0);
 
-    const getAppScale = () => {
-        const appFrame =
-            document.querySelector(".app-frame");
+    const [isDragging, setIsDragging] =
+        useState(false);
 
-        if (!appFrame) {
-            return 1;
-        }
-
-        const frameWidth =
-            appFrame.getBoundingClientRect().width;
-
-        return frameWidth / FIGMA_WIDTH || 1;
-    };
+    const [isEntered, setIsEntered] =
+        useState(false);
 
     const resetDrag = () => {
         isDraggingRef.current = false;
@@ -61,20 +51,22 @@ const Home = () => {
             return;
         }
 
-        const appScale = getAppScale();
-
         const movedDistance =
-            startYRef.current - event.clientY;
+            startYRef.current -
+            event.clientY;
 
-        const designDistance =
-            movedDistance / appScale;
+        const limitedDistance =
+            Math.min(
+                Math.max(
+                    movedDistance,
+                    0,
+                ),
+                FIGMA_MAX_DRAG_DISTANCE,
+            );
 
-        const limitedDistance = Math.min(
-            Math.max(designDistance, 0),
-            FIGMA_MAX_DRAG_DISTANCE,
+        setDragDistance(
+            limitedDistance,
         );
-
-        setDragDistance(limitedDistance);
     };
 
     const handlePointerUp = (event) => {
@@ -82,18 +74,18 @@ const Home = () => {
             return;
         }
 
-        const appScale = getAppScale();
-
         const movedDistance =
-            startYRef.current - event.clientY;
+            startYRef.current -
+            event.clientY;
 
-        const designDistance =
-            movedDistance / appScale;
-
-        const finalDragDistance = Math.min(
-            Math.max(designDistance, 0),
-            FIGMA_MAX_DRAG_DISTANCE,
-        );
+        const finalDragDistance =
+            Math.min(
+                Math.max(
+                    movedDistance,
+                    0,
+                ),
+                FIGMA_MAX_DRAG_DISTANCE,
+            );
 
         const progress =
             finalDragDistance /
@@ -112,8 +104,12 @@ const Home = () => {
             );
         }
 
-        if (progress >= ENTRY_THRESHOLD) {
+        if (
+            progress >=
+            ENTRY_THRESHOLD
+        ) {
             setIsEntered(true);
+
             return;
         }
 

@@ -78,7 +78,7 @@ const PerformanceFaq = () => {
     return (
         <section className="performance-faq">
             <p className="performance-faq-label">
-                F&Q
+                FAQ
             </p>
 
             <h2 className="performance-faq-title">

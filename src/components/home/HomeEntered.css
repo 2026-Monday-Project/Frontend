@@ -1,4 +1,6 @@
 .home-entered-page {
+    position: relative;
+
     width: 100%;
     height: 100%;
 
@@ -8,10 +10,16 @@
 }
 
 .home-entered-design {
-    position: relative;
+    position: absolute;
 
-    width: 402px;
-    height: 874px;
+    top: 0;
+    left: 50%;
+
+    width: 100%;
+    height: auto;
+    aspect-ratio: 402 / 874;
+
+    transform: translateX(-50%);
 
     overflow: hidden;
 }
@@ -22,11 +30,10 @@
 
 .home-entered-background {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
 
-    width: 402px;
-    height: 874px;
+    width: 100%;
+    height: 100%;
     max-width: none;
 
     object-fit: fill;
@@ -43,6 +50,7 @@
 .home-entered-text {
     position: absolute;
 
+    /* Figma 402 x 874 기준 */
     top: 292px;
     left: 0;
 
@@ -114,6 +122,7 @@
 .home-entered-buttons {
     position: absolute;
 
+    /* Figma 402 x 874 기준 */
     top: 491px;
     left: 50%;
 
@@ -170,4 +179,17 @@
     background-color: transparent;
 
     color: var(--color-green-main);
+}
+
+/* ==============================
+    모바일
+   ============================== */
+
+@media (max-width: 402px) {
+    .home-entered-design {
+        width: 100%;
+        height: auto;
+
+        aspect-ratio: 402 / 874;
+    }
 }

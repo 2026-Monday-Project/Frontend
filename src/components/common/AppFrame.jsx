@@ -83,12 +83,14 @@ const AppFrame = ({ children }) => {
                     ? "app-frame-viewport-mobile"
                     : ""
             }`}
-            style={{
-                width: `${FRAME_WIDTH * scale}px`,
-                height: isMobile
-                    ? "100dvh"
-                    : `${FRAME_HEIGHT * scale}px`,
-            }}
+            style={
+                isMobile
+                    ? undefined
+                    : {
+                          width: `${FRAME_WIDTH * scale}px`,
+                          height: `${FRAME_HEIGHT * scale}px`,
+                      }
+            }
         >
             <div
                 className={`app-frame ${
@@ -96,9 +98,13 @@ const AppFrame = ({ children }) => {
                         ? "app-frame-mobile"
                         : ""
                 }`}
-                style={{
-                    transform: `scale(${scale})`,
-                }}
+                style={
+                    isMobile
+                        ? undefined
+                        : {
+                              transform: `scale(${scale})`,
+                          }
+                }
             >
                 {children}
             </div>
