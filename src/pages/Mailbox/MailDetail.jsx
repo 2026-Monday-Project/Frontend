@@ -1,85 +1,173 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import api from '@/api/axios';
-import Navbar from '@/components/common/Navbar';
-import Drawer from '@/components/common/Drawer';
-import letterImg from '@/assets/images/custom/letter.svg';
-import './MailDetail.css';
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import {
+    useNavigate,
+    useParams,
+} from "react-router-dom";
+
+import api from "@/api/axios";
+
+import Navbar from "@/components/common/Navbar";
+import Drawer from "@/components/common/Drawer";
+
+import letterImg from "@/assets/images/custom/letter.svg";
+
+import "./MailDetail.css";
 
 const MailDetail = () => {
     const navigate = useNavigate();
-    const { notificationId } = useParams();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [mailDetail, setMailDetail] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+
+    const { notificationId } =
+        useParams();
+
+    const [isMenuOpen, setIsMenuOpen] =
+        useState(false);
+
+    const [mailDetail, setMailDetail] =
+        useState(null);
+
+    const [isLoading, setIsLoading] =
+        useState(true);
 
     useEffect(() => {
-            const fetchMailDetail = async () => {
+        const fetchMailDetail =
+            async () => {
                 try {
-                    const response = await api.get(`/my-garden/notifications/${notificationId}`);
-                    setMailDetail(response.data.data);
+                    const response =
+                        await api.get(
+                            `/my-garden/notifications/${notificationId}`,
+                        );
+
+                    setMailDetail(
+                        response.data.data,
+                    );
                 } catch (error) {
-                    if (error.response?.status === 401) {
-                        localStorage.removeItem('accessToken');
-                        navigate('/mygarden/unlogged-in');
+                    if (
+                        error.response
+                            ?.status ===
+                        401
+                    ) {
+                        localStorage.removeItem(
+                            "accessToken",
+                        );
+
+                        navigate(
+                            "/mygarden/unlogged-in",
+                        );
                     } else {
-                        console.error(error);
-                        alert('알림을 불러오는 중 오류가 발생했습니다.');
+                        window.alert(
+                            "알림을 불러오는 중 오류가 발생했습니다.",
+                        );
+
                         navigate(-1);
                     }
                 } finally {
-                    setIsLoading(false);
+                    setIsLoading(
+                        false,
+                    );
                 }
             };
 
-            if (notificationId) {
-                fetchMailDetail();
-            }
-        }, [notificationId, navigate]);
+        if (notificationId) {
+            fetchMailDetail();
+        }
+    }, [
+        notificationId,
+        navigate,
+    ]);
 
     const handleMenuClick = () => {
-        setIsMenuOpen(!isMenuOpen);
+        setIsMenuOpen(
+            (prev) => !prev,
+        );
     };
 
     const handleDrawerClose = () => {
         setIsMenuOpen(false);
     };
 
-    const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+    const formatDate = (
+        dateString,
+    ) => {
+        if (!dateString) {
+            return "";
+        }
+
+        const date =
+            new Date(dateString);
+
+        const year =
+            date.getFullYear();
+
+        const month = String(
+            date.getMonth() + 1,
+        ).padStart(2, "0");
+
+        const day = String(
+            date.getDate(),
+        ).padStart(2, "0");
+
         return `${year}.${month}.${day}`;
     };
 
     return (
         <div className="mail-detail-page">
-            <Navbar 
+            <Navbar
                 title="편지함"
                 showBackButton={true}
-                onBack={() => navigate(-1)}
+                onBack={() =>
+                    navigate(-1)
+                }
                 showMenuButton={true}
-                isMenuOpen={isMenuOpen}
-                onMenuClick={handleMenuClick}
+                isMenuOpen={
+                    isMenuOpen
+                }
+                onMenuClick={
+                    handleMenuClick
+                }
             />
-            <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
-            
+
+            <Drawer
+                isOpen={isMenuOpen}
+                onClose={
+                    handleDrawerClose
+                }
+            />
+
             {isLoading ? (
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <p style={{ color: '#a0a998', fontSize: '14px' }}>알림을 불러오는 중입니다...</p>
+                <div className="mail-detail-loading">
+                    <p>
+                        알림을 불러오는
+                        중입니다...
+                    </p>
                 </div>
             ) : mailDetail ? (
-                <div className="letter-wrapper">
-                    <img src={letterImg} alt="편지 배경" className="letter-bg" />
-                    
+                <div
+                    className="letter-wrapper"
+                    style={{
+                        backgroundImage: `url(${letterImg})`,
+                    }}
+                >
                     <div className="letter-content">
-                        <h2 className="letter-title">{mailDetail.title}</h2>
-                        <p className="letter-date">{formatDate(mailDetail.createdAt)}</p>
-                        
-                        <p className="letter-text" style={{ whiteSpace: 'pre-wrap' }}>
-                            {mailDetail.content}
+                        <h2 className="letter-title">
+                            {
+                                mailDetail.title
+                            }
+                        </h2>
+
+                        <p className="letter-date">
+                            {formatDate(
+                                mailDetail.createdAt,
+                            )}
+                        </p>
+
+                        <p className="letter-text">
+                            {
+                                mailDetail.content
+                            }
                         </p>
                     </div>
                 </div>
