@@ -32,19 +32,11 @@
   padding: 0 16px;
   border: 1.5px solid var(--color-green-main);
   border-radius: 14px;
+  cursor: pointer;
 }
 
 .story-form3-consent-item.story-form-input-invalid {
   border-color: #e03131;
-}
-
-.story-form3-consent-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
 }
 
 .story-form3-consent-detail-button {
@@ -93,6 +85,7 @@
 
 .story-form3-consent-label {
   flex: 1;
+  min-width: 0;
   color: var(--color-text);
   font-size: 16px;
   font-weight: 400;
