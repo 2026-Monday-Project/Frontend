@@ -45,7 +45,7 @@
 
   width: 100%;
 
-  padding: 0 28px 32px;
+  padding: 0 28px 110px;
 
   overflow-y: auto;
   overscroll-behavior-y: contain;
@@ -301,7 +301,10 @@
 /* 다음 (내용이 길어져도 항상 하단에 고정) */
 
 .story-form-next-button {
-  flex-shrink: 0;
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
 
   display: flex;
   justify-content: center;
@@ -310,8 +313,6 @@
 
   width: 239px;
   height: 43px;
-
-  margin: 0 auto 32px;
 
   padding: 10px 60px;
 
@@ -325,6 +326,8 @@
   font-family: Warhaven, sans-serif;
   font-size: 20px;
   font-weight: 400;
+
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
   cursor: pointer;
 }
