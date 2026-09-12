@@ -1,15 +1,20 @@
 .nickname-change {
     width: 100%;
     height: 100%;
+
     background-color: var(--color-background);
+
     overflow: hidden;
 }
 
 .nickname-change-content {
     display: flex;
+
     width: 100%;
     height: calc(100% - 68px);
+
     padding: 38px 24px 28px;
+
     flex-direction: column;
 }
 
@@ -17,6 +22,7 @@
     margin: 0;
 
     color: var(--color-green-main);
+
     font-family: Pretendard, sans-serif;
     font-size: 24px;
     font-style: normal;
@@ -26,13 +32,16 @@
 
 .nickname-change-field {
     display: flex;
+
     margin-top: 56px;
+
     flex-direction: column;
     gap: 10px;
 }
 
 .nickname-change-label {
     color: var(--color-text);
+
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-style: normal;
@@ -42,60 +51,122 @@
 
 .nickname-change-input-box {
     display: flex;
+
     width: 100%;
     height: 49px;
+
     padding: 10px 12px;
+
     align-items: center;
     gap: 10px;
 
     border: 1px solid var(--color-green-main);
     border-radius: 10px;
+
+    background: #fffdf6;
+}
+
+.nickname-change-input-box-error {
+    border: 1px solid #c62b2b;
+    border-radius: 10px;
+
     background: #fffdf6;
 }
 
 .nickname-change-input {
     flex: 1;
+
     min-width: 0;
 
     border: 0;
     outline: none;
+
     background: transparent;
 
     color: var(--color-text);
+
     font-family: Pretendard, sans-serif;
     font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.nickname-change-input::placeholder {
+    color: rgba(0, 0, 0, 0.45);
+
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    opacity: 1;
 }
 
 .nickname-duplicate-button {
     display: flex;
+
     width: 76px;
     height: 29px;
+
     padding: 10px;
+
     justify-content: center;
     align-items: center;
+
     flex-shrink: 0;
 
     border-radius: 5px;
+
     background: var(--color-green-muted);
 
     color: #fff;
+
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
     white-space: nowrap;
+}
+
+.nickname-duplicate-button:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.nickname-change-message {
+    margin: 0;
+
+    font-family: Pretendard, sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.nickname-change-message-success {
+    color: var(--color-green-main);
+}
+
+.nickname-change-message-error {
+    color: #c62b2b;
 }
 
 .nickname-change-submit {
     width: 100%;
     height: 49px;
+
     margin-top: auto;
 
     border-radius: 15px;
+
     background: var(--color-green-main);
 
     color: #fff;
+
     font-family: Warhaven, sans-serif;
     font-size: 20px;
     font-weight: 400;
@@ -104,105 +175,8 @@
 
 .nickname-change-submit:disabled {
     border-radius: 15px;
+
     background: rgba(36, 63, 38, 0.42);
+
     cursor: default;
-}
-
-.nickname-change-input-box-error {
-    border-color: #e53935;
-}
-
-.nickname-change-message {
-    margin: 8px 0 0;
-    font-size: 12px;
-    line-height: 1.4;
-}
-
-.nickname-change-message-success {
-    color: var(--color-green-main);
-}
-
-.nickname-change-message-error {
-    color: #e53935;
-}
-
-
-/* ==============================
-    닉네임 변경 완료
-   ============================== */
-
-.nickname-completed {
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-background);
-    overflow: hidden;
-}
-
-.nickname-completed-content {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    padding: 63px 47px 40px;
-    flex-direction: column;
-    align-items: center;
-}
-
-.nickname-completed-image {
-    width: 307px;
-    height: 335px;
-    aspect-ratio: 296 / 323;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.nickname-completed-title {
-    align-self: stretch;
-    margin: 28px 0 0;
-
-    color: var(--color-green-main);
-    text-align: center;
-    font-family: Warhaven, sans-serif;
-    font-size: 32px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-
-.nickname-completed-buttons {
-    display: flex;
-    width: 100%;
-    margin-top: 56px;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.nickname-completed-button {
-    display: flex;
-    width: 100%;
-    height: 43px;
-    padding: 10px 60px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    border-radius: 15px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-
-    font-family: Warhaven, sans-serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    white-space: nowrap;
-}
-
-.nickname-completed-button-primary {
-    background: var(--color-green-main);
-    color: #fff;
-}
-
-.nickname-completed-button-secondary {
-    border: 1px solid var(--color-green-main);
-    background: transparent;
-    color: var(--color-green-main);
 }
