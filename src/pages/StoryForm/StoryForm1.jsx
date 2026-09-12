@@ -22,6 +22,9 @@ const PET_TYPE_LIMIT_MESSAGE = "최대 50자까지 입력할 수 있어요.";
 
 // 자모 단독 입력(ㄱ, ㅏ 등)까지 허용해야 조합 중인 한글 입력이 끊기지 않는다.
 const NON_HANGUL_REGEX = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+// 완성되지 않은 자모(초성/모음 단독)만 남아있는지 검사한다.
+const INCOMPLETE_HANGUL_REGEX = /[ㄱ-ㅎㅏ-ㅣ]/;
+const INCOMPLETE_HANGUL_MESSAGE = "완성된 한글로 입력해 주세요.";
 
 const EMPTY_DATA = {
   petName: "",
@@ -167,9 +170,14 @@ const StoryForm1 = ({ mode }) => {
       [name]: nextValue,
     }));
 
+    const nicknameError =
+      name === "nickname" && INCOMPLETE_HANGUL_REGEX.test(nextValue)
+        ? INCOMPLETE_HANGUL_MESSAGE
+        : "";
+
     setErrors((prev) => ({
       ...prev,
-      [name]: "",
+      [name]: name === "nickname" ? nicknameError : "",
     }));
 
     if (name === "email") {
@@ -195,8 +203,13 @@ const StoryForm1 = ({ mode }) => {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
       petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
       petType: formData.petType.trim() ? "" : REQUIRED_MESSAGE,
-      nickname:
-        lockIdentity || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
+      nickname: lockIdentity
+        ? ""
+        : !formData.nickname.trim()
+          ? REQUIRED_MESSAGE
+          : INCOMPLETE_HANGUL_REGEX.test(formData.nickname)
+            ? INCOMPLETE_HANGUL_MESSAGE
+            : "",
       email: lockIdentity || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
@@ -229,6 +242,12 @@ const StoryForm1 = ({ mode }) => {
     if (!nickname) {
       setNicknameSuccessMessage("");
       setErrors((prev) => ({ ...prev, nickname: "*닉네임을 입력해주세요." }));
+      return;
+    }
+
+    if (INCOMPLETE_HANGUL_REGEX.test(nickname)) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({ ...prev, nickname: INCOMPLETE_HANGUL_MESSAGE }));
       return;
     }
 
