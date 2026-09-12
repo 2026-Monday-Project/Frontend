@@ -3,8 +3,7 @@
 
     flex-shrink: 0;
 
-    box-shadow:
-        0 0 22px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.16);
 
     overflow: hidden;
 }
@@ -23,10 +22,10 @@
     overflow-y: auto;
 }
 
+/* Drawer가 열렸을 때만 페이지 스크롤 잠금 */
 .app-frame.is-scroll-locked {
     overflow-y: hidden;
 }
-
 
 /* 모바일 */
 @media (max-width: 402px) {
@@ -49,5 +48,11 @@
 
         overflow-x: hidden;
         overflow-y: auto;
+    }
+
+    /* 모바일에서도 Drawer가 열렸을 때만 스크롤 잠금 */
+    .app-frame.is-scroll-locked,
+    .app-frame-mobile.is-scroll-locked {
+        overflow-y: hidden;
     }
 }
