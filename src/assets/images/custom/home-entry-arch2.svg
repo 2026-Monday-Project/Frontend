@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1400" width="900" height="1400" role="img" aria-labelledby="title desc">
+  <title id="title">Home Entry Arch</title>
+  <desc id="desc">Muted olive green pointed arch with a cream chevron, botanical line art, and sparkles on a transparent background.</desc>
+  <defs>
+    <linearGradient id="archFill" x1="0" y1="0" x2="0.85" y2="1">
+      <stop offset="0%" stop-color="#7B8868"/>
+      <stop offset="48%" stop-color="#6F7D5D"/>
+      <stop offset="100%" stop-color="#667454"/>
+    </linearGradient>
+    <radialGradient id="softGlow" cx="50%" cy="58%" r="42%">
+      <stop offset="0%" stop-color="#F7F2E4" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#F7F2E4" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <!-- Transparent outer background by design -->
+  <path d="M150 1360V535C150 345 259 192 450 40C641 192 750 345 750 535V1360Z"
+        fill="url(#archFill)" filter="url(#subtleShadow)"/>
+  <path d="M150 1360V535C150 345 259 192 450 40C641 192 750 345 750 535V1360Z"
+        fill="url(#softGlow)"/>
+
+  <!-- Chevron -->
+  <path d="M392 345L450 287L508 345" fill="none" stroke="#F7F0DE" stroke-width="18" stroke-linecap="square" stroke-linejoin="miter"/>
+
+  <!-- Botanical stem and leaves -->
+  <g fill="none" stroke="#F7F0DE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M450 1120C446 1038 448 950 449 860C450 773 452 686 451 585"/>
+
+    <!-- top leaves -->
+    <path d="M451 606C424 574 424 540 451 511C478 541 478 574 451 606Z"/>
+    <path d="M451 606C451 572 452 544 451 514"/>
+
+    <path d="M451 656C418 635 406 604 421 574C455 593 466 624 451 656Z"/>
+    <path d="M451 656C440 626 432 602 422 577"/>
+
+    <path d="M451 684C481 658 490 627 475 599C444 621 435 653 451 684Z"/>
+    <path d="M451 684C461 655 470 630 474 602"/>
+
+    <!-- mid left cluster -->
+    <path d="M447 738C403 716 385 684 396 651C439 665 458 700 447 738Z"/>
+    <path d="M447 738C429 709 413 684 398 654"/>
+
+    <path d="M444 792C396 783 369 753 372 716C421 721 449 752 444 792Z"/>
+    <path d="M444 792C418 770 395 746 374 719"/>
+
+    <path d="M444 838C402 844 369 823 358 789C405 778 438 801 444 838Z"/>
+    <path d="M444 838C415 824 389 810 361 791"/>
+
+    <path d="M445 885C406 897 373 883 356 851C400 835 435 852 445 885Z"/>
+    <path d="M445 885C417 875 389 866 359 853"/>
+
+    <!-- mid right cluster -->
+    <path d="M454 745C495 724 514 693 504 663C463 677 444 710 454 745Z"/>
+    <path d="M454 745C472 717 489 692 502 666"/>
+
+    <path d="M454 798C501 790 527 762 524 728C478 732 451 761 454 798Z"/>
+    <path d="M454 798C479 778 500 754 522 731"/>
+
+    <path d="M455 844C497 850 528 831 539 799C494 787 462 810 455 844Z"/>
+    <path d="M455 844C485 832 511 818 536 801"/>
+
+    <path d="M455 891C494 904 527 890 543 859C500 844 466 859 455 891Z"/>
+    <path d="M455 891C482 881 512 871 540 861"/>
+
+    <!-- lower leaves -->
+    <path d="M446 934C407 950 379 941 362 914C400 896 434 905 446 934Z"/>
+    <path d="M446 934C417 927 393 920 365 915"/>
+
+    <path d="M454 939C491 957 522 949 540 920C500 902 466 911 454 939Z"/>
+    <path d="M454 939C483 932 510 926 537 921"/>
+
+    <path d="M447 979C418 1000 389 999 368 978C397 953 429 954 447 979Z"/>
+    <path d="M447 979C421 976 398 976 372 978"/>
+
+    <path d="M453 986C483 1005 513 1002 534 980C505 956 473 960 453 986Z"/>
+    <path d="M453 986C478 982 505 980 531 980"/>
+  </g>
+
+  <!-- Sparkles -->
+  <g fill="#F7F0DE">
+    <path d="M330 720l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+    <path d="M568 690l6 18 18 6-18 6-6 18-6-18-18-6 18-6z"/>
+    <path d="M604 760l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
+    <path d="M316 842l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+    <path d="M588 850l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+    <path d="M350 936l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
+    <path d="M555 965l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+    <path d="M390 1010l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+    <path d="M510 1042l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"/>
+
+    <circle cx="350" cy="682" r="3"/>
+    <circle cx="365" cy="699" r="2.5"/>
+    <circle cx="620" cy="716" r="3"/>
+    <circle cx="606" cy="817" r="2.5"/>
+    <circle cx="340" cy="795" r="2.5"/>
+    <circle cx="330" cy="905" r="3"/>
+    <circle cx="618" cy="908" r="2.5"/>
+    <circle cx="374" cy="995" r="2.5"/>
+    <circle cx="585" cy="1013" r="2.5"/>
+
+    <rect x="365" y="650" width="8" height="8" transform="rotate(45 369 654)"/>
+    <rect x="382" y="635" width="10" height="10" transform="rotate(45 387 640)"/>
+    <rect x="612" y="742" width="8" height="8" transform="rotate(45 616 746)"/>
+    <rect x="575" y="902" width="8" height="8" transform="rotate(45 579 906)"/>
+    <rect x="344" y="890" width="8" height="8" transform="rotate(45 348 894)"/>
+  </g>
+</svg>
