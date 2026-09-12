@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useRef,
     useState,
 } from "react";
 
@@ -17,6 +18,20 @@ const AppFrame = ({ children }) => {
     const [isTablet, setIsTablet] =
         useState(false);
 
+    /*
+     * iPad에서 키보드가 올라오면
+     * visualViewport.height가 작아진다.
+     *
+     * 이 값을 그대로 scale 계산에 사용하면
+     * AppFrame 전체가 키보드 높이에 맞춰 축소되므로,
+     * 키보드가 열리기 전 가장 큰 viewport 높이를 보관한다.
+     */
+    const maxViewportHeightRef =
+        useRef(0);
+
+    const lastViewportWidthRef =
+        useRef(0);
+
     useEffect(() => {
         const handleResize = () => {
             const width =
@@ -24,7 +39,7 @@ const AppFrame = ({ children }) => {
                     ?.width ??
                 window.innerWidth;
 
-            const height =
+            const currentHeight =
                 window.visualViewport
                     ?.height ??
                 window.innerHeight;
@@ -59,17 +74,46 @@ const AppFrame = ({ children }) => {
 
             if (tablet) {
                 /*
-                 * 태블릿은 세로 화면을
-                 * 무조건 꽉 채우도록
-                 * 실제 보이는 viewport 높이를 기준으로 확대
+                 * 화면 회전처럼 가로폭 자체가
+                 * 크게 바뀐 경우에는 기준 높이를
+                 * 새로 설정한다.
                  */
+                const widthChanged =
+                    Math.abs(
+                        width -
+                            lastViewportWidthRef.current,
+                    ) > 50;
+
+                if (
+                    lastViewportWidthRef.current ===
+                        0 ||
+                    widthChanged
+                ) {
+                    lastViewportWidthRef.current =
+                        width;
+
+                    maxViewportHeightRef.current =
+                        currentHeight;
+                } else {
+                    /*
+                     * 키보드가 열렸을 때 height가
+                     * 줄어드는 것은 무시한다.
+                     *
+                     * 키보드가 닫혀 더 큰 높이가
+                     * 관측되면 그때만 갱신한다.
+                     */
+                    maxViewportHeightRef.current =
+                        Math.max(
+                            maxViewportHeightRef.current,
+                            currentHeight,
+                        );
+                }
+
                 const tabletScale =
-                    height /
+                    maxViewportHeightRef.current /
                     FRAME_HEIGHT;
 
-                setScale(
-                    tabletScale,
-                );
+                setScale(tabletScale);
 
                 return;
             }
@@ -83,7 +127,7 @@ const AppFrame = ({ children }) => {
                 FRAME_WIDTH;
 
             const heightScale =
-                height /
+                currentHeight /
                 FRAME_HEIGHT;
 
             setScale(
@@ -107,11 +151,6 @@ const AppFrame = ({ children }) => {
             handleResize,
         );
 
-        window.visualViewport?.addEventListener(
-            "scroll",
-            handleResize,
-        );
-
         return () => {
             window.removeEventListener(
                 "resize",
@@ -120,11 +159,6 @@ const AppFrame = ({ children }) => {
 
             window.visualViewport?.removeEventListener(
                 "resize",
-                handleResize,
-            );
-
-            window.visualViewport?.removeEventListener(
-                "scroll",
                 handleResize,
             );
         };
@@ -164,7 +198,7 @@ const AppFrame = ({ children }) => {
                     isMobile
                         ? undefined
                         : {
-                              transform: `scale(${scale})`,
+                            transform: `scale(${scale})`,
                           }
                 }
             >
