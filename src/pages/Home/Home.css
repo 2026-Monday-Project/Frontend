@@ -22,6 +22,7 @@
 
 .home-background {
     position: absolute;
+
     inset: 0;
 
     width: 100%;
@@ -42,10 +43,12 @@
 
 .home-info {
     position: absolute;
+
     top: 30.5%;
     left: 50%;
 
     display: flex;
+
     width: 220px;
 
     flex-direction: column;
@@ -127,13 +130,14 @@
 .home-entry-guide-text {
     position: absolute;
 
-    bottom: 137px;
+    bottom: 171px;
     left: 50%;
 
     display: flex;
 
     flex-direction: column;
     align-items: center;
+
     gap: 5px;
 
     margin: 0;
@@ -171,10 +175,14 @@
 .home-entry-arch {
     position: absolute;
 
-    bottom: 0;
+    /*
+     * SVG 내부 하단 투명 여백을 화면 밖으로 빼서
+     * 실제 초록색 부분의 끝이 화면 하단에 붙도록 함
+     */
+    bottom: -56px;
     left: 50%;
 
-    width: 129px;
+    width: 137px;
 
     padding: 0;
 
@@ -206,7 +214,9 @@
     width: 100%;
     height: auto;
     max-width: none;
+
     object-fit: contain;
+
     pointer-events: none;
 
     user-select: none;
@@ -221,7 +231,11 @@
 .home-entry-trail-container {
     position: absolute;
 
-    bottom: 0;
+    /*
+     * 가이드 이미지는 기존 위치 유지
+     * 아치 SVG 자체의 투명 여백 문제와는 별개
+     */
+    bottom: -18px;
     left: 50%;
 
     width: 82px;
@@ -273,11 +287,7 @@
     }
 
     .home-entry-guide-text {
-        bottom: 120px;
-    }
-
-    .home-entry-arch {
-        width: 118px;
+        bottom: 154px;
     }
 
     .home-entry-trail-container {
