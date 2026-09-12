@@ -200,6 +200,24 @@ const AdminReviewDetail = () => {
         try {
             setIsSubmitting(true);
 
+            const response =
+                await getAdminStoryDetail(
+                    story.storyId,
+                );
+
+            const currentStatus =
+                response.data.data.status;
+
+            if (currentStatus !== story.status) {
+                window.alert(
+                    "다른 관리자에 의해 사연 상태가 변경되었습니다.",
+                );
+
+                navigate("/admin/reviews");
+
+                return;
+            }
+
             await updateAdminStoryReview(
                 story.storyId,
                 selectedVisibility,
@@ -215,7 +233,7 @@ const AdminReviewDetail = () => {
                     },
                 },
             );
-        } catch {
+        } finally {
             setIsSubmitting(false);
         }
     };
