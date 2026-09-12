@@ -232,8 +232,13 @@ const AdminNotification = () => {
 
                 {needsReason && (
                     <div className="admin-notification-field">
-                        <label htmlFor="notification-reason">
-                            사유
+                        <label className="admin-notification-reason-label"
+                            htmlFor="notification-reason">
+                            <span>사유</span>
+
+                            <small>
+                                (두 자 이상 입력해주세요)
+                            </small>
                         </label>
 
                         <input
