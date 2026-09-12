@@ -10,10 +10,16 @@
 }
 
 .home-entered-design {
-    position: relative;
+    position: absolute;
+
+    top: 0;
+    left: 50%;
 
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 402 / 874;
+
+    transform: translateX(-50%);
 
     overflow: hidden;
 }
@@ -30,10 +36,7 @@
     height: 100%;
     max-width: none;
 
-    object-fit: cover;
-
-    /* 아래쪽 디자인을 살리고 위쪽을 잘라냄 */
-    object-position: center bottom;
+    object-fit: fill;
 
     pointer-events: none;
 
@@ -47,7 +50,8 @@
 .home-entered-text {
     position: absolute;
 
-    top: 33.4%;
+    /* Figma 402 x 874 기준 */
+    top: 292px;
     left: 0;
 
     display: flex;
@@ -118,7 +122,8 @@
 .home-entered-buttons {
     position: absolute;
 
-    top: 56.2%;
+    /* Figma 402 x 874 기준 */
+    top: 491px;
     left: 50%;
 
     display: flex;
@@ -177,15 +182,14 @@
 }
 
 /* ==============================
-    낮은 모바일 화면
+    모바일
    ============================== */
 
-@media (max-height: 760px) {
-    .home-entered-text {
-        top: 31%;
-    }
+@media (max-width: 402px) {
+    .home-entered-design {
+        width: 100%;
+        height: auto;
 
-    .home-entered-buttons {
-        top: 54%;
+        aspect-ratio: 402 / 874;
     }
 }
