@@ -29,7 +29,9 @@ const getExtension = (fileName) =>
 // GIF는 캔버스를 거치면 애니메이션이 깨지므로 리사이즈 대상에서 제외한다.
 const resizeImageFile = (file) =>
   new Promise((resolve) => {
-    if (file.type === "image/gif") {
+    // handlePhotoChange의 허용 목록과 동일하게 "확장자" 기준으로 GIF를 판별한다.
+    // file.type(MIME)은 브라우저/OS에 따라 비거나 다르게 들어올 수 있어 신뢰할 수 없다.
+    if (getExtension(file.name) === "gif") {
       resolve(file);
       return;
     }
@@ -101,6 +103,10 @@ const StoryForm2 = ({ mode }) => {
   const [photos, setPhotos] = useState(story.photos);
   const [viewerIndex, setViewerIndex] = useState(null);
 
+  // handlePhotoChange는 리사이즈(await) 동안 photos state가 바뀔 수 있어, MAX_PHOTOS 슬롯을
+  // await 이전에 동기적으로 "예약"하기 위한 카운터. state와 별개로 항상 최신 개수를 반영한다.
+  const photosCountRef = useRef(story.photos.length);
+
   const isFormValid =
     formData.title.trim() && formData.content.trim() && photos.length > 0;
 
@@ -164,6 +170,8 @@ const StoryForm2 = ({ mode }) => {
   const handlePhotoRemove = (event, index) => {
     event.stopPropagation();
 
+    photosCountRef.current = Math.max(photosCountRef.current - 1, 0);
+
     setPhotos((prev) => {
       const target = prev[index];
       // 새로 추가한 사진(objectURL)만 해제. 기존(수정 진입 시) 사진은 URL을 만든 적이 없다.
@@ -212,8 +220,12 @@ const StoryForm2 = ({ mode }) => {
       return;
     }
 
-    const remainingSlots = MAX_PHOTOS - photos.length;
+    // 리사이즈(await)에 시간이 걸리는 동안 다른 선택이 겹쳐도 정원을 넘기지 않도록,
+    // await 이전에 남은 슬롯만큼 동기적으로 먼저 "예약"한다.
+    const remainingSlots = Math.max(MAX_PHOTOS - photosCountRef.current, 0);
     const filesToAdd = supportedFiles.slice(0, remainingSlots);
+    photosCountRef.current += filesToAdd.length;
+
     const resizedFiles = await Promise.all(filesToAdd.map(resizeImageFile));
 
     const newPhotos = resizedFiles.map((file) => ({
