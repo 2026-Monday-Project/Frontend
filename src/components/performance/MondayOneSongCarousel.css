@@ -7,28 +7,88 @@
     position: relative;
 
     width: 100%;
+
     overflow: hidden;
 
     border-radius: 10px;
 }
 
+/* ==============================
+    공개 후 캐러셀
+   ============================== */
+
+.monday-song-viewport {
+    width: 100%;
+
+    overflow: hidden;
+
+    cursor: grab;
+
+    touch-action: pan-y;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.monday-song-viewport:active {
+    cursor: grabbing;
+}
+
+.monday-song-track {
+    display: flex;
+
+    width: 100%;
+
+    transition:
+        transform 0.3s ease;
+
+    will-change: transform;
+}
+
+.monday-song-track-dragging {
+    transition: none;
+}
+
+.monday-song-slide {
+    width: 100%;
+
+    flex: 0 0 100%;
+}
+
 .monday-song-image {
     display: block;
+
     width: 100%;
     height: auto;
+
+    max-width: none;
+
+    pointer-events: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
+
+/* ==============================
+    공개 전
+   ============================== */
 
 .monday-song-image-blurred {
     filter: blur(7.5px);
+
     transform: scale(1.04);
 }
 
 .monday-song-overlay {
     position: absolute;
+
     inset: 0;
 
     display: flex;
+
     flex-direction: column;
+
     justify-content: center;
     align-items: center;
 }
@@ -42,56 +102,89 @@
     height: 96px;
 
     border: 1px solid #fff;
+
     border-radius: 15px;
 }
 
 .monday-song-coming-soon,
 .monday-song-release {
     position: relative;
+
     z-index: 1;
 
     margin: 0;
+
     color: #fff;
 }
 
 .monday-song-coming-soon {
     font-family: Warhaven, sans-serif;
+
     font-size: 20px;
+    font-style: normal;
     font-weight: 400;
+    line-height: normal;
 }
 
 .monday-song-release {
     margin-top: 10px;
 
     font-family: Pretendard, sans-serif;
+
     font-size: 12px;
+    font-style: normal;
     font-weight: 400;
+    line-height: normal;
 }
+
+/* ==============================
+    인디케이터
+   ============================== */
 
 .monday-song-indicator {
     display: flex;
+
     justify-content: center;
     align-items: center;
+
     gap: 6px;
 
     margin-top: 12px;
+}
 
+.monday-song-indicator-disabled {
     filter: blur(5px);
+
     opacity: 0.45;
 }
 
 .monday-song-dot {
     width: 7px;
     height: 7px;
+
+    padding: 0;
+
     flex-shrink: 0;
 
+    border: 0;
     border-radius: 999px;
-    background: #a0a998;
+
+    background-color: #a0a998;
+
+    cursor: pointer;
+
+    transition:
+        width 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.monday-song-dot:disabled {
+    cursor: default;
 }
 
 .monday-song-dot-active {
     width: 14px;
-    height: 7px;
 
-    background: var(--color-green-main);
+    background-color:
+        var(--color-green-main);
 }

@@ -18,10 +18,13 @@ import Login from "@/pages/Login/Login";
 import LoginCompleted from "@/pages/Login/LoginCompleted";
 import MyGarden from "@/pages/MyGarden/MyGarden";
 import MyGardenUnLoggedIn from "@/pages/MyGarden/MyGardenUnLoggedIn";
+import EarnedLikes from "@/pages/MyGarden/EarnedLikes";
+import LikedStories from "@/pages/MyGarden/LikedStories";
 import MyStoriesList from "@/pages/MyGarden/MyStoriesList";
 import MyStoryDetail from "@/pages/MyGarden/MyStoryDetail";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import MailDetail from "@/pages/Mailbox/MailDetail";
+
 import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound/NotFound";
 
@@ -86,11 +89,13 @@ const Router = () => {
                 {/* 내 정원 */}
                 <Route path="/mygarden" element={<MyGarden />} />
                 <Route path="/mygarden/unlogged-in" element={<MyGardenUnLoggedIn />} />
+                <Route path="/mygarden/earned-likes" element={<EarnedLikes />} />
+                <Route path="/mygarden/liked-stories" element={<LikedStories />} />
+
                 <Route path="/mystories/list" element={<MyStoriesList />} />
                 <Route path="/mystories/detail/:storyId" element={<MyStoryDetail />} />
             
                 {/* 편지함 */}
-                <Route path="/mailbox" element={<Mailbox />} />
                 <Route path="/mailbox" element={<Mailbox />} />
                 <Route path="/mailbox/:notificationId" element={<MailDetail />} />
 
