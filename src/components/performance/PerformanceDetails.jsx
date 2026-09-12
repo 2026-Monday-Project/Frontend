@@ -5,7 +5,11 @@ import salonMoonbowMap from "@/assets/images/provided/maps/salon-moonbow-map.svg
 
 import "./PerformanceDetails.css";
 
-const INSTAGRAM_URL = "https://www.instagram.com/mondayprojectkr/";
+const INSTAGRAM_URL =
+    "https://www.instagram.com/mondayprojectkr/";
+
+const GOOGLE_MAP_URL =
+    "https://www.google.com/maps/search/?api=1&query=%EC%84%9C%EC%9A%B8+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C+113";
 
 const PerformanceDetails = () => {
     const handleReservationClick = () => {
@@ -31,7 +35,9 @@ const PerformanceDetails = () => {
                     <dl className="performance-information-list">
                         <div className="performance-information-row">
                             <dt>일시</dt>
-                            <dd>2026.10.15(목) 오후 8시</dd>
+                            <dd>
+                                2026.10.15(목) 오후 8시
+                            </dd>
                         </div>
 
                         <div className="performance-information-row">
@@ -76,11 +82,13 @@ const PerformanceDetails = () => {
                     <br />
                     내용은 사랑,
                     <br />
-                    답장은 매기스가든의 노래로 보내드립니다!
+                    답장은 매기스가든의 노래로
+                    보내드립니다!
                 </p>
 
                 <p className="performance-instagram-description">
-                    자세한 내용은 먼데이프로젝트 인스타그램에서 확인하세요!
+                    자세한 내용은 먼데이프로젝트
+                    인스타그램에서 확인하세요!
                 </p>
 
                 <a
@@ -117,7 +125,8 @@ const PerformanceDetails = () => {
                 </h2>
 
                 <p className="performance-song-description">
-                    매기스가든이 직접 전하는 비하인드 스토리
+                    매기스가든이 직접 전하는 비하인드
+                    스토리
                 </p>
 
                 <MondayOneSongCarousel />
@@ -136,11 +145,19 @@ const PerformanceDetails = () => {
                     서울 마포구 잔다리로 113 지층
                 </p>
 
-                <img
-                    className="performance-map"
-                    src={salonMoonbowMap}
-                    alt="살롱문보우 위치 지도"
-                />
+                <a
+                    className="performance-map-link"
+                    href={GOOGLE_MAP_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="구글 지도에서 살롱문보우 위치 보기"
+                >
+                    <img
+                        className="performance-map"
+                        src={salonMoonbowMap}
+                        alt="살롱문보우 위치 지도"
+                    />
+                </a>
             </section>
         </>
     );
