@@ -3,7 +3,6 @@ import {
     useRef,
     useState,
 } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 import homeEnteredBackground from "@/assets/images/custom/home-entered-background.svg";
@@ -17,8 +16,7 @@ const HomeEntered = () => {
 
     const pageRef = useRef(null);
 
-    const [scale, setScale] =
-        useState(1);
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
         const page = pageRef.current;
@@ -28,10 +26,11 @@ const HomeEntered = () => {
         }
 
         const updateScale = () => {
-            setScale(
+            const nextScale =
                 page.clientWidth /
-                    FIGMA_WIDTH,
-            );
+                FIGMA_WIDTH;
+
+            setScale(nextScale);
         };
 
         updateScale();
@@ -80,13 +79,10 @@ const HomeEntered = () => {
                     </div>
 
                     <div className="home-entered-text-content">
-                        <p>
-                            매기스가든에서
-                        </p>
+                        <p>매기스가든에서</p>
 
                         <p>
-                            사랑과 편지를
-                            만나보세요.
+                            사랑과 편지를 만나보세요.
                         </p>
                     </div>
                 </div>
