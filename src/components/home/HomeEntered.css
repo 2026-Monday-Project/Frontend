@@ -51,7 +51,8 @@
 .home-entered-text {
     position: absolute;
 
-    top: 292px;
+    /* 기존 292px → 위로 이동 */
+    top: 245px;
     left: 0;
 
     display: flex;
@@ -122,7 +123,8 @@
 .home-entered-buttons {
     position: absolute;
 
-    top: 491px;
+    /* 기존 491px → 위로 이동 */
+    top: 430px;
     left: 50%;
 
     display: flex;
