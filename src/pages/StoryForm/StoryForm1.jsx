@@ -54,8 +54,11 @@ const StoryForm1 = ({ mode }) => {
   }, [formData]);
 
   // 로그인 상태 & 아직 계정 정보가 없으면 프로필을 불러와 닉네임/이메일을 채운다.
+  // - 신규 작성: 계정 정보로 잠가서 그대로 제출
+  // - 수정: 사연 상세 응답엔 닉네임/이메일이 없어서 화면이 빈 채로 보였음 → 표시용으로 채운다
+  //   (수정 제출 요청 자체엔 닉네임/이메일을 안 보내므로 제출 로직엔 영향 없음)
   useEffect(() => {
-    if (isEdit || !isLoggedIn) return;
+    if (!isLoggedIn) return;
 
     if (info.nickname || info.email) {
       setProfileState("ready");
