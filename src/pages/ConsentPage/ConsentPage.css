@@ -25,7 +25,9 @@
   gap: 13px;
   width: 100%;
   min-height: 40px;
-  padding: 32px 40px 0;
+  /* 좌우 여백을 사연 작성 페이지(StoryForm) 헤더와 동일하게 맞춰서,
+     뒤로가기 아이콘이 두 화면에서 항상 같은 위치에 오도록 한다. */
+  padding: 32px 28px 0;
 }
 
 /* 본문 스크롤 영역 */
