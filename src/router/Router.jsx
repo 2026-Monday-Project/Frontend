@@ -22,6 +22,7 @@ import MyStoriesList from "@/pages/MyGarden/MyStoriesList";
 import MyStoryDetail from "@/pages/MyGarden/MyStoryDetail";
 import Mailbox from "@/pages/Mailbox/Mailbox";
 import MailDetail from "@/pages/Mailbox/MailDetail";
+
 import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound/NotFound";
 
@@ -90,7 +91,6 @@ const Router = () => {
                 <Route path="/mystories/detail/:storyId" element={<MyStoryDetail />} />
             
                 {/* 편지함 */}
-                <Route path="/mailbox" element={<Mailbox />} />
                 <Route path="/mailbox" element={<Mailbox />} />
                 <Route path="/mailbox/:notificationId" element={<MailDetail />} />
 
