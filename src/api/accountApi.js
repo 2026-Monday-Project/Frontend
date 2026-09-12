@@ -1,5 +1,11 @@
 import api from "@/api/axios";
 
+export const login = (email) => {
+    return api.post("/accounts/login", {
+        email,
+    });
+};
+
 export const checkEmailAvailable = (email) => {
     return api.get("/accounts/email-check", {
         params: {

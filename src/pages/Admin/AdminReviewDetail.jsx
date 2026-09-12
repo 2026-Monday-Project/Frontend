@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import {
+    useNavigate,
+    useParams,
+} from "react-router-dom";
 
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminStatusBadge from "@/components/admin/AdminStatusBadge";
@@ -8,10 +15,7 @@ import caretRight from "@/assets/icons/caret-right.svg";
 import checkboxUnchecked from "@/assets/icons/checkbox-unchecked.svg";
 import checkboxChecked from "@/assets/icons/checkbox-checked.svg";
 
-import {
-    getAdminStoryDetail,
-    updateAdminStoryReview,
-} from "@/api/adminApi";
+import { getAdminStoryDetail } from "@/api/adminApi";
 
 import "./AdminReviewDetail.css";
 
@@ -58,9 +62,6 @@ const AdminReviewDetail = () => {
     const [selectedVisibility, setSelectedVisibility] =
         useState(null);
 
-    const [isSubmitting, setIsSubmitting] =
-        useState(false);
-
     useEffect(() => {
         const fetchStoryDetail = async () => {
             try {
@@ -105,7 +106,8 @@ const AdminReviewDetail = () => {
         }
 
         const maxScrollLeft =
-            element.scrollWidth - element.clientWidth;
+            element.scrollWidth -
+            element.clientWidth;
 
         if (maxScrollLeft <= 0) {
             setPhotoScrollProgress(0);
@@ -113,7 +115,8 @@ const AdminReviewDetail = () => {
         }
 
         setPhotoScrollProgress(
-            element.scrollLeft / maxScrollLeft,
+            element.scrollLeft /
+                maxScrollLeft,
         );
     };
 
@@ -130,7 +133,9 @@ const AdminReviewDetail = () => {
         dragStartScrollLeft.current =
             element.scrollLeft;
 
-        element.setPointerCapture(event.pointerId);
+        element.setPointerCapture(
+            event.pointerId,
+        );
     };
 
     const handlePhotoPointerMove = (event) => {
@@ -145,7 +150,8 @@ const AdminReviewDetail = () => {
         }
 
         const dragDistance =
-            event.clientX - dragStartX.current;
+            event.clientX -
+            dragStartX.current;
 
         element.scrollLeft =
             dragStartScrollLeft.current -
@@ -157,7 +163,9 @@ const AdminReviewDetail = () => {
 
         if (
             element &&
-            element.hasPointerCapture(event.pointerId)
+            element.hasPointerCapture(
+                event.pointerId,
+            )
         ) {
             element.releasePointerCapture(
                 event.pointerId,
@@ -170,37 +178,32 @@ const AdminReviewDetail = () => {
     const allChecked =
         Object.values(reviewChecks).every(Boolean);
 
-    const isConfirmEnabled =
+    const isNextEnabled =
         allChecked &&
-        selectedVisibility !== null &&
-        !isSubmitting;
+        selectedVisibility !== null;
 
-    const handleConfirm = async () => {
-        if (!isConfirmEnabled || !story) {
+    const handleNext = () => {
+        if (!isNextEnabled || !story) {
             return;
         }
 
-        try {
-            setIsSubmitting(true);
-
-            await updateAdminStoryReview(
-                story.storyId,
-                selectedVisibility,
-            );
-
-            navigate(
-                `/admin/notifications/${story.storyId}`,
-                {
-                    state: {
-                        previousStatus: story.status,
-                        nextStatus:
-                            selectedVisibility,
-                    },
+        /*
+         * 여기서는 공개/비공개 상태를
+         * 실제로 변경하지 않음.
+         *
+         * 관리자가 선택한 상태만
+         * 알림 발송 페이지로 전달.
+         */
+        navigate(
+            `/admin/notifications/${story.storyId}`,
+            {
+                state: {
+                    previousStatus: story.status,
+                    nextStatus:
+                        selectedVisibility,
                 },
-            );
-        } catch {
-            setIsSubmitting(false);
-        }
+            },
+        );
     };
 
     if (!story) {
@@ -233,7 +236,8 @@ const AdminReviewDetail = () => {
                     <h3>제출 내용</h3>
 
                     <p className="admin-review-pet">
-                        {story.petName} · {story.petAge} ·{" "}
+                        {story.petName} ·{" "}
+                        {story.petAge} ·{" "}
                         {story.petType}
                     </p>
 
@@ -270,7 +274,9 @@ const AdminReviewDetail = () => {
                                 ? "admin-review-photo-list-dragging"
                                 : ""
                         }`}
-                        onScroll={handlePhotoScroll}
+                        onScroll={
+                            handlePhotoScroll
+                        }
                         onPointerDown={
                             handlePhotoPointerDown
                         }
@@ -293,7 +299,8 @@ const AdminReviewDetail = () => {
                                     <img
                                         src={image}
                                         alt={`제출 사진 ${
-                                            index + 1
+                                            index +
+                                            1
                                         }`}
                                         draggable="false"
                                     />
@@ -322,42 +329,52 @@ const AdminReviewDetail = () => {
                 </section>
 
                 <section className="admin-review-check-list">
-                    {reviewItemList.map((item) => {
-                        const checked =
-                            reviewChecks[item.key];
+                    {reviewItemList.map(
+                        (item) => {
+                            const checked =
+                                reviewChecks[
+                                    item.key
+                                ];
 
-                        return (
-                            <button
-                                key={item.key}
-                                type="button"
-                                className="admin-review-check-item"
-                                onClick={() =>
-                                    handleCheckClick(
-                                        item.key,
-                                    )
-                                }
-                            >
-                                <img
-                                    src={
-                                        checked
-                                            ? checkboxChecked
-                                            : checkboxUnchecked
+                            return (
+                                <button
+                                    key={
+                                        item.key
                                     }
-                                    alt=""
-                                />
+                                    type="button"
+                                    className="admin-review-check-item"
+                                    onClick={() =>
+                                        handleCheckClick(
+                                            item.key,
+                                        )
+                                    }
+                                >
+                                    <img
+                                        src={
+                                            checked
+                                                ? checkboxChecked
+                                                : checkboxUnchecked
+                                        }
+                                        alt=""
+                                    />
 
-                                <span>
-                                    <strong>
-                                        {item.title}
-                                    </strong>
+                                    <span>
+                                        <strong>
+                                            {
+                                                item.title
+                                            }
+                                        </strong>
 
-                                    <small>
-                                        {item.description}
-                                    </small>
-                                </span>
-                            </button>
-                        );
-                    })}
+                                        <small>
+                                            {
+                                                item.description
+                                            }
+                                        </small>
+                                    </span>
+                                </button>
+                            );
+                        },
+                    )}
                 </section>
 
                 <div className="admin-review-action-area">
@@ -400,14 +417,14 @@ const AdminReviewDetail = () => {
                     <button
                         type="button"
                         className={`admin-review-confirm ${
-                            isConfirmEnabled
+                            isNextEnabled
                                 ? "admin-review-confirm-active"
                                 : ""
                         }`}
-                        disabled={!isConfirmEnabled}
-                        onClick={handleConfirm}
+                        disabled={!isNextEnabled}
+                        onClick={handleNext}
                     >
-                        확인
+                        다음
                     </button>
                 </div>
             </div>

@@ -25,13 +25,21 @@
 }
 
 .admin-story-card-title {
+    width: 100%;
+    min-width: 0;
+
     margin: 12px 0 0;
+
+    overflow: hidden;
 
     color: #151515;
     font-family: Pretendard, sans-serif;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     line-height: normal;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .admin-story-card-bottom {

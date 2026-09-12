@@ -1,21 +1,32 @@
-.story-form2-container {
-  padding-bottom: 40px;
-}
 
 /* 사연 본문 */
 
 .story-form2-textarea-wrapper {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 220px;
+  border: 1px solid var(--color-green-main);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.story-form2-textarea-wrapper:focus-within {
+  border-width: 2px;
+}
+
+.story-form2-textarea-wrapper.story-form-input-invalid {
+  border-color: #e03131;
 }
 
 .story-form2-textarea {
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  height: 220px;
-  padding: 14px 14px 28px;
+  padding: 14px 14px 4px;
   resize: none;
-  border: 1px solid var(--color-green-main);
-  border-radius: 12px;
+  border: none;
   background-color: transparent;
   color: var(--color-text);
   font-family: inherit;
@@ -31,22 +42,10 @@
   font-weight: 400;
 }
 
-.story-form2-textarea:focus {
-  border-width: 2px;
-}
-
-.story-form2-textarea.story-form-input-invalid {
-  border-color: #e03131;
-}
-
-.story-form2-textarea.story-form-input-invalid:focus {
-  border-width: 2px;
-}
-
 .story-form2-textarea-count {
-  position: absolute;
-  right: 14px;
-  bottom: 12px;
+  flex-shrink: 0;
+  align-self: flex-end;
+  padding: 4px 14px 10px;
   color: var(--color-text-muted);
   font-size: 13px;
   pointer-events: none;
@@ -58,7 +57,9 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  /* overflow-x를 auto로 두면 overflow-y도 auto로 계산되어, 삭제 배지가 위로 튀어나온
+     부분이 잘려 보인다. 배지가 들어갈 여백을 위쪽에 미리 확보해 잘리지 않게 한다. */
+  padding: 12px 0 4px;
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
@@ -68,10 +69,16 @@
   display: none;
 }
 
-.story-form2-photo-thumb {
+.story-form2-photo-thumb-wrapper {
+  position: relative;
   flex: 0 0 auto;
   width: 72px;
   height: 72px;
+}
+
+.story-form2-photo-thumb {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: 12px;
   cursor: pointer;
@@ -81,6 +88,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.story-form2-photo-remove-button {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--color-background);
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+}
+
+.story-form2-photo-remove-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .story-form2-photo-add-button {
@@ -110,12 +139,15 @@
   display: none;
 }
 
-/* 이전 / 다음 */
+/* 이전 / 다음 (내용이 길어져도 항상 하단에 고정) */
 
 .story-form2-footer {
+  flex-shrink: 0;
+
   display: flex;
   gap: 40px;
-  margin-top: 8px;
+
+  padding: 8px 28px 32px;
 }
 
 .story-form2-prev-button {
@@ -171,7 +203,7 @@
   z-index: 50;
   width: 100%;
   max-width: var(--max-mobile-width);
-  height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--color-background);
@@ -207,12 +239,15 @@
 .story-photo-viewer-main {
   flex: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .story-photo-viewer-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .story-photo-viewer-thumbs {

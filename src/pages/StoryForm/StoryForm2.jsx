@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
-import stepIndicator from "@/assets/icons/step-indicator-2.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
+import stepIndicator from "@/assets/icons/step-indicator-2.svg";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm2.css";
@@ -10,6 +10,16 @@ const REQUIRED_MESSAGE = "*필수 항목입니다.";
 const PHOTO_REQUIRED_MESSAGE = "*사진을 업로드 해주세요.";
 const MAX_PHOTOS = 5;
 const MAX_CONTENT_LENGTH = 500;
+
+// 백엔드 허용 확장자
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "heic"];
+const PHOTO_EXTENSION_MESSAGE =
+  "*jpg, jpeg, png, gif, webp, heic 형식만 업로드할 수 있어요.";
+
+const getExtension = (fileName) =>
+  fileName.includes(".")
+    ? fileName.split(".").pop().toLowerCase()
+    : "";
 
 const StoryForm2 = ({ mode }) => {
   const navigate = useNavigate();
@@ -33,9 +43,7 @@ const StoryForm2 = ({ mode }) => {
   const [viewerIndex, setViewerIndex] = useState(null);
 
   const isFormValid =
-    formData.title.trim() &&
-    formData.content.trim() &&
-    photos.length > 0;
+    formData.title.trim() && formData.content.trim() && photos.length > 0;
 
   useEffect(() => {
     if (viewerIndex === null) return;
@@ -94,6 +102,34 @@ const StoryForm2 = ({ mode }) => {
     setViewerIndex(index);
   };
 
+  const handlePhotoRemove = (event, index) => {
+    event.stopPropagation();
+
+    setPhotos((prev) => {
+      const target = prev[index];
+      // 새로 추가한 사진(objectURL)만 해제. 기존(수정 진입 시) 사진은 URL을 만든 적이 없다.
+      if (target?.file && target.url) {
+        URL.revokeObjectURL(target.url);
+      }
+
+      const next = prev.filter((_, i) => i !== index);
+
+      // 사진은 작성/수정 모두 필수 항목 → 마지막 한 장을 지우면 즉시 에러를 띄운다.
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        photos: next.length > 0 ? "" : PHOTO_REQUIRED_MESSAGE,
+      }));
+
+      return next;
+    });
+
+    setViewerIndex((prev) => {
+      if (prev === null) return prev;
+      if (prev === index) return null;
+      return prev > index ? prev - 1 : prev;
+    });
+  };
+
   const handleViewerClose = () => {
     setViewerIndex(null);
   };
@@ -104,8 +140,21 @@ const StoryForm2 = ({ mode }) => {
 
     if (files.length === 0) return;
 
+    const hasUnsupported = files.some(
+      (file) => !ALLOWED_EXTENSIONS.includes(getExtension(file.name)),
+    );
+
+    const supportedFiles = files.filter((file) =>
+      ALLOWED_EXTENSIONS.includes(getExtension(file.name)),
+    );
+
+    if (supportedFiles.length === 0) {
+      setErrors((prev) => ({ ...prev, photos: PHOTO_EXTENSION_MESSAGE }));
+      return;
+    }
+
     const remainingSlots = MAX_PHOTOS - photos.length;
-    const newPhotos = files.slice(0, remainingSlots).map((file) => ({
+    const newPhotos = supportedFiles.slice(0, remainingSlots).map((file) => ({
       id: crypto.randomUUID(),
       url: URL.createObjectURL(file),
       file,
@@ -115,7 +164,7 @@ const StoryForm2 = ({ mode }) => {
 
     setErrors((prev) => ({
       ...prev,
-      photos: "",
+      photos: hasUnsupported ? PHOTO_EXTENSION_MESSAGE : "",
     }));
   };
 
@@ -135,6 +184,7 @@ const StoryForm2 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -169,9 +219,11 @@ const StoryForm2 = ({ mode }) => {
               사연 본문
             </label>
 
-            <div className="story-form2-textarea-wrapper">
+            <div
+              className={`story-form2-textarea-wrapper ${errors.content ? "story-form-input-invalid" : ""}`}
+            >
               <textarea
-                className={`story-form2-textarea ${errors.content ? "story-form-input-invalid" : ""}`}
+                className="story-form2-textarea"
                 id="story-content"
                 name="content"
                 maxLength={MAX_CONTENT_LENGTH}
@@ -197,15 +249,36 @@ const StoryForm2 = ({ mode }) => {
 
             <div className="story-form2-photo-grid">
               {photos.map((photo, index) => (
-                <button
-                  type="button"
-                  className="story-form2-photo-thumb"
-                  key={photo.id}
-                  onClick={() => handlePhotoThumbClick(index)}
-                  aria-label={`${index + 1}번째 사진 자세히 보기`}
-                >
-                  <img src={photo.url} alt="" />
-                </button>
+                <div className="story-form2-photo-thumb-wrapper" key={photo.id}>
+                  <button
+                    type="button"
+                    className="story-form2-photo-thumb"
+                    onClick={() => handlePhotoThumbClick(index)}
+                    aria-label={`${index + 1}번째 사진 자세히 보기`}
+                  >
+                    <img src={photo.url} alt="" />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="story-form2-photo-remove-button"
+                    onClick={(event) => handlePhotoRemove(event, index)}
+                    aria-label={`${index + 1}번째 사진 삭제`}
+                  >
+                    <svg
+                      className="story-form2-photo-remove-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M6 6l12 12M18 6L6 18"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
               ))}
 
               {photos.length < MAX_PHOTOS && (
@@ -239,12 +312,13 @@ const StoryForm2 = ({ mode }) => {
               ref={fileInputRef}
               className="story-form2-photo-input"
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png,.gif,.webp,.heic,image/jpeg,image/png,image/gif,image/webp,image/heic"
               multiple
               onChange={handlePhotoChange}
             />
           </div>
         </form>
+        </div>
 
         <div className="story-form2-footer">
           <button

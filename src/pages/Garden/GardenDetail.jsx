@@ -166,10 +166,14 @@ const GardenDetail = () => {
                                     <strong>{story.nickname}</strong>
                                     <p>
                                         <span>{story.petName}</span>
-                                        <span className="garden-detail-separator" aria-hidden="true" />
-                                        <span>{story.age}살</span>
-                                        <span className="garden-detail-separator" aria-hidden="true" />
-                                        <span>{story.breed}</span>
+                                        <span className="garden-detail-pet-detail">
+                                            <span className="garden-detail-separator" aria-hidden="true" />
+                                            <span>{story.breed}</span>
+                                        </span>
+                                        <span className="garden-detail-pet-detail">
+                                            <span className="garden-detail-separator" aria-hidden="true" />
+                                            <span>{story.age}살</span>
+                                        </span>
                                     </p>
                                 </div>
                             </div>

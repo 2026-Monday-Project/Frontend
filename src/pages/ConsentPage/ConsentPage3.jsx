@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
-import mondayProjectLogo from "@/assets/icons/ConsentPage logo.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
+import mondayProjectLogo from "@/assets/icons/ConsentPage logo.svg";
 import "@/pages/ConsentPage/ConsentPage.css";
 
 const ConsentPage3 = () => {
@@ -29,6 +29,7 @@ const ConsentPage3 = () => {
           </h1>
         </header>
 
+        <div className="consent-page-scroll-area">
         <p className="consent-page-intro">
           먼데이프로젝트는 관객 사연 접수 및 운영을 위해 아래와 같이
           개인정보를 수집·이용합니다.
@@ -84,6 +85,7 @@ const ConsentPage3 = () => {
           src={mondayProjectLogo}
           alt="Monday Project"
         />
+        </div>
       </section>
     </main>
   );

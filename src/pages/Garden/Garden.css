@@ -1,15 +1,39 @@
 .garden-page {
+    position: relative;
     display: flex;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
-    min-height: 100dvh;
+    overflow: hidden;
     background-color: var(--color-background);
+}
+
+.garden-page > .navbar {
+    flex-shrink: 0;
 }
 
 .garden-content {
     display: flex;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
     flex-direction: column;
     align-items: center;
-    padding: 18px 0 24px;
+    padding: 18px 0 112px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+}
+
+.garden-content > * {
+    flex-shrink: 0;
+}
+
+.garden-content > .garden-story-list {
+    margin-bottom: 0;
+}
+
+.garden-page:has(> .drawer-overlay) > .garden-content {
+    overflow-y: hidden;
 }
 
 .garden-sort-row {
@@ -19,27 +43,32 @@
 }
 
 .garden-sort {
+    display: flex;
     width: 88px;
     height: 27px;
-    display: flex;
+    padding: 0 8px 0 10px;
+
     align-items: center;
     justify-content: space-between;
-    padding: 0 8px 0 10px;
+
     border: 1px solid var(--color-green-main);
     border-radius: 5px;
     background-color: var(--color-background);
-    color: var(--color-green-main);
+
+    color: #000;
     font-family: Pretendard, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
     box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 }
 
 .garden-sort img {
     width: 16px;
     height: 16px;
+
     transition: transform 160ms ease;
 }
 
@@ -52,22 +81,29 @@
     top: 31px;
     left: 0;
     z-index: 21;
+
     width: 88px;
+
     overflow: hidden;
+
     border: 1px solid var(--color-green-main);
     border-radius: 5px;
     background-color: var(--color-background);
+
     box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 }
 
 .garden-sort-option {
+    display: flex;
     width: 100%;
     height: 34px;
-    display: flex;
+
     align-items: center;
     justify-content: center;
+
     background-color: var(--color-background);
-    color: var(--color-text);
+
+    color: #000;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-style: normal;
@@ -77,8 +113,13 @@
 }
 
 .garden-sort-option-selected {
-    background-color: var(--color-green-main);
-    color: #ffffff;
+    height: 32px;
+    padding: 7px 20px 7px 19px;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 3.5px 3.5px 0 0;
+    background-color: #315338;
+    color: #FFFFFF;
 }
 
 .garden-sort:focus-visible,
@@ -93,35 +134,45 @@
 
 .garden-status {
     margin: 48px 18px;
+
     color: var(--color-text-muted);
     font-size: 14px;
     text-align: center;
 }
 
 .garden-cta-wrapper {
-    margin-top: auto;
-    width: 100%;
+    position: absolute;
+    right: 0;
+    bottom: 28px;
+    left: 0;
+    z-index: 30;
     display: flex;
+    width: 100%;
     justify-content: center;
-    padding: 0 0 28px;
+    pointer-events: none;
 }
 
 .garden-cta-button {
+    pointer-events: auto;
+    display: flex;
     width: 272px;
     height: 48px;
-    display: flex;
+    padding: 11px 43px 11px 42px;
+
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
-    padding: 11px 43px 11px 42px;
+
     border-radius: 15px;
     background-color: var(--color-green-main);
+
     color: #ffffff;
     font-family: Warhaven, sans-serif;
     font-size: 20px;
     font-weight: 400;
     line-height: 26px;
     white-space: nowrap;
+
     box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 }
 

@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
-import stepIndicator from "@/assets/icons/step-indicator-1.png";
-import { checkEmailAvailable, checkNicknameAvailable } from "@/api/accountApi";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
+import stepIndicator from "@/assets/icons/step-indicator-1.svg";
+import {
+  checkEmailAvailable,
+  checkNicknameAvailable,
+  getMyProfile,
+} from "@/api/accountApi";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 
 const REQUIRED_MESSAGE = "*필수 항목입니다.";
+const NICKNAME_OK_MESSAGE = "사용 가능한 닉네임이에요.";
+const EMAIL_OK_MESSAGE = "사용 가능한 이메일이에요.";
 
 const EMPTY_DATA = {
   petName: "",
@@ -20,7 +26,24 @@ const StoryForm1 = ({ mode }) => {
   const navigate = useNavigate();
   const { storyId } = useParams();
   const isEdit = mode === "edit";
-  const { info, setInfo } = useStoryForm();
+  const { info, setInfo, verified, setVerified } = useStoryForm();
+
+  // 로그인 상태에서 새 사연을 보내는 경우: 닉네임/이메일은 계정 정보로 고정, 중복 확인 생략
+  const [isLoggedIn] = useState(() =>
+    Boolean(localStorage.getItem("accessToken")),
+  );
+
+  // "n/a"(비로그인·수정) | "loading" | "ready" | "failed"
+  const [profileState, setProfileState] = useState(
+    isLoggedIn && !isEdit ? "loading" : "n/a",
+  );
+
+  // 프로필을 성공적으로 불러온 뒤에만 identity lock을 활성화한다.
+  // 로딩 중엔 진행 차단, 실패 시엔 잠금을 풀어 직접 입력 + 중복 확인으로 폴백한다.
+  const isLockedByLogin =
+    isLoggedIn && !isEdit && profileState !== "failed";
+  const lockIdentity = isEdit || isLockedByLogin;
+  const isProfileLoading = isLockedByLogin && profileState !== "ready";
 
   const [formData, setFormData] = useState({ ...EMPTY_DATA, ...info });
 
@@ -30,6 +53,49 @@ const StoryForm1 = ({ mode }) => {
     latestFormDataRef.current = formData;
   }, [formData]);
 
+  // 로그인 상태 & 아직 계정 정보가 없으면 프로필을 불러와 닉네임/이메일을 채운다.
+  useEffect(() => {
+    if (isEdit || !isLoggedIn) return;
+
+    if (info.nickname || info.email) {
+      setProfileState("ready");
+      return;
+    }
+
+    let cancelled = false;
+    setProfileState("loading");
+
+    getMyProfile()
+      .then(({ data }) => {
+        if (cancelled) return;
+
+        const profile = data?.data ?? {};
+        const identity = {
+          nickname: profile.nickname ?? "",
+          email: profile.email ?? "",
+        };
+
+        if (!identity.nickname && !identity.email) {
+          setProfileState("failed");
+          return;
+        }
+
+        setFormData((prev) => ({ ...prev, ...identity }));
+        setInfo((prev) => ({ ...prev, ...identity }));
+        setVerified({ nickname: true, email: true });
+        setProfileState("ready");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        // 프로필 조회 실패(토큰 만료 등) → 잠금 해제, 직접 입력 모드로 폴백
+        setProfileState("failed");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isEdit, isLoggedIn, info.nickname, info.email, setInfo, setVerified]);
+
   const [errors, setErrors] = useState({
     petName: "",
     petAge: "",
@@ -38,22 +104,39 @@ const StoryForm1 = ({ mode }) => {
     email: "",
   });
 
-  const [emailSuccessMessage, setEmailSuccessMessage] = useState("");
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState(
+    verified.email ? EMAIL_OK_MESSAGE : "",
+  );
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState("");
+  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState(
+    verified.nickname ? NICKNAME_OK_MESSAGE : "",
+  );
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+  // 중복 확인 통과 여부는 컨텍스트에 저장 → 이전/다음으로 스텝을 오가도 유지된다.
+  const isEmailChecked = verified.email;
+  const isNicknameChecked = verified.nickname;
+  const setIsEmailChecked = (value) =>
+    setVerified((prev) => ({ ...prev, email: value }));
+  const setIsNicknameChecked = (value) =>
+    setVerified((prev) => ({ ...prev, nickname: value }));
+
+  // 수정 모드에선 닉네임/이메일을 수정·전송하지 않으므로 identity 검증이 필요 없다.
+  const identityReady = isEdit
+    ? true
+    : lockIdentity
+      ? !isProfileLoading &&
+        Boolean(formData.nickname.trim() && formData.email.trim())
+      : isNicknameChecked &&
+        isEmailChecked &&
+        !isCheckingNickname &&
+        !isCheckingEmail;
 
   const isReadyForNext =
     formData.petName.trim() &&
     formData.petAge.trim() &&
     formData.petType.trim() &&
-    (isEdit ||
-      (isNicknameChecked &&
-        isEmailChecked &&
-        !isCheckingNickname &&
-        !isCheckingEmail));
+    identityReady;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -84,19 +167,23 @@ const StoryForm1 = ({ mode }) => {
   };
 
   const handleNext = () => {
+    // 로그인 계정 정보 로딩 중엔 identity가 아직 비어 있으므로 진행 차단
+    if (isProfileLoading) return;
+
     const newErrors = {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
       petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
       petType: formData.petType.trim() ? "" : REQUIRED_MESSAGE,
-      nickname: isEdit || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
-      email: isEdit || formData.email.trim() ? "" : REQUIRED_MESSAGE,
+      nickname:
+        lockIdentity || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
+      email: lockIdentity || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
-    if (!isEdit && (isCheckingNickname || isCheckingEmail)) {
+    if (!lockIdentity && (isCheckingNickname || isCheckingEmail)) {
       return;
     }
 
-    if (!isEdit) {
+    if (!lockIdentity) {
       if (!newErrors.nickname && !isNicknameChecked) {
         newErrors.nickname = "*닉네임 중복 확인을 해주세요.";
       }
@@ -134,7 +221,7 @@ const StoryForm1 = ({ mode }) => {
 
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, nickname: "" }));
-        setNicknameSuccessMessage("사용 가능한 닉네임이에요.");
+        setNicknameSuccessMessage(NICKNAME_OK_MESSAGE);
         setIsNicknameChecked(true);
       } else {
         setNicknameSuccessMessage("");
@@ -177,7 +264,7 @@ const StoryForm1 = ({ mode }) => {
 
       if (data.data.available) {
         setErrors((prev) => ({ ...prev, email: "" }));
-        setEmailSuccessMessage("사용 가능한 이메일이에요.");
+        setEmailSuccessMessage(EMAIL_OK_MESSAGE);
         setIsEmailChecked(true);
       } else {
         setEmailSuccessMessage("");
@@ -214,6 +301,7 @@ const StoryForm1 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -292,14 +380,15 @@ const StoryForm1 = ({ mode }) => {
               공개 닉네임
             </label>
 
-            {isEdit ? (
+            {lockIdentity ? (
               <input
                 className="story-form-input"
                 id="nickname"
                 name="nickname"
                 type="text"
                 value={formData.nickname}
-                disabled
+                disabled={isEdit}
+                readOnly={isLockedByLogin}
               />
             ) : (
               <div className="story-form-input-button-wrapper">
@@ -325,7 +414,7 @@ const StoryForm1 = ({ mode }) => {
               </div>
             )}
 
-            {isEdit ? (
+            {lockIdentity ? (
               <p className="story-form-hint">
                 닉네임은 설정에서 변경할 수 있어요.
               </p>
@@ -343,14 +432,15 @@ const StoryForm1 = ({ mode }) => {
               이메일
             </label>
 
-            {isEdit ? (
+            {lockIdentity ? (
               <input
                 className="story-form-input"
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
-                disabled
+                disabled={isEdit}
+                readOnly={isLockedByLogin}
               />
             ) : (
               <div className="story-form-input-button-wrapper">
@@ -375,7 +465,7 @@ const StoryForm1 = ({ mode }) => {
               </div>
             )}
 
-            {isEdit ? (
+            {lockIdentity ? (
               <p className="story-form-hint">이메일은 수정할 수 없어요.</p>
             ) : errors.email ? (
               <p className="story-form-error-message">{errors.email}</p>
@@ -384,6 +474,7 @@ const StoryForm1 = ({ mode }) => {
             ) : null}
           </div>
         </form>
+        </div>
 
         <button
           className={`story-form-next-button ${isReadyForNext ? "is-valid" : ""}`}

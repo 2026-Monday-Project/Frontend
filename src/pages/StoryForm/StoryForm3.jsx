@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.png";
+import arrowLeft from "@/assets/icons/arrow-left.svg";
 import chevronRight from "@/assets/icons/Vector green.png";
-import stepIndicator from "@/assets/icons/step-indicator-3.png";
+import stepIndicator from "@/assets/icons/step-indicator-3.svg";
 import { createStory, updateStory } from "@/api/storyApi";
+import { login } from "@/api/accountApi";
 import { useStoryForm } from "@/pages/StoryForm/storyFormContext";
 import "@/pages/StoryForm/StoryForm1.css";
 import "@/pages/StoryForm/StoryForm3.css";
@@ -90,6 +91,7 @@ const StoryForm3 = ({ mode }) => {
   const navigate = useNavigate();
   const { storyId } = useParams();
   const isEdit = mode === "edit";
+  const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
   const { info, story, consents, setConsents, reset } = useStoryForm();
 
   const [errors, setErrors] = useState({
@@ -128,12 +130,15 @@ const StoryForm3 = ({ mode }) => {
   };
 
   const handleSubmit = async () => {
-    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단
+    // 이전 단계를 건너뛰고 3단계에 직접 접근한 경우(공유 상태가 비어 있음) 차단.
+    // 닉네임/이메일은 비로그인 신규 작성에서만 필수(로그인 시엔 토큰으로 식별하고 전송하지 않음).
     const infoIncomplete =
       !info.petName?.trim() ||
       !String(info.petAge ?? "").trim() ||
       !info.petType?.trim() ||
-      (!isEdit && (!info.nickname?.trim() || !info.email?.trim()));
+      (!isEdit &&
+        !isLoggedIn &&
+        (!info.nickname?.trim() || !info.email?.trim()));
     const storyIncomplete =
       !story.title?.trim() ||
       !story.content?.trim() ||
@@ -179,6 +184,8 @@ const StoryForm3 = ({ mode }) => {
           snsConsent: consents.sns,
         }
       : {
+          // POST /stories는 로그인 여부와 무관하게 nickname/email을 요구한다.
+          // 로그인 사용자는 프로필에서 가져온 값(기존 계정 값과 동일 → no-op)을 그대로 보낸다.
           nickname: info.nickname,
           email: info.email,
           petName: info.petName,
@@ -201,6 +208,20 @@ const StoryForm3 = ({ mode }) => {
         await updateStory(storyId, request, newImages);
       } else {
         await createStory(request, newImages);
+
+        // 비로그인 제출이면 방금 입력한 이메일로 자동 로그인 → 내 정원 진입 가능하도록 토큰 저장.
+        // 로그인이 실패해도 사연은 이미 등록됐으므로 완료 화면으로는 이동한다.
+        if (!isLoggedIn) {
+          try {
+            const { data } = await login(info.email);
+            const token = data?.data?.accessToken;
+            if (token) {
+              localStorage.setItem("accessToken", token);
+            }
+          } catch (loginError) {
+            console.error("사연 제출 후 자동 로그인 실패:", loginError);
+          }
+        }
       }
 
       reset();
@@ -233,6 +254,7 @@ const StoryForm3 = ({ mode }) => {
           <h1 className="story-form-title">우리 이야기 보내기</h1>
         </header>
 
+        <div className="story-form-scroll-area">
         <div className="story-form-step">
           <img
             className="story-form-step-image"
@@ -267,6 +289,7 @@ const StoryForm3 = ({ mode }) => {
         {submitError && (
           <p className="story-form-error-message">{submitError}</p>
         )}
+        </div>
 
         <div className="story-form3-footer">
           <button

@@ -49,7 +49,11 @@ const MyStoryDetail = () => {
 
     if (!story) return null;
 
-    const storyImages = Array.isArray(story.imageUrls) ? story.imageUrls : [];
+    const storyImages = Array.isArray(story.images)
+        ? story.images.map((image) => image.imageUrl)
+        : Array.isArray(story.imageUrls)
+          ? story.imageUrls
+          : [];
 
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
@@ -266,8 +270,9 @@ const MyStoryDetail = () => {
                         </label>
                     </div>
                 </div>
-                {renderBottomButtons()}
             </div>
+
+            {renderBottomButtons()}
 
             {isDeleteModalOpen && (
                 <div className="modal-overlay" onClick={closeDeleteModal}>

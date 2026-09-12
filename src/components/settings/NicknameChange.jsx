@@ -38,16 +38,26 @@ const NicknameChange = ({ onBack }) => {
     }, []);
 
     const handleNicknameChange = (event) => {
-        setNickname(event.target.value);
+        const inputValue = event.target.value;
 
-        // 닉네임을 수정하면 기존 중복 확인 결과 초기화
+        const koreanOnlyNickname = inputValue
+            .replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣]/g, "")
+            .slice(0, 10);
+
+        setNickname(koreanOnlyNickname);
         setNicknameCheckStatus(null);
     };
+
+    const isNicknameValid =
+        /^[가-힣]{1,10}$/.test(nickname);
 
     const handleDuplicateCheck = async () => {
         const trimmedNickname = nickname.trim();
 
-        if (!trimmedNickname || isChecking) {
+        if (
+            !isNicknameValid ||
+            isChecking
+        ) {
             return;
         }
 
@@ -61,7 +71,9 @@ const NicknameChange = ({ onBack }) => {
                 response.data.data.available;
 
             setNicknameCheckStatus(
-                isAvailable ? "available" : "duplicate",
+                isAvailable
+                    ? "available"
+                    : "duplicate",
             );
         } catch {
             setNicknameCheckStatus(null);
@@ -82,7 +94,7 @@ const NicknameChange = ({ onBack }) => {
         const trimmedNickname = nickname.trim();
 
         if (
-            !trimmedNickname ||
+            !isNicknameValid ||
             nicknameCheckStatus !== "available" ||
             isSubmitting
         ) {
@@ -161,7 +173,7 @@ const NicknameChange = ({ onBack }) => {
                             type="button"
                             className="nickname-duplicate-button"
                             disabled={
-                                !nickname.trim() ||
+                                !isNicknameValid ||
                                 isChecking
                             }
                             onClick={handleDuplicateCheck}
@@ -187,7 +199,7 @@ const NicknameChange = ({ onBack }) => {
                     type="button"
                     className="nickname-change-submit"
                     disabled={
-                        !nickname.trim() ||
+                        !isNicknameValid ||
                         !isAvailable ||
                         isSubmitting
                     }

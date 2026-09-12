@@ -139,7 +139,7 @@ const MyGarden = () => {
                         {stories.map(story => (
                             <StoryCard 
                                 key={story.storyId}
-                                thumbnail={louisProfile}
+                                thumbnail={story.thumbnailUrl || story.imageUrl || louisProfile}
                                 status={formatStatus(story.status)}
                                 title={story.title}
                                 date={formatDate(story.createdAt)}
@@ -166,11 +166,12 @@ const MyGarden = () => {
                                 <div 
                                     key={mail.notificationId} 
                                     className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
-                                    onClick={() => navigate('/mailbox')} 
+                                    onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
                                         <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
+                                        <p className={isExplicitlyUnread ? "mail-desc" : "mail-desc-read"}>{mail.content}</p>
                                         <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
                                     </div>
                                     {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
