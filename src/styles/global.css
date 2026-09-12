@@ -196,3 +196,9 @@ body {
 
     background-color: var(--color-page-backgroud);
 }
+
+@media (max-width: 402px) {
+    #root {
+        align-items: flex-start;
+    }
+}

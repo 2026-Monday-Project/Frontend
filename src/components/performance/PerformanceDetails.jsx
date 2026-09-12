@@ -1,15 +1,13 @@
 import instagramLogo from "@/assets/icons/instagram-logo.svg";
 import arrowSquareOut from "@/assets/icons/arrow-square-out.svg";
 import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarousel";
-import salonMoonbowMap from "@/assets/images/provided/maps/salon-moonbow-map.svg";
 
 import "./PerformanceDetails.css";
 
 const INSTAGRAM_URL =
     "https://www.instagram.com/mondayprojectkr/";
-
-const GOOGLE_MAP_URL =
-    "https://www.google.com/maps/search/?api=1&query=%EC%84%9C%EC%9A%B8+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C+113";
+const GOOGLE_MAP_EMBED_URL =
+    "https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C+113&z=20&output=embed";
 
 const PerformanceDetails = () => {
     const handleReservationClick = () => {
@@ -145,19 +143,15 @@ const PerformanceDetails = () => {
                     서울 마포구 잔다리로 113 지층
                 </p>
 
-                <a
-                    className="performance-map-link"
-                    href={GOOGLE_MAP_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="구글 지도에서 살롱문보우 위치 보기"
-                >
-                    <img
+                <div className="performance-map-container">
+                    <iframe
                         className="performance-map"
-                        src={salonMoonbowMap}
-                        alt="살롱문보우 위치 지도"
+                        src={GOOGLE_MAP_EMBED_URL}
+                        title="살롱문보우 위치 지도"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
                     />
-                </a>
+                </div>
             </section>
         </>
     );
