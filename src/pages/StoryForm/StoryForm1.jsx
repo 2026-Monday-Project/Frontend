@@ -20,6 +20,9 @@ const PET_AGE_LIMIT_MESSAGE = "최대 99살까지 입력할 수 있어요.";
 const PET_TYPE_MAX_LENGTH = 50;
 const PET_TYPE_LIMIT_MESSAGE = "최대 50자까지 입력할 수 있어요.";
 
+// 자모 단독 입력(ㄱ, ㅏ 등)까지 허용해야 조합 중인 한글 입력이 끊기지 않는다.
+const NON_HANGUL_REGEX = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+
 const EMPTY_DATA = {
   petName: "",
   petAge: "",
@@ -155,7 +158,9 @@ const StoryForm1 = ({ mode }) => {
     const nextValue =
       name === "petAge"
         ? value.replace(/[^0-9]/g, "").slice(0, PET_AGE_MAX_LENGTH)
-        : value;
+        : name === "nickname"
+          ? value.replace(NON_HANGUL_REGEX, "")
+          : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -424,7 +429,7 @@ const StoryForm1 = ({ mode }) => {
                   maxLength={10}
                   value={formData.nickname}
                   onChange={handleInputChange}
-                  placeholder="10자 이내로 입력해주세요."
+                  placeholder="10자 이내 한글로 입력해 주세요."
                 />
 
                 <button
