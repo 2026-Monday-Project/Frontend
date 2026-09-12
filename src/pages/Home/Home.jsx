@@ -1,8 +1,4 @@
-import {
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { useRef, useState } from "react";
 
 import HomeEntered from "@/components/home/HomeEntered";
 
@@ -15,14 +11,10 @@ import homeEntryTrailLong from "@/assets/images/custom/home-entry-trail-long.svg
 
 import "./Home.css";
 
-const FIGMA_WIDTH = 402;
-const FIGMA_HEIGHT = 874;
 const FIGMA_MAX_DRAG_DISTANCE = 146;
 const ENTRY_THRESHOLD = 0.35;
 
 const Home = () => {
-    const homePageRef = useRef(null);
-
     const startYRef = useRef(0);
     const isDraggingRef = useRef(false);
 
@@ -35,53 +27,6 @@ const Home = () => {
     const [isEntered, setIsEntered] =
         useState(false);
 
-    const [designScale, setDesignScale] =
-        useState({
-            x: 1,
-            y: 1,
-        });
-
-    useEffect(() => {
-        const homePage =
-            homePageRef.current;
-
-        if (!homePage) {
-            return undefined;
-        }
-
-        const updateScale = () => {
-            const pageWidth =
-                homePage.clientWidth;
-
-            const pageHeight =
-                homePage.clientHeight;
-
-            setDesignScale({
-                x:
-                    pageWidth /
-                    FIGMA_WIDTH,
-                y:
-                    pageHeight /
-                    FIGMA_HEIGHT,
-            });
-        };
-
-        updateScale();
-
-        const resizeObserver =
-            new ResizeObserver(
-                updateScale,
-            );
-
-        resizeObserver.observe(
-            homePage,
-        );
-
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, []);
-
     const resetDrag = () => {
         isDraggingRef.current = false;
 
@@ -89,12 +34,8 @@ const Home = () => {
         setDragDistance(0);
     };
 
-    const handlePointerDown = (
-        event,
-    ) => {
-        startYRef.current =
-            event.clientY;
-
+    const handlePointerDown = (event) => {
+        startYRef.current = event.clientY;
         isDraggingRef.current = true;
 
         setDragDistance(0);
@@ -105,9 +46,7 @@ const Home = () => {
         );
     };
 
-    const handlePointerMove = (
-        event,
-    ) => {
+    const handlePointerMove = (event) => {
         if (!isDraggingRef.current) {
             return;
         }
@@ -116,14 +55,10 @@ const Home = () => {
             startYRef.current -
             event.clientY;
 
-        const designDistance =
-            movedDistance /
-            designScale.y;
-
         const limitedDistance =
             Math.min(
                 Math.max(
-                    designDistance,
+                    movedDistance,
                     0,
                 ),
                 FIGMA_MAX_DRAG_DISTANCE,
@@ -134,9 +69,7 @@ const Home = () => {
         );
     };
 
-    const handlePointerUp = (
-        event,
-    ) => {
+    const handlePointerUp = (event) => {
         if (!isDraggingRef.current) {
             return;
         }
@@ -145,14 +78,10 @@ const Home = () => {
             startYRef.current -
             event.clientY;
 
-        const designDistance =
-            movedDistance /
-            designScale.y;
-
         const finalDragDistance =
             Math.min(
                 Math.max(
-                    designDistance,
+                    movedDistance,
                     0,
                 ),
                 FIGMA_MAX_DRAG_DISTANCE,
@@ -187,9 +116,7 @@ const Home = () => {
         setDragDistance(0);
     };
 
-    const handlePointerCancel = (
-        event,
-    ) => {
+    const handlePointerCancel = (event) => {
         resetDrag();
 
         if (
@@ -203,9 +130,7 @@ const Home = () => {
         }
     };
 
-    const handleEntryKeyDown = (
-        event,
-    ) => {
+    const handleEntryKeyDown = (event) => {
         if (
             event.key === "Enter" ||
             event.key === " "
@@ -225,16 +150,8 @@ const Home = () => {
     }
 
     return (
-        <main
-            ref={homePageRef}
-            className="home-page"
-        >
-            <div
-                className="home-design"
-                style={{
-                    transform: `scale(${designScale.x}, ${designScale.y})`,
-                }}
-            >
+        <main className="home-page">
+            <div className="home-design">
                 <img
                     className="home-background"
                     src={homeBackground}
@@ -268,13 +185,10 @@ const Home = () => {
 
                     <div className="home-performance-info">
                         <p>
-                            2026.10.15(목)
-                            20:00
+                            2026.10.15(목) 20:00
                         </p>
 
-                        <p>
-                            살롱문보우
-                        </p>
+                        <p>살롱문보우</p>
                     </div>
                 </section>
 
@@ -288,32 +202,23 @@ const Home = () => {
                         transform: `translateX(-50%) translateY(-${dragDistance}px)`,
                     }}
                 >
-                    <p>
-                        위로 스와이프하여
-                    </p>
-
-                    <p>
-                        정원으로 입장하세요.
-                    </p>
+                    <p>위로 스와이프하여</p>
+                    <p>정원으로 입장하세요.</p>
                 </div>
 
                 {isDragging &&
-                    dragProgress >=
-                        0.18 && (
+                    dragProgress >= 0.18 && (
                         <div
                             className="home-entry-trail-container"
                             aria-hidden="true"
                         >
                             <img
                                 className="home-entry-base-guide"
-                                src={
-                                    homeEntryGuide
-                                }
+                                src={homeEntryGuide}
                                 alt=""
                             />
 
-                            {dragProgress <
-                                0.55 && (
+                            {dragProgress < 0.55 && (
                                 <img
                                     className="home-entry-trail home-entry-trail-short"
                                     src={
@@ -323,8 +228,7 @@ const Home = () => {
                                 />
                             )}
 
-                            {dragProgress >=
-                                0.55 && (
+                            {dragProgress >= 0.55 && (
                                 <img
                                     className="home-entry-trail home-entry-trail-long"
                                     src={
@@ -364,9 +268,7 @@ const Home = () => {
                     aria-label="위로 밀어서 정원 입장하기"
                 >
                     <img
-                        src={
-                            homeEntryArch
-                        }
+                        src={homeEntryArch}
                         alt=""
                         draggable="false"
                     />

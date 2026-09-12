@@ -43,7 +43,9 @@ const HomeEntered = () => {
                     <button
                         type="button"
                         className="home-entered-button home-entered-button-primary"
-                        onClick={handlePerformanceClick}
+                        onClick={
+                            handlePerformanceClick
+                        }
                     >
                         공연 정보 보기
                     </button>
@@ -51,7 +53,9 @@ const HomeEntered = () => {
                     <button
                         type="button"
                         className="home-entered-button home-entered-button-secondary"
-                        onClick={handleGardenClick}
+                        onClick={
+                            handleGardenClick
+                        }
                     >
                         정원 둘러보기
                     </button>
