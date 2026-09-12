@@ -14,6 +14,27 @@ import "./Home.css";
 const FIGMA_MAX_DRAG_DISTANCE = 146;
 const ENTRY_THRESHOLD = 0.35;
 
+const getAppScale = () => {
+    const appFrame =
+        document.querySelector(".app-frame");
+
+    if (!appFrame) {
+        return 1;
+    }
+
+    const logicalWidth =
+        appFrame.offsetWidth;
+
+    const renderedWidth =
+        appFrame.getBoundingClientRect().width;
+
+    if (!logicalWidth) {
+        return 1;
+    }
+
+    return renderedWidth / logicalWidth;
+};
+
 const Home = () => {
     const startYRef = useRef(0);
     const isDraggingRef = useRef(false);
@@ -34,9 +55,30 @@ const Home = () => {
         setDragDistance(0);
     };
 
-    const handlePointerDown = (event) => {
-        startYRef.current = event.clientY;
-        isDraggingRef.current = true;
+    const getDesignDragDistance = (
+        clientY,
+    ) => {
+        const movedDistance =
+            startYRef.current -
+            clientY;
+
+        const appScale =
+            getAppScale();
+
+        return (
+            movedDistance /
+            appScale
+        );
+    };
+
+    const handlePointerDown = (
+        event,
+    ) => {
+        startYRef.current =
+            event.clientY;
+
+        isDraggingRef.current =
+            true;
 
         setDragDistance(0);
         setIsDragging(true);
@@ -46,19 +88,24 @@ const Home = () => {
         );
     };
 
-    const handlePointerMove = (event) => {
-        if (!isDraggingRef.current) {
+    const handlePointerMove = (
+        event,
+    ) => {
+        if (
+            !isDraggingRef.current
+        ) {
             return;
         }
 
-        const movedDistance =
-            startYRef.current -
-            event.clientY;
+        const designDistance =
+            getDesignDragDistance(
+                event.clientY,
+            );
 
         const limitedDistance =
             Math.min(
                 Math.max(
-                    movedDistance,
+                    designDistance,
                     0,
                 ),
                 FIGMA_MAX_DRAG_DISTANCE,
@@ -69,19 +116,24 @@ const Home = () => {
         );
     };
 
-    const handlePointerUp = (event) => {
-        if (!isDraggingRef.current) {
+    const handlePointerUp = (
+        event,
+    ) => {
+        if (
+            !isDraggingRef.current
+        ) {
             return;
         }
 
-        const movedDistance =
-            startYRef.current -
-            event.clientY;
+        const designDistance =
+            getDesignDragDistance(
+                event.clientY,
+            );
 
         const finalDragDistance =
             Math.min(
                 Math.max(
-                    movedDistance,
+                    designDistance,
                     0,
                 ),
                 FIGMA_MAX_DRAG_DISTANCE,
@@ -91,7 +143,9 @@ const Home = () => {
             finalDragDistance /
             FIGMA_MAX_DRAG_DISTANCE;
 
-        isDraggingRef.current = false;
+        isDraggingRef.current =
+            false;
+
         setIsDragging(false);
 
         if (
@@ -116,7 +170,9 @@ const Home = () => {
         setDragDistance(0);
     };
 
-    const handlePointerCancel = (event) => {
+    const handlePointerCancel = (
+        event,
+    ) => {
         resetDrag();
 
         if (
@@ -130,7 +186,9 @@ const Home = () => {
         }
     };
 
-    const handleEntryKeyDown = (event) => {
+    const handleEntryKeyDown = (
+        event,
+    ) => {
         if (
             event.key === "Enter" ||
             event.key === " "
@@ -188,7 +246,9 @@ const Home = () => {
                             2026.10.15(목) 20:00
                         </p>
 
-                        <p>살롱문보우</p>
+                        <p>
+                            살롱문보우
+                        </p>
                     </div>
                 </section>
 
@@ -202,23 +262,32 @@ const Home = () => {
                         transform: `translateX(-50%) translateY(-${dragDistance}px)`,
                     }}
                 >
-                    <p>위로 스와이프하여</p>
-                    <p>정원으로 입장하세요.</p>
+                    <p>
+                        위로 스와이프하여
+                    </p>
+
+                    <p>
+                        정원으로 입장하세요.
+                    </p>
                 </div>
 
                 {isDragging &&
-                    dragProgress >= 0.18 && (
+                    dragProgress >=
+                        0.18 && (
                         <div
                             className="home-entry-trail-container"
                             aria-hidden="true"
                         >
                             <img
                                 className="home-entry-base-guide"
-                                src={homeEntryGuide}
+                                src={
+                                    homeEntryGuide
+                                }
                                 alt=""
                             />
 
-                            {dragProgress < 0.55 && (
+                            {dragProgress <
+                                0.55 && (
                                 <img
                                     className="home-entry-trail home-entry-trail-short"
                                     src={
@@ -228,7 +297,8 @@ const Home = () => {
                                 />
                             )}
 
-                            {dragProgress >= 0.55 && (
+                            {dragProgress >=
+                                0.55 && (
                                 <img
                                     className="home-entry-trail home-entry-trail-long"
                                     src={
@@ -268,7 +338,9 @@ const Home = () => {
                     aria-label="위로 밀어서 정원 입장하기"
                 >
                     <img
-                        src={homeEntryArch}
+                        src={
+                            homeEntryArch
+                        }
                         alt=""
                         draggable="false"
                     />
