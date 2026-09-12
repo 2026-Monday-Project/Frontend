@@ -11,7 +11,6 @@ import arrowRight from "@/assets/icons/arrow-right.svg";
 
 import {
     sendAdminNotification,
-    updateAdminStoryReview,
 } from "@/api/adminApi";
 
 import "./AdminNotification.css";
@@ -58,12 +57,6 @@ const AdminNotification = () => {
 
     const needsReason =
         nextStatus === "PRIVATE";
-
-    const handleBack = () => {
-        navigate(
-            `/admin/reviews/${storyId}`,
-        );
-    };
 
     const handleAutoComplete = () => {
         if (isAutoFilled) {
@@ -174,11 +167,6 @@ const AdminNotification = () => {
                 notificationContent,
             );
 
-            await updateAdminStoryReview(
-                storyId,
-                nextStatus,
-            );
-
             navigate("/admin/completed", {
                 state: {
                     type: "notification",
@@ -192,8 +180,7 @@ const AdminNotification = () => {
     return (
         <main className="admin-notification-page">
             <AdminHeader
-                title="알림 발송"
-                onBack={handleBack}
+                title="알림 발송" showBackButton={false}
             />
 
             <div className="admin-notification-content">

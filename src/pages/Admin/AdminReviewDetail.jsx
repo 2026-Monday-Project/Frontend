@@ -15,7 +15,10 @@ import caretRight from "@/assets/icons/caret-right.svg";
 import checkboxUnchecked from "@/assets/icons/checkbox-unchecked.svg";
 import checkboxChecked from "@/assets/icons/checkbox-checked.svg";
 
-import { getAdminStoryDetail } from "@/api/adminApi";
+import {
+    getAdminStoryDetail,
+    updateAdminStoryReview,
+} from "@/api/adminApi";
 
 import "./AdminReviewDetail.css";
 
@@ -61,6 +64,9 @@ const AdminReviewDetail = () => {
 
     const [selectedVisibility, setSelectedVisibility] =
         useState(null);
+
+    const [isSubmitting, setIsSubmitting] =
+        useState(false);
 
     useEffect(() => {
         const fetchStoryDetail = async () => {
@@ -182,28 +188,36 @@ const AdminReviewDetail = () => {
         allChecked &&
         selectedVisibility !== null;
 
-    const handleNext = () => {
-        if (!isNextEnabled || !story) {
+    const handleNext = async () => {
+        if (
+            !isNextEnabled ||
+            !story ||
+            isSubmitting
+        ) {
             return;
         }
 
-        /*
-         * 여기서는 공개/비공개 상태를
-         * 실제로 변경하지 않음.
-         *
-         * 관리자가 선택한 상태만
-         * 알림 발송 페이지로 전달.
-         */
-        navigate(
-            `/admin/notifications/${story.storyId}`,
-            {
-                state: {
-                    previousStatus: story.status,
-                    nextStatus:
-                        selectedVisibility,
+        try {
+            setIsSubmitting(true);
+
+            await updateAdminStoryReview(
+                story.storyId,
+                selectedVisibility,
+            );
+
+            navigate(
+                `/admin/notifications/${story.storyId}`,
+                {
+                    state: {
+                        previousStatus: story.status,
+                        nextStatus:
+                            selectedVisibility,
+                    },
                 },
-            },
-        );
+            );
+        } catch {
+            setIsSubmitting(false);
+        }
     };
 
     if (!story) {
@@ -421,10 +435,15 @@ const AdminReviewDetail = () => {
                                 ? "admin-review-confirm-active"
                                 : ""
                         }`}
-                        disabled={!isNextEnabled}
+                        disabled={
+                            !isNextEnabled ||
+                            isSubmitting
+                        }
                         onClick={handleNext}
                     >
-                        다음
+                        {isSubmitting
+                            ? "처리 중"
+                            : "다음"}
                     </button>
                 </div>
             </div>
