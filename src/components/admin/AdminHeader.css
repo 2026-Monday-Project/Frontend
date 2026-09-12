@@ -28,3 +28,8 @@
     font-weight: 700;
     line-height: normal;
 }
+
+/* 뒤로가기 버튼이 없는 경우 */
+.admin-header-no-back .admin-header-title {
+    margin-left: 0;
+}
