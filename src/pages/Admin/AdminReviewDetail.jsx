@@ -200,22 +200,45 @@ const AdminReviewDetail = () => {
         try {
             setIsSubmitting(true);
 
-            await updateAdminStoryReview(
-                story.storyId,
-                selectedVisibility,
-            );
+            const response =
+                await getAdminStoryDetail(
+                    story.storyId,
+                );
 
+            const currentStatus =
+                response.data.data.status;
+
+            // 내가 보고 있는 동안 다른 관리자가 상태를 변경한 경우
+            if (currentStatus !== story.status) {
+                window.alert(
+                    "다른 관리자에 의해 사연 상태가 변경되었습니다.",
+                );
+
+                navigate("/admin/reviews");
+
+                return;
+            }
+
+            // 현재 상태와 새로 선택한 상태가 다를 때만 PATCH
+            if (currentStatus !== selectedVisibility) {
+                await updateAdminStoryReview(
+                    story.storyId,
+                    selectedVisibility,
+                );
+            }
+
+            // 같은 상태를 다시 선택해도 알림 발송 페이지로 이동
             navigate(
                 `/admin/notifications/${story.storyId}`,
                 {
                     state: {
-                        previousStatus: story.status,
+                        previousStatus: currentStatus,
                         nextStatus:
                             selectedVisibility,
                     },
                 },
             );
-        } catch {
+        } finally {
             setIsSubmitting(false);
         }
     };
