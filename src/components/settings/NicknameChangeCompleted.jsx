@@ -5,22 +5,31 @@ import loginCompletedImage from "@/assets/images/custom/login-completed.svg";
 import "./NicknameChangeCompleted.css";
 
 const NicknameChangeCompleted = () => {
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-    const handleMyGardenClick = () => {
-        navigate("/mygarden");
-    };
+    const handleMyGardenClick =
+        () => {
+            navigate(
+                "/mygarden",
+            );
+        };
 
-    const handleGardenClick = () => {
-        navigate("/garden");
-    };
+    const handleGardenClick =
+        () => {
+            navigate(
+                "/garden",
+            );
+        };
 
     return (
         <main className="nickname-completed">
             <div className="nickname-completed-content">
                 <img
                     className="nickname-completed-image"
-                    src={loginCompletedImage}
+                    src={
+                        loginCompletedImage
+                    }
                     alt=""
                 />
 
@@ -34,7 +43,9 @@ const NicknameChangeCompleted = () => {
                     <button
                         type="button"
                         className="nickname-completed-button nickname-completed-button-primary"
-                        onClick={handleMyGardenClick}
+                        onClick={
+                            handleMyGardenClick
+                        }
                     >
                         내 정원으로 가기
                     </button>
@@ -42,7 +53,9 @@ const NicknameChangeCompleted = () => {
                     <button
                         type="button"
                         className="nickname-completed-button nickname-completed-button-secondary"
-                        onClick={handleGardenClick}
+                        onClick={
+                            handleGardenClick
+                        }
                     >
                         정원 둘러보기
                     </button>

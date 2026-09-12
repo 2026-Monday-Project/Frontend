@@ -1,4 +1,7 @@
-import { useEffect, useRef } from "react";
+import {
+    useEffect,
+    useRef,
+} from "react";
 import { NavLink } from "react-router-dom";
 
 import arrowBackIcon from "@/assets/icons/arrow-back.svg";
@@ -37,7 +40,13 @@ const MENU_ITEMS = [
 const Drawer = ({ isOpen, onClose }) => {
     const closeButtonRef = useRef(null);
     const panelRef = useRef(null);
-    const previousActiveElementRef = useRef(null);
+    const overlayRef = useRef(null);
+
+    const previousActiveElementRef =
+        useRef(null);
+
+    const scrollTopRef = useRef(0);
+
     const onCloseRef = useRef(onClose);
 
     useEffect(() => {
@@ -50,7 +59,29 @@ const Drawer = ({ isOpen, onClose }) => {
         }
 
         const appFrame =
-            document.querySelector(".app-frame");
+            document.querySelector(
+                ".app-frame",
+            );
+
+        if (!appFrame) {
+            return undefined;
+        }
+
+        /*
+         * Drawer를 열기 직전의
+         * 현재 스크롤 위치 저장
+         */
+        scrollTopRef.current =
+            appFrame.scrollTop;
+
+        /*
+         * Drawer를 app-frame 맨 위가 아니라
+         * 현재 보고 있는 위치에 배치
+         */
+        if (overlayRef.current) {
+            overlayRef.current.style.top =
+                `${scrollTopRef.current}px`;
+        }
 
         const previousBodyOverflow =
             document.body.style.overflow;
@@ -61,6 +92,7 @@ const Drawer = ({ isOpen, onClose }) => {
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
                 onCloseRef.current();
+
                 return;
             }
 
@@ -97,7 +129,11 @@ const Drawer = ({ isOpen, onClose }) => {
                     isFocusOutsidePanel)
             ) {
                 event.preventDefault();
-                lastFocusableElement.focus();
+
+                lastFocusableElement.focus({
+                    preventScroll: true,
+                });
+
                 return;
             }
 
@@ -108,15 +144,26 @@ const Drawer = ({ isOpen, onClose }) => {
                     isFocusOutsidePanel)
             ) {
                 event.preventDefault();
-                firstFocusableElement.focus();
+
+                firstFocusableElement.focus({
+                    preventScroll: true,
+                });
             }
         };
 
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow =
+            "hidden";
 
-        appFrame?.classList.add(
+        appFrame.classList.add(
             "is-scroll-locked",
         );
+
+        /*
+         * overflow 상태가 바뀌어도
+         * 기존 스크롤 위치 강제 유지
+         */
+        appFrame.scrollTop =
+            scrollTopRef.current;
 
         document.addEventListener(
             "keydown",
@@ -124,12 +171,28 @@ const Drawer = ({ isOpen, onClose }) => {
         );
 
         const focusFrame =
-            window.requestAnimationFrame(() => {
-                closeButtonRef.current?.focus();
-            });
+            window.requestAnimationFrame(
+                () => {
+                    /*
+                     * 중요:
+                     * 포커스 때문에 app-frame이
+                     * 맨 위로 올라가는 것 방지
+                     */
+                    closeButtonRef.current?.focus(
+                        {
+                            preventScroll: true,
+                        },
+                    );
+
+                    appFrame.scrollTop =
+                        scrollTopRef.current;
+                },
+            );
 
         return () => {
-            window.cancelAnimationFrame(focusFrame);
+            window.cancelAnimationFrame(
+                focusFrame,
+            );
 
             document.removeEventListener(
                 "keydown",
@@ -139,15 +202,26 @@ const Drawer = ({ isOpen, onClose }) => {
             document.body.style.overflow =
                 previousBodyOverflow;
 
-            appFrame?.classList.remove(
+            appFrame.classList.remove(
                 "is-scroll-locked",
             );
 
+            /*
+             * Drawer 닫아도
+             * 열기 전 위치 그대로 복원
+             */
+            appFrame.scrollTop =
+                scrollTopRef.current;
+
             if (
-                previousActiveElementRef.current
-                    ?.isConnected
+                previousActiveElementRef
+                    .current?.isConnected
             ) {
-                previousActiveElementRef.current.focus();
+                previousActiveElementRef.current.focus(
+                    {
+                        preventScroll: true,
+                    },
+                );
             }
         };
     }, [isOpen]);
@@ -162,6 +236,7 @@ const Drawer = ({ isOpen, onClose }) => {
 
     return (
         <div
+            ref={overlayRef}
             className="drawer-overlay"
             onClick={onClose}
         >
