@@ -25,7 +25,9 @@
   gap: 13px;
   width: 100%;
   min-height: 40px;
-  padding: 32px 40px 0;
+  /* 좌우 여백을 사연 작성 페이지(StoryForm) 헤더와 동일하게 맞춰서,
+     뒤로가기 아이콘이 두 화면에서 항상 같은 위치에 오도록 한다. */
+  padding: 32px 28px 0;
 }
 
 /* 본문 스크롤 영역 */
@@ -60,8 +62,10 @@
 
 .consent-page-title {
   flex: 1;
+  min-width: 0;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   color: var(--color-green-main);
   font-family: Warhaven, sans-serif;
   font-size: 20px;
@@ -69,6 +73,7 @@
   line-height: 1;
   letter-spacing: 0;
   text-align: center;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

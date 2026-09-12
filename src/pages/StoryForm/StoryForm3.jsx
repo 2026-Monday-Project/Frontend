@@ -46,19 +46,20 @@ const ConsentList = ({ items, consents, errors = {}, onToggle, onViewDetail }) =
   <div className="story-form3-consent-list">
     {items.map(({ key, label, detailPath }) => (
       <div className="story-form3-consent-item-wrapper" key={key}>
-        <div
+        {/* label로 감싸서 영역 전체(체크박스/문구/배경)를 눌러도 체크되게 한다.
+            버튼(자세히 보기)처럼 안에 있는 다른 인터랙티브 요소를 클릭할 땐
+            브라우저가 알아서 체크 토글을 발생시키지 않고 그 요소 본연의 동작만 실행한다. */}
+        <label
           className={`story-form3-consent-item ${errors[key] ? "story-form-input-invalid" : ""}`}
         >
-          <label className="story-form3-consent-toggle">
-            <input
-              className="story-form3-consent-checkbox"
-              type="checkbox"
-              checked={consents[key]}
-              onChange={() => onToggle(key)}
-            />
+          <input
+            className="story-form3-consent-checkbox"
+            type="checkbox"
+            checked={consents[key]}
+            onChange={() => onToggle(key)}
+          />
 
-            <span className="story-form3-consent-label">{label}</span>
-          </label>
+          <span className="story-form3-consent-label">{label}</span>
 
           {detailPath ? (
             <button
@@ -77,7 +78,7 @@ const ConsentList = ({ items, consents, errors = {}, onToggle, onViewDetail }) =
               aria-hidden="true"
             />
           )}
-        </div>
+        </label>
 
         {errors[key] && (
           <p className="story-form-error-message">{errors[key]}</p>
