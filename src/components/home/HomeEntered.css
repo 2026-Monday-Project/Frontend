@@ -1,4 +1,6 @@
 .home-entered-page {
+    position: relative;
+
     width: 100%;
     height: 100%;
 
@@ -29,7 +31,9 @@
     max-width: none;
 
     object-fit: cover;
-    object-position: center top;
+
+    /* 아래쪽 디자인을 살리고 위쪽을 잘라냄 */
+    object-position: center bottom;
 
     pointer-events: none;
 
@@ -159,15 +163,13 @@
 .home-entered-button-primary {
     border: 0;
 
-    background-color:
-        var(--color-green-main);
+    background-color: var(--color-green-main);
 
     color: #ffffff;
 }
 
 .home-entered-button-secondary {
-    border: 1px solid
-        var(--color-green-main);
+    border: 1px solid var(--color-green-main);
 
     background-color: transparent;
 
@@ -180,10 +182,10 @@
 
 @media (max-height: 760px) {
     .home-entered-text {
-        top: 29%;
+        top: 31%;
     }
 
     .home-entered-buttons {
-        top: 55%;
+        top: 54%;
     }
 }
