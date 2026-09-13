@@ -152,10 +152,13 @@
     cursor: grab;
     user-select: none;
 
-    touch-action: pan-y;
     overscroll-behavior-x: contain;
 
     scrollbar-width: none;
+
+    /* iOS Safari에서 자연스럽게 가로 터치 스크롤 */
+    -webkit-overflow-scrolling: touch;
+    touch-action: auto;
 }
 
 .admin-review-photo-list-dragging {
