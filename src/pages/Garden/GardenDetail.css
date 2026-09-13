@@ -2,8 +2,16 @@
     display: flex;
     min-height: 100%;
     flex-direction: column;
-    overflow-x: hidden;
+    /* Clip horizontal overflow without creating a scroll container for sticky. */
+    overflow-x: clip;
     background-color: var(--color-background);
+}
+
+.garden-detail-page > .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
 }
 
 .garden-detail-status {
