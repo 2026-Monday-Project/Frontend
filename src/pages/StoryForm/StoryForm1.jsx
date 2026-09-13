@@ -14,14 +14,14 @@ const REQUIRED_MESSAGE = "*필수 항목입니다.";
 const NICKNAME_OK_MESSAGE = "사용 가능한 닉네임이에요.";
 const EMAIL_OK_MESSAGE = "사용 가능한 이메일이에요.";
 
-// 나이를 너무 크게 입력하면 서버 오류로 이어질 수 있어 자릿수를 미리 제한한다.
-const PET_AGE_MAX_LENGTH = 2;
 const PET_AGE_LIMIT_MESSAGE = "최대 99살까지 입력할 수 있어요.";
-const PET_TYPE_MAX_LENGTH = 50;
 const PET_TYPE_LIMIT_MESSAGE = "최대 50자까지 입력할 수 있어요.";
 
 // 자모 단독 입력(ㄱ, ㅏ 등)까지 허용해야 조합 중인 한글 입력이 끊기지 않는다.
 const NON_HANGUL_REGEX = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+// 완성되지 않은 자모(초성/모음 단독)만 남아있는지 검사한다.
+const INCOMPLETE_HANGUL_REGEX = /[ㄱ-ㅎㅏ-ㅣ]/;
+const INCOMPLETE_HANGUL_MESSAGE = "완성된 한글로 입력해 주세요.";
 
 const EMPTY_DATA = {
   petName: "",
@@ -154,10 +154,9 @@ const StoryForm1 = ({ mode }) => {
     const { name, value } = event.target;
 
     // 나이는 정수만 허용 (소수점 "." / 음수 "-" / 지수 표기 "e" 등을 즉시 제거)
-    // type="number"는 maxLength가 브라우저에서 무시되므로 자릿수도 여기서 직접 잘라낸다.
     const nextValue =
       name === "petAge"
-        ? value.replace(/[^0-9]/g, "").slice(0, PET_AGE_MAX_LENGTH)
+        ? value.replace(/[^0-9]/g, "")
         : name === "nickname"
           ? value.replace(NON_HANGUL_REGEX, "")
           : value;
@@ -167,9 +166,18 @@ const StoryForm1 = ({ mode }) => {
       [name]: nextValue,
     }));
 
+    let fieldError = "";
+    if (name === "nickname" && INCOMPLETE_HANGUL_REGEX.test(nextValue)) {
+      fieldError = INCOMPLETE_HANGUL_MESSAGE;
+    } else if (name === "petAge" && Number(nextValue) > 99) {
+      fieldError = PET_AGE_LIMIT_MESSAGE;
+    } else if (name === "petType" && nextValue.length > 50) {
+      fieldError = PET_TYPE_LIMIT_MESSAGE;
+    }
+
     setErrors((prev) => ({
       ...prev,
-      [name]: "",
+      [name]: fieldError,
     }));
 
     if (name === "email") {
@@ -193,10 +201,23 @@ const StoryForm1 = ({ mode }) => {
 
     const newErrors = {
       petName: formData.petName.trim() ? "" : REQUIRED_MESSAGE,
-      petAge: formData.petAge.trim() ? "" : REQUIRED_MESSAGE,
-      petType: formData.petType.trim() ? "" : REQUIRED_MESSAGE,
-      nickname:
-        lockIdentity || formData.nickname.trim() ? "" : REQUIRED_MESSAGE,
+      petAge: !formData.petAge.trim()
+        ? REQUIRED_MESSAGE
+        : Number(formData.petAge) > 99
+          ? PET_AGE_LIMIT_MESSAGE
+          : "",
+      petType: !formData.petType.trim()
+        ? REQUIRED_MESSAGE
+        : formData.petType.length > 50
+          ? PET_TYPE_LIMIT_MESSAGE
+          : "",
+      nickname: lockIdentity
+        ? ""
+        : !formData.nickname.trim()
+          ? REQUIRED_MESSAGE
+          : INCOMPLETE_HANGUL_REGEX.test(formData.nickname)
+            ? INCOMPLETE_HANGUL_MESSAGE
+            : "",
       email: lockIdentity || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
@@ -229,6 +250,12 @@ const StoryForm1 = ({ mode }) => {
     if (!nickname) {
       setNicknameSuccessMessage("");
       setErrors((prev) => ({ ...prev, nickname: "*닉네임을 입력해주세요." }));
+      return;
+    }
+
+    if (INCOMPLETE_HANGUL_REGEX.test(nickname)) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({ ...prev, nickname: INCOMPLETE_HANGUL_MESSAGE }));
       return;
     }
 
@@ -374,10 +401,8 @@ const StoryForm1 = ({ mode }) => {
               <span className="story-form-age-unit">살</span>
             </div>
 
-            {errors.petAge ? (
+            {errors.petAge && (
               <p className="story-form-error-message">{errors.petAge}</p>
-            ) : (
-              <p className="story-form-hint">{PET_AGE_LIMIT_MESSAGE}</p>
             )}
           </div>
 
@@ -391,16 +416,13 @@ const StoryForm1 = ({ mode }) => {
               id="pet-type"
               name="petType"
               type="text"
-              maxLength={PET_TYPE_MAX_LENGTH}
               value={formData.petType}
               onChange={handleInputChange}
               placeholder="예: 골든리트리버"
             />
 
-            {errors.petType ? (
+            {errors.petType && (
               <p className="story-form-error-message">{errors.petType}</p>
-            ) : (
-              <p className="story-form-hint">{PET_TYPE_LIMIT_MESSAGE}</p>
             )}
           </div>
 

@@ -142,12 +142,15 @@
 /* 이전 / 다음 (내용이 길어져도 항상 하단에 고정) */
 
 .story-form2-footer {
-  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 32px;
 
   display: flex;
   gap: 40px;
 
-  padding: 8px 28px 32px;
+  padding: 0 28px;
 }
 
 .story-form2-prev-button {

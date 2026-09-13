@@ -70,14 +70,14 @@ const MailDetail = () => {
                     <p>알림을 불러오는 중입니다...</p>
                 </div>
             ) : mailDetail ? (
-                <div
-                    className="letter-wrapper"
-                    style={{ backgroundImage: `url(${letterImg})` }}
-                >
-                    <div className="letter-content">
-                        <h2 className="letter-title">{mailDetail.title}</h2>
-                        <p className="letter-date">{formatDate(mailDetail.createdAt)}</p>
-                        <p className="letter-text">{mailDetail.content}</p>
+                <div className="mail-scroll-area">
+                    <div className="letter-wrapper">
+                        <img src={letterImg} alt="" className="letter-bg-image" />
+                        <div className="letter-content">
+                            <h2 className="letter-title">{mailDetail.title}</h2>
+                            <p className="letter-date">{formatDate(mailDetail.createdAt)}</p>
+                            <p className="letter-text">{mailDetail.content}</p>
+                        </div>
                     </div>
                 </div>
             ) : null}
