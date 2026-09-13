@@ -102,12 +102,6 @@ const PerformanceDetails = () => {
                     />
 
                     <span>mondayprojectkr</span>
-
-                    <img
-                        className="performance-external-icon"
-                        src={arrowSquareOut}
-                        alt=""
-                    />
                 </a>
             </section>
 
