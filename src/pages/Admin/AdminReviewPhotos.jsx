@@ -57,19 +57,37 @@ const AdminReviewPhotos = () => {
     }, [storyId]);
 
     useEffect(() => {
+        const container = thumbnailRef.current;
         const selectedThumbnail =
-            thumbnailItemRefs.current[
-                currentIndex
-            ];
+            thumbnailItemRefs.current[currentIndex];
 
-        if (!selectedThumbnail) {
+        if (
+            !container ||
+            !selectedThumbnail
+        ) {
             return;
         }
 
-        selectedThumbnail.scrollIntoView({
+        const targetScrollLeft =
+            selectedThumbnail.offsetLeft -
+            container.clientWidth / 2 +
+            selectedThumbnail.clientWidth / 2;
+
+        const maxScrollLeft =
+            container.scrollWidth -
+            container.clientWidth;
+
+        const nextScrollLeft = Math.max(
+            0,
+            Math.min(
+                targetScrollLeft,
+                maxScrollLeft,
+            ),
+        );
+
+        container.scrollTo({
+            left: nextScrollLeft,
             behavior: "smooth",
-            block: "nearest",
-            inline: "center",
         });
     }, [currentIndex]);
 
