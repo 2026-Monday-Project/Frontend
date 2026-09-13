@@ -1,11 +1,139 @@
 .home-page {
+    position: relative;
+
     width: 100%;
     height: 100%;
 
-    background-color: var(--color-background);
+    background-color:
+        var(--color-background);
 
     overflow: hidden;
 }
+
+
+/* ==============================
+    입장 완료 화면
+============================== */
+
+.home-entered-layer {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 0;
+
+    overflow: hidden;
+
+    background-color:
+        var(--color-background);
+}
+
+
+/* ==============================
+    위로 밀리는 첫 화면
+============================== */
+
+.home-swipe-layer {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 2;
+
+    background-color:
+        var(--color-background);
+
+    overflow: hidden;
+
+    touch-action: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    cursor: grab;
+
+    opacity: 1;
+
+    transition:
+        transform 0.42s
+        cubic-bezier(
+            0.32,
+            0.72,
+            0,
+            1
+        );
+
+    will-change:
+        transform,
+        opacity;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+
+/* ==============================
+    드래그 중
+============================== */
+
+.home-swipe-layer.is-dragging {
+    /*
+     * 드래그 중에는 손가락/마우스를
+     * 즉각 따라가야 하므로 transition 제거.
+     */
+    transition: none;
+
+    cursor: grabbing;
+
+    opacity: 1;
+}
+
+
+/* ==============================
+    손을 뗀 뒤 자동으로 올라가는 구간
+============================== */
+
+.home-swipe-layer.is-entering {
+    pointer-events: none;
+
+    /*
+     * 손을 뗀 뒤:
+     *
+     * transform:
+     * 현재 위치 → 화면 밖
+     *
+     * opacity:
+     * 1 → 0
+     *
+     * 둘이 동시에 진행된다.
+     */
+    transition:
+        transform 0.42s
+        cubic-bezier(
+            0.32,
+            0.72,
+            0,
+            1
+        ),
+        opacity 0.36s
+        cubic-bezier(
+            0.33,
+            1,
+            0.68,
+            1
+        );
+}
+
+
+/* ==============================
+    Home Design
+============================== */
 
 .home-design {
     position: relative;
@@ -16,9 +144,10 @@
     overflow: hidden;
 }
 
+
 /* ==============================
     배경 이미지
-   ============================== */
+============================== */
 
 .home-background {
     position: absolute;
@@ -27,6 +156,7 @@
 
     width: 100%;
     height: 100%;
+
     max-width: none;
 
     object-fit: cover;
@@ -34,12 +164,17 @@
 
     pointer-events: none;
 
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
     z-index: 0;
 }
 
+
 /* ==============================
     공연 정보
-   ============================== */
+============================== */
 
 .home-info {
     position: absolute;
@@ -54,11 +189,14 @@
     flex-direction: column;
     align-items: center;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     color: #605a30;
 
     text-align: center;
+
+    pointer-events: none;
 
     z-index: 2;
 }
@@ -68,7 +206,10 @@
 
     color: #605a30;
 
-    font-family: Warhaven, sans-serif;
+    font-family:
+        Warhaven,
+        sans-serif;
+
     font-size: 36px;
     font-style: normal;
     font-weight: 400;
@@ -84,12 +225,17 @@
     flex-shrink: 0;
 
     object-fit: contain;
+
+    pointer-events: none;
 }
 
 .home-subtitle {
     margin: 0;
 
-    font-family: Warhaven, sans-serif;
+    font-family:
+        Warhaven,
+        sans-serif;
+
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -108,9 +254,13 @@
     margin: 0;
 
     flex-direction: column;
+
     gap: 6px;
 
-    font-family: Warhaven, sans-serif;
+    font-family:
+        Warhaven,
+        sans-serif;
+
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
@@ -123,16 +273,31 @@
     margin: 0;
 }
 
-/* ==============================
-    스와이프 문구
-   ============================== */
 
-.home-entry-guide-text {
+/* ==============================
+    입장 안내
+============================== */
+
+.home-entry-guide {
     position: absolute;
 
-    bottom: 171px;
+    bottom: 55px;
     left: 50%;
 
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events: none;
+
+    z-index: 3;
+}
+
+.home-entry-guide-text {
     display: flex;
 
     flex-direction: column;
@@ -144,7 +309,10 @@
 
     color: #ffffff;
 
-    font-family: Warhaven, sans-serif;
+    font-family:
+        Warhaven,
+        sans-serif;
+
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -153,142 +321,97 @@
     text-align: center;
     white-space: nowrap;
 
-    pointer-events: none;
+    text-shadow:
+        0 2px 4px
+        rgba(
+            0,
+            0,
+            0,
+            0.25
+        );
 
-    z-index: 6;
-
-    transition: transform 0.25s ease;
-}
-
-.home-entry-guide-text.is-dragging {
-    transition: none;
+    transform:
+        translateY(-5px);
 }
 
 .home-entry-guide-text p {
     margin: 0;
 }
 
+
 /* ==============================
-    스와이프 아치
-   ============================== */
+    3단 화살표
+============================== */
 
-.home-entry-arch {
-    position: absolute;
+.home-entry-chevron {
+    position: relative;
 
-    bottom: -2px;
-    left: 50%;
+    display: flex;
 
-    width: 137px;
+    width: 34px;
 
-    padding: 0;
-    border: 0;
-    background: transparent;
+    margin-top: 18px;
 
-    touch-action: none;
+    flex-direction: column;
+    align-items: center;
 
-    user-select: none;
-    -webkit-user-select: none;
-
-    cursor: grab;
-
-    z-index: 5;
-
-    transition: transform 0.25s ease;
+    gap: 1px;
 }
 
-.home-entry-arch.is-dragging {
-    cursor: grabbing;
-
-    transition: none;
-}
-
-.home-entry-arch img {
+.home-entry-chevron-item {
     display: block;
 
-    width: 100%;
-    height: auto;
-    max-width: none;
+    width: 22px;
+    height: 22px;
 
-    object-fit: contain;
+    border-top:
+        3px solid
+        #ffffff;
 
-    pointer-events: none;
+    border-left:
+        3px solid
+        #ffffff;
 
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
+    border-radius: 2px;
+
+    transform:
+        rotate(45deg);
+
+    filter:
+        drop-shadow(
+            0 3px 2px
+            rgba(
+                0,
+                0,
+                0,
+                0.2
+            )
+        );
 }
 
-/* ==============================
-    스와이프 가이드
-   ============================== */
-
-.home-entry-trail-container {
-    position: absolute;
-
-    /*
-     * 가이드 이미지는 기존 위치 유지
-     * 아치 SVG 자체의 투명 여백 문제와는 별개
-     */
-    bottom: -18px;
-    left: 50%;
-
-    width: 82px;
-    height: 151px;
-
-    transform: translateX(-50%);
-
-    pointer-events: none;
-
-    z-index: 4;
+.home-entry-chevron-first {
+    opacity: 1;
 }
 
-.home-entry-base-guide {
-    position: absolute;
-
-    bottom: 0;
-    left: 50%;
-
-    width: 82px;
-
-    transform: translateX(-50%);
+.home-entry-chevron-second {
+    opacity: 0.75;
 }
 
-.home-entry-trail {
-    position: absolute;
-
-    left: 50%;
-
-    width: 12px;
-
-    transform: translateX(-50%);
+.home-entry-chevron-third {
+    opacity: 0.5;
 }
 
-.home-entry-trail-short {
-    bottom: 48px;
-}
-
-.home-entry-trail-long {
-    bottom: 48px;
-}
 
 /* ==============================
     낮은 모바일 화면
-   ============================== */
+============================== */
 
 @media (max-height: 760px) {
     .home-info {
         top: 27%;
     }
 
-    .home-entry-guide-text {
-        bottom: 154px;
-    }
-
-    .home-entry-trail-container {
-        transform:
-            translateX(-50%)
-            scale(0.92);
-
-        transform-origin: bottom center;
+    .home-entry-guide {
+        bottom: 42px;
     }
 }

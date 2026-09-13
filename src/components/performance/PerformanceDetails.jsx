@@ -1,5 +1,4 @@
 import instagramLogo from "@/assets/icons/instagram-logo.svg";
-import arrowSquareOut from "@/assets/icons/arrow-square-out.svg";
 import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarousel";
 
 import "./PerformanceDetails.css";
