@@ -127,6 +127,11 @@ const AdminReviewDetail = () => {
     };
 
     const handlePhotoPointerDown = (event) => {
+        // 모바일/태블릿은 브라우저 기본 터치 스크롤 사용
+        if (event.pointerType !== "mouse") {
+            return;
+        }
+
         const element = photoListRef.current;
 
         if (!element) {
@@ -139,13 +144,14 @@ const AdminReviewDetail = () => {
         dragStartScrollLeft.current =
             element.scrollLeft;
 
-        element.setPointerCapture(
-            event.pointerId,
-        );
+        element.setPointerCapture(event.pointerId);
     };
 
     const handlePhotoPointerMove = (event) => {
-        if (!isPhotoDragging) {
+        if (
+            event.pointerType !== "mouse" ||
+            !isPhotoDragging
+        ) {
             return;
         }
 
@@ -165,13 +171,15 @@ const AdminReviewDetail = () => {
     };
 
     const handlePhotoPointerUp = (event) => {
+        if (event.pointerType !== "mouse") {
+            return;
+        }
+
         const element = photoListRef.current;
 
         if (
             element &&
-            element.hasPointerCapture(
-                event.pointerId,
-            )
+            element.hasPointerCapture(event.pointerId)
         ) {
             element.releasePointerCapture(
                 event.pointerId,

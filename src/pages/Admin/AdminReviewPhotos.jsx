@@ -14,15 +14,19 @@ import { getAdminStoryDetail } from "@/api/adminApi";
 import "./AdminReviewPhotos.css";
 
 const DRAG_THRESHOLD = 5;
+const SWIPE_THRESHOLD = 40;
 
 const AdminReviewPhotos = () => {
     const navigate = useNavigate();
     const { storyId } = useParams();
 
     const thumbnailRef = useRef(null);
+
     const dragStartX = useRef(0);
     const dragStartScrollLeft = useRef(0);
     const dragDistance = useRef(0);
+
+    const mainTouchStartX = useRef(0);
 
     const [photoList, setPhotoList] = useState([]);
     const [currentIndex, setCurrentIndex] =
@@ -145,6 +149,46 @@ const AdminReviewPhotos = () => {
         }, 0);
     };
 
+    const handleMainTouchStart = (event) => {
+        mainTouchStartX.current =
+            event.touches[0].clientX;
+    };
+
+    const handleMainTouchEnd = (event) => {
+        if (photoList.length <= 1) {
+            return;
+        }
+
+        const touchEndX =
+            event.changedTouches[0].clientX;
+
+        const distance =
+            touchEndX -
+            mainTouchStartX.current;
+
+        if (
+            Math.abs(distance) <
+            SWIPE_THRESHOLD
+        ) {
+            return;
+        }
+
+        if (distance < 0) {
+            setCurrentIndex((prev) =>
+                Math.min(
+                    prev + 1,
+                    photoList.length - 1,
+                ),
+            );
+
+            return;
+        }
+
+        setCurrentIndex((prev) =>
+            Math.max(prev - 1, 0),
+        );
+    };
+
     return (
         <main className="admin-review-photos">
             <header className="admin-review-photos-header">
@@ -167,7 +211,15 @@ const AdminReviewPhotos = () => {
                 </span>
             </header>
 
-            <div className="admin-review-photos-main">
+            <div
+                className="admin-review-photos-main"
+                onTouchStart={
+                    handleMainTouchStart
+                }
+                onTouchEnd={
+                    handleMainTouchEnd
+                }
+            >
                 {photoList[currentIndex] ? (
                     <img
                         src={photoList[currentIndex]}
@@ -177,7 +229,9 @@ const AdminReviewPhotos = () => {
                         draggable="false"
                     />
                 ) : (
-                    <span>제출 사진 없음</span>
+                    <span>
+                        제출 사진 없음
+                    </span>
                 )}
             </div>
 
