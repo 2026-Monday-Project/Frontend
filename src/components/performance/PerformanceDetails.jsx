@@ -1,5 +1,4 @@
 import instagramLogo from "@/assets/icons/instagram-logo.svg";
-import arrowSquareOut from "@/assets/icons/arrow-square-out.svg";
 import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarousel";
 
 import "./PerformanceDetails.css";
@@ -102,12 +101,6 @@ const PerformanceDetails = () => {
                     />
 
                     <span>mondayprojectkr</span>
-
-                    <img
-                        className="performance-external-icon"
-                        src={arrowSquareOut}
-                        alt=""
-                    />
                 </a>
             </section>
 
