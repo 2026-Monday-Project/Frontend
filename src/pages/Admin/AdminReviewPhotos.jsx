@@ -21,6 +21,7 @@ const AdminReviewPhotos = () => {
     const { storyId } = useParams();
 
     const thumbnailRef = useRef(null);
+    const thumbnailItemRefs = useRef([]);
 
     const dragStartX = useRef(0);
     const dragStartScrollLeft = useRef(0);
@@ -54,6 +55,23 @@ const AdminReviewPhotos = () => {
 
         fetchStoryPhotos();
     }, [storyId]);
+
+    useEffect(() => {
+        const selectedThumbnail =
+            thumbnailItemRefs.current[
+                currentIndex
+            ];
+
+        if (!selectedThumbnail) {
+            return;
+        }
+
+        selectedThumbnail.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+        });
+    }, [currentIndex]);
 
     const handleBack = () => {
         navigate(`/admin/reviews/${storyId}`);
@@ -257,6 +275,11 @@ const AdminReviewPhotos = () => {
                         (photo, index) => (
                             <button
                                 key={photo}
+                                ref={(element) => {
+                                    thumbnailItemRefs.current[
+                                        index
+                                    ] = element;
+                                }}
                                 type="button"
                                 className={`admin-review-photo-thumbnail ${
                                     currentIndex ===
