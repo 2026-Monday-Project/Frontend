@@ -4,21 +4,15 @@
     width: 100%;
     height: 100%;
 
-    /*
-     * 중요
-     *
-     * 여기 자체에 배경색이 있으면
-     * swipe-layer를 오른쪽으로 밀어도
-     * 아래 Home이 가려진다.
-     */
-    background-color: transparent;
+    background-color:
+        transparent;
 
     overflow: hidden;
 }
 
 
 /* ==============================
-    실제 오른쪽으로 움직이는 화면
+    오른쪽 스와이프 화면
 ============================== */
 
 .home-entered-swipe-layer {
@@ -29,10 +23,6 @@
     width: 100%;
     height: 100%;
 
-    /*
-     * 실제 HomeEntered 화면에만
-     * 배경색 적용
-     */
     background-color:
         var(--color-background);
 
@@ -54,27 +44,21 @@
             1
         );
 
-    will-change: transform;
+    will-change:
+        transform;
 
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
 }
-
-
-/* ==============================
-    오른쪽 드래그 중
-============================== */
 
 .home-entered-swipe-layer.is-dragging {
     transition: none;
 
     cursor: grabbing;
 }
-
-
-/* ==============================
-    첫 Home으로 복귀
-============================== */
 
 .home-entered-swipe-layer.is-returning {
     pointer-events: none;
@@ -103,14 +87,15 @@
     width: 402px;
     height: 874px;
 
-    transform-origin: top left;
+    transform-origin:
+        top left;
 
     overflow: hidden;
 }
 
 
 /* ==============================
-    배경 이미지
+    배경
 ============================== */
 
 .home-entered-background {
@@ -252,9 +237,11 @@
     align-items: center;
     justify-content: center;
 
-    padding: 10px 60px;
+    padding:
+        10px 60px;
 
-    border-radius: 15px;
+    border-radius:
+        15px;
 
     font-family:
         Warhaven,
@@ -273,7 +260,8 @@
 
     cursor: pointer;
 
-    touch-action: manipulation;
+    touch-action:
+        manipulation;
 }
 
 .home-entered-button-primary {
@@ -290,7 +278,8 @@
         1px solid
         var(--color-green-main);
 
-    background-color: transparent;
+    background-color:
+        transparent;
 
     color:
         var(--color-green-main);

@@ -1,39 +1,62 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
+    <head>
+        <meta charset="UTF-8" />
 
-    <link
-      rel="preload"
-      as="image"
-      href="/src/assets/images/custom/home-background.svg"
-    />
+        <!-- Home에서 가장 먼저 사용하는 폰트 -->
+        <link
+            rel="preload"
+            href="/src/assets/fonts/nexon-warhaven-regular.ttf"
+            as="font"
+            type="font/ttf"
+            crossorigin
+        />
 
-    <link
-      rel="icon"
-      type="image/png"
-      href="/apple-touch-icon.png"
-    />
+        <!-- Home 첫 화면 배경 -->
+        <link
+            rel="preload"
+            href="/src/assets/images/custom/home-background.svg"
+            as="image"
+            fetchpriority="high"
+        />
 
-    <link
-      rel="apple-touch-icon"
-      href="/apple-touch-icon.png"
-    />
+        <!-- 앱이 준비되기 전 흰색 플래시 방지 -->
+        <style>
+            html,
+            body,
+            #root {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                background: #f8f7f4;
+            }
+        </style>
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/apple-touch-icon.png"
+        />
 
-    <title>Maggie's Garden</title>
-  </head>
+        <link
+            rel="apple-touch-icon"
+            href="/apple-touch-icon.png"
+        />
 
-  <body>
-    <div id="root"></div>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
 
-    <script
-      type="module"
-      src="/src/main.jsx"
-    ></script>
-  </body>
+        <title>Maggie's Garden</title>
+    </head>
+
+    <body>
+        <div id="root"></div>
+
+        <script
+            type="module"
+            src="/src/main.jsx"
+        ></script>
+    </body>
 </html>

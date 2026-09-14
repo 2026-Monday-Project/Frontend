@@ -9,40 +9,112 @@ import "./AppFrame.css";
 const FRAME_WIDTH = 402;
 const FRAME_HEIGHT = 874;
 
-const AppFrame = ({ children }) => {
-    const [scale, setScale] = useState(1);
+const getViewportSize = () => {
+    return {
+        width:
+            window.visualViewport
+                ?.width ??
+            window.innerWidth,
 
-    const [isMobile, setIsMobile] =
-        useState(false);
+        height:
+            window.visualViewport
+                ?.height ??
+            window.innerHeight,
+    };
+};
 
-    const [isTablet, setIsTablet] =
-        useState(false);
+const getInitialFrameState = () => {
+    const {
+        width,
+        height,
+    } = getViewportSize();
 
-    /*
-     * iPad에서 키보드가 올라오면
-     * visualViewport.height가 작아진다.
-     *
-     * 이 값을 그대로 scale 계산에 사용하면
-     * AppFrame 전체가 키보드 높이에 맞춰 축소되므로,
-     * 키보드가 열리기 전 가장 큰 viewport 높이를 보관한다.
-     */
+    const isMobile =
+        width <= FRAME_WIDTH;
+
+    const isTouchDevice =
+        navigator.maxTouchPoints > 1;
+
+    const isTablet =
+        !isMobile &&
+        isTouchDevice;
+
+    if (isMobile) {
+        return {
+            scale: 1,
+            isMobile: true,
+            isTablet: false,
+            viewportWidth: width,
+            viewportHeight: height,
+        };
+    }
+
+    if (isTablet) {
+        return {
+            scale:
+                height /
+                FRAME_HEIGHT,
+            isMobile: false,
+            isTablet: true,
+            viewportWidth: width,
+            viewportHeight: height,
+        };
+    }
+
+    const widthScale =
+        width /
+        FRAME_WIDTH;
+
+    const heightScale =
+        height /
+        FRAME_HEIGHT;
+
+    return {
+        scale:
+            Math.min(
+                widthScale,
+                heightScale,
+                1,
+            ),
+        isMobile: false,
+        isTablet: false,
+        viewportWidth: width,
+        viewportHeight: height,
+    };
+};
+
+const AppFrame = ({
+    children,
+}) => {
+    const [
+        frameState,
+        setFrameState,
+    ] = useState(
+        getInitialFrameState,
+    );
+
+    const {
+        scale,
+        isMobile,
+        isTablet,
+    } = frameState;
+
     const maxViewportHeightRef =
-        useRef(0);
+        useRef(
+            frameState.viewportHeight,
+        );
 
     const lastViewportWidthRef =
-        useRef(0);
+        useRef(
+            frameState.viewportWidth,
+        );
 
     useEffect(() => {
         const handleResize = () => {
-            const width =
-                window.visualViewport
-                    ?.width ??
-                window.innerWidth;
-
-            const currentHeight =
-                window.visualViewport
-                    ?.height ??
-                window.innerHeight;
+            const {
+                width,
+                height: currentHeight,
+            } = getViewportSize();
 
             const mobile =
                 width <= FRAME_WIDTH;
@@ -55,29 +127,21 @@ const AppFrame = ({ children }) => {
                 !mobile &&
                 isTouchDevice;
 
-            setIsMobile(mobile);
-            setIsTablet(tablet);
-
-            /* =========================
-                모바일
-               ========================= */
-
             if (mobile) {
-                setScale(1);
+                setFrameState({
+                    scale: 1,
+                    isMobile: true,
+                    isTablet: false,
+                    viewportWidth:
+                        width,
+                    viewportHeight:
+                        currentHeight,
+                });
 
                 return;
             }
 
-            /* =========================
-                iPad / 태블릿
-               ========================= */
-
             if (tablet) {
-                /*
-                 * 화면 회전처럼 가로폭 자체가
-                 * 크게 바뀐 경우에는 기준 높이를
-                 * 새로 설정한다.
-                 */
                 const widthChanged =
                     Math.abs(
                         width -
@@ -95,13 +159,6 @@ const AppFrame = ({ children }) => {
                     maxViewportHeightRef.current =
                         currentHeight;
                 } else {
-                    /*
-                     * 키보드가 열렸을 때 height가
-                     * 줄어드는 것은 무시한다.
-                     *
-                     * 키보드가 닫혀 더 큰 높이가
-                     * 관측되면 그때만 갱신한다.
-                     */
                     maxViewportHeightRef.current =
                         Math.max(
                             maxViewportHeightRef.current,
@@ -113,14 +170,19 @@ const AppFrame = ({ children }) => {
                     maxViewportHeightRef.current /
                     FRAME_HEIGHT;
 
-                setScale(tabletScale);
+                setFrameState({
+                    scale:
+                        tabletScale,
+                    isMobile: false,
+                    isTablet: true,
+                    viewportWidth:
+                        width,
+                    viewportHeight:
+                        currentHeight,
+                });
 
                 return;
             }
-
-            /* =========================
-                PC
-               ========================= */
 
             const widthScale =
                 width /
@@ -130,16 +192,21 @@ const AppFrame = ({ children }) => {
                 currentHeight /
                 FRAME_HEIGHT;
 
-            setScale(
-                Math.min(
-                    widthScale,
-                    heightScale,
-                    1,
-                ),
-            );
+            setFrameState({
+                scale:
+                    Math.min(
+                        widthScale,
+                        heightScale,
+                        1,
+                    ),
+                isMobile: false,
+                isTablet: false,
+                viewportWidth:
+                    width,
+                viewportHeight:
+                    currentHeight,
+            });
         };
-
-        handleResize();
 
         window.addEventListener(
             "resize",
@@ -198,7 +265,7 @@ const AppFrame = ({ children }) => {
                     isMobile
                         ? undefined
                         : {
-                            transform: `scale(${scale})`,
+                              transform: `scale(${scale})`,
                           }
                 }
             >
