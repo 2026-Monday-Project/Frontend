@@ -198,54 +198,66 @@
 
 
 
+/* --- 편지함 CSS --- */
 .mail-item, .mail-item-read {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     background-color: #fffdf6;
     padding: 16px 20px;
     border-radius: 10px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    gap: 23px;
+    gap: 16px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left; 
 }
 
-.mail-content, .mail-content-read {
+.mail-text-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    align-items: flex-start;
+    gap: 6px;
     flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    min-width: 0; 
 }
 
-.mail-title, .mail-title-read {
-    align-self: stretch;
+/* 겹치지 않는 새로운 클래스명 적용 */
+.garden-mail-title, .garden-mail-title-read {
     font-size: 16px;
     font-weight: 500;
     margin: 0;
-}
-
-.mail-desc, .mail-desc-read {
-    font-size: 12px;
-    margin: 0;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 250px;
 }
 
-.mail-date, .mail-date-read {
+.garden-mail-desc, .garden-mail-desc-read {
+    font-size: 12px;
+    margin: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.garden-mail-date, .garden-mail-date-read {
     font-size: 10px;
     margin: 0;
-    margin-top: 4px;
+}
+
+/* 읽은 편지 색상 처리 */
+.garden-mail-title-read,
+.garden-mail-desc-read,
+.garden-mail-date-read {
+    color: #686866;
 }
 
 .unread-dot {
     width: 6px;
     height: 6px;
-}
-
-.mail-item-read {
-    color: #686866;
+    flex-shrink: 0;
+    margin-top: 6px;
 }

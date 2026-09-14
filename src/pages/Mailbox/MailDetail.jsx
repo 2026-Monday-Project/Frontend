@@ -3,7 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "@/api/axios";
 import Navbar from "@/components/common/Navbar";
 import Drawer from "@/components/common/Drawer";
-import letterImg from "@/assets/images/custom/letter.svg";
+
+import letterBackground from "@/assets/images/custom/letter-background.svg";
+import letterOnly from "@/assets/images/custom/letter-only.svg";
+import letterDivider from "@/assets/images/custom/letter-divider.svg";
+import letterDividerLeaf from "@/assets/images/custom/letter-divider-leaf.svg";
+import letterEnvelope from "@/assets/images/custom/letter-envelope.svg";
+
 import "./MailDetail.css";
 
 const MailDetail = () => {
@@ -70,14 +76,27 @@ const MailDetail = () => {
                     <p>알림을 불러오는 중입니다...</p>
                 </div>
             ) : mailDetail ? (
-                <div className="mail-scroll-area">
-                    <div className="letter-wrapper">
-                        <img src={letterImg} alt="" className="letter-bg-image" />
-                        <div className="letter-content">
-                            <h2 className="letter-title">{mailDetail.title}</h2>
-                            <p className="letter-date">{formatDate(mailDetail.createdAt)}</p>
-                            <p className="letter-text">{mailDetail.content}</p>
+                <div 
+                    className="mail-scroll-area"
+                    style={{ backgroundImage: `url(${letterBackground})` }}
+                >
+                    <div className="mail-content-wrapper">
+                        <div className="mail-inner-content">
+                            <img src={letterOnly} alt="편지지 아이콘" className="mail-icon" />
+                            
+                            <h2 className="mail-title">{mailDetail.title}</h2>
+                            <p className="mail-date">{formatDate(mailDetail.createdAt)}</p>
+                            
+                            <img src={letterDivider} alt="구분선" className="mail-divider" />
+                            
+                            <p className="mail-text">{mailDetail.content}</p>
+                        </div>    
+                        
+                        <div className="mail-envelope-wrapper">
+                            <img src={letterDividerLeaf} alt="나뭇잎 구분선" className="mail-divider-leaf" />
+                            <img src={letterEnvelope} alt="편지 봉투 하단" className="mail-envelope-bottom" />
                         </div>
+                        
                     </div>
                 </div>
             ) : null}

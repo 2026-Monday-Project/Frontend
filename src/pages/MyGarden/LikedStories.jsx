@@ -4,6 +4,7 @@ import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import StoryCard from '@/components/common/StoryCard';
+import GardenEmptyState from '@/components/garden/GardenEmptyState';
 import arrowDownIcon from '@/assets/icons/arrow-down.svg';
 import grassesImg from '@/assets/images/custom/grasses.svg';
 import louisProfile from '@/assets/images/custom/louis-profile.svg';
@@ -41,7 +42,6 @@ const LikedStories = () => {
                 });
                 
                 const fetchedContent = response.data?.data?.content || [];
-                
                 if (isCurrentRequest) {
                     setStories(fetchedContent);
                 }
@@ -124,67 +124,73 @@ const LikedStories = () => {
             />
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
 
-            <div className="liked-stories-header" ref={sortRef}>
-                <div className="garden-sort-row">
-                    <button
-                        className="garden-sort"
-                        type="button"
-                        onClick={() => setIsSortOpen((isOpen) => !isOpen)}
-                        aria-label={`사연 정렬 기준: ${selectedSort}`}
-                        aria-haspopup="listbox"
-                        aria-expanded={isSortOpen}
-                        aria-controls="garden-sort-options"
-                    >
-                        <span>{selectedSort}</span>
-                        <img
-                            className={isSortOpen ? "garden-sort-icon-open" : ""}
-                            src={arrowDownIcon}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
-
-                    {isSortOpen && (
-                        <div
-                            id="garden-sort-options"
-                            className="garden-sort-options"
-                            role="listbox"
-                            aria-label="사연 정렬 기준"
+            {stories.length > 0 && (
+                <div className="liked-stories-header" ref={sortRef}>
+                    <div className="garden-sort-row">
+                        <button
+                            className="garden-sort"
+                            type="button"
+                            onClick={() => setIsSortOpen((isOpen) => !isOpen)}
+                            aria-label={`사연 정렬 기준: ${selectedSort}`}
+                            aria-haspopup="listbox"
+                            aria-expanded={isSortOpen}
+                            aria-controls="garden-sort-options"
                         >
-                            {SORT_OPTIONS.map((option) => (
-                                <button
-                                    key={option}
-                                    className={`garden-sort-option ${selectedSort === option ? "garden-sort-option-selected" : ""}`}
-                                    type="button"
-                                    role="option"
-                                    aria-selected={selectedSort === option}
-                                    onClick={() => handleSortSelect(option)}
-                                >
-                                    {option}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                            <span>{selectedSort}</span>
+                            <img
+                                className={isSortOpen ? "garden-sort-icon-open" : ""}
+                                src={arrowDownIcon}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+
+                        {isSortOpen && (
+                            <div
+                                id="garden-sort-options"
+                                className="garden-sort-options"
+                                role="listbox"
+                                aria-label="사연 정렬 기준"
+                            >
+                                {SORT_OPTIONS.map((option) => (
+                                    <button
+                                        key={option}
+                                        className={`garden-sort-option ${selectedSort === option ? "garden-sort-option-selected" : ""}`}
+                                        type="button"
+                                        role="option"
+                                        aria-selected={selectedSort === option}
+                                        onClick={() => handleSortSelect(option)}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div className="story-list-scroll">
                 {!isLoading && stories.length === 0 ? (
-                    <div className="empty-state-card">
-                        <p className="empty-state-text">아직 공감한 사연이 없어요.</p>
+                    <div className="empty-state-wrapper">
+                        <GardenEmptyState 
+                            title="아직 공감한 사연이 없어요."
+                            subtitle="정원을 둘러보고 마음을 나눠보세요."
+                            guide="마음을 나눈 사연은 여기서 확인할 수 있어요."
+                        />
                     </div>
                 ) : (
                     stories.map(story => (
                         <StoryCard 
                             key={story.storyId}
-                            image={story.thumbnailUrl || story.imageUrl || louisProfile}
-                            title={story.title}
+                            image={story.thumbnailUrl || louisProfile}
+                            title={story.storyTitle}
                             petName={story.petName} 
                             breed={story.petType}   
                             age={story.petAge}      
                             date={formatDate(story.createdAt)}
-                            viewCount={story.viewCount || 0}
-                            likeCount={story.likeCount || 0}
+                            viewCount={story.viewCount}
+                            likeCount={story.likeCount}
                             onClick={() => navigate(`/garden/${story.storyId}`)} 
                         />
                     ))

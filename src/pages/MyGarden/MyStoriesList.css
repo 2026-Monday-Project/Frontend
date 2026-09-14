@@ -56,3 +56,9 @@
 .story-list-scroll::-webkit-scrollbar {
     display: none;
 }
+
+.empty-state-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
