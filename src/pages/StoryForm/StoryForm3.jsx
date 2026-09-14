@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.svg";
+import arrowLeft from "@/assets/icons/ep_arrow-left.svg";
 import chevronRight from "@/assets/icons/Vector green.png";
 import stepIndicator from "@/assets/icons/step-indicator-3.svg";
 import { createStory, updateStory } from "@/api/storyApi";
