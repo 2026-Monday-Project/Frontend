@@ -12,10 +12,11 @@
 
 
 /* ==============================
-    입장 완료 화면
+    처음 Home을 위로 밀 때
+    아래에 보이는 입장 완료 화면
 ============================== */
 
-.home-entered-layer {
+.home-entered-under-layer {
     position: absolute;
 
     inset: 0;
@@ -33,7 +34,37 @@
 
 
 /* ==============================
-    위로 밀리는 첫 화면
+    실제 입장 완료 후
+    최상단 HomeEntered
+============================== */
+
+.home-entered-active-layer {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 2;
+
+    overflow: hidden;
+
+    /*
+     * 중요
+     *
+     * HomeEntered를 오른쪽으로 밀었을 때
+     * 이 부모 배경이 보이면 안 된다.
+     *
+     * 아래 z-index 1의 첫 Home이
+     * 그대로 보여야 한다.
+     */
+    background-color: transparent;
+}
+
+
+/* ==============================
+    첫 Home 화면
 ============================== */
 
 .home-swipe-layer {
@@ -44,7 +75,7 @@
     width: 100%;
     height: 100%;
 
-    z-index: 2;
+    z-index: 1;
 
     background-color:
         var(--color-background);
@@ -79,14 +110,10 @@
 
 
 /* ==============================
-    드래그 중
+    위로 드래그 중
 ============================== */
 
 .home-swipe-layer.is-dragging {
-    /*
-     * 드래그 중에는 손가락/마우스를
-     * 즉각 따라가야 하므로 transition 제거.
-     */
     transition: none;
 
     cursor: grabbing;
@@ -96,23 +123,12 @@
 
 
 /* ==============================
-    손을 뗀 뒤 자동으로 올라가는 구간
+    손을 뗀 뒤 입장
 ============================== */
 
 .home-swipe-layer.is-entering {
     pointer-events: none;
 
-    /*
-     * 손을 뗀 뒤:
-     *
-     * transform:
-     * 현재 위치 → 화면 밖
-     *
-     * opacity:
-     * 1 → 0
-     *
-     * 둘이 동시에 진행된다.
-     */
     transition:
         transform 0.42s
         cubic-bezier(
@@ -400,7 +416,30 @@
 .home-entry-chevron-third {
     opacity: 0.5;
 }
+/* ==============================
+    Entered 뒤에 대기 중인 Home
+============================== */
 
+.home-swipe-layer.is-entered-background {
+    /*
+     * Entered 화면 뒤에서 Home이
+     * 원위치로 복구될 때 애니메이션이
+     * 보이지 않도록 완전히 고정한다.
+     */
+    transition: none;
+
+    transform: translate3d(
+        0,
+        0,
+        0
+    ) !important;
+
+    opacity: 1 !important;
+
+    pointer-events: none;
+
+    cursor: default;
+}
 
 /* ==============================
     낮은 모바일 화면

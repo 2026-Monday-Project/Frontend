@@ -119,20 +119,6 @@ const Home = () => {
         };
     }, []);
 
-    const getDesignDragDistance = (
-        clientY,
-    ) => {
-        const movedDistance =
-            startYRef.current -
-            clientY;
-
-        const appScale =
-            getAppScale();
-
-        return movedDistance /
-            appScale;
-    };
-
     const updateDragDistance = (
         distance,
     ) => {
@@ -143,18 +129,9 @@ const Home = () => {
     };
 
     const handleEnter = () => {
-        /*
-         * 손을 뗀 순간에는
-         * 현재 위치 + opacity 1을 유지한다.
-         */
         setIsEntering(true);
         setSwipeOpacity(1);
 
-        /*
-         * transition이 적용된 프레임을
-         * 먼저 한 번 렌더한 뒤
-         * 다음 프레임에서 이동 + fade 시작.
-         */
         window.requestAnimationFrame(() => {
             window.requestAnimationFrame(() => {
                 updateDragDistance(
@@ -167,13 +144,25 @@ const Home = () => {
 
         window.setTimeout(() => {
             setIsEntered(true);
+
+            setIsEntering(false);
+            setIsDragging(false);
+
+            isDraggingRef.current = false;
+
+            setSwipeOpacity(1);
+
+            updateDragDistance(0);
         }, ENTRY_ANIMATION_TIME);
     };
 
     const handlePointerDown = (
         event,
     ) => {
-        if (isEntering) {
+        if (
+            isEntering ||
+            isEntered
+        ) {
             return;
         }
 
@@ -201,15 +190,22 @@ const Home = () => {
     ) => {
         if (
             !isDraggingRef.current ||
-            isEntering
+            isEntering ||
+            isEntered
         ) {
             return;
         }
 
+        const appScale =
+            getAppScale();
+
+        const movedDistance =
+            startYRef.current -
+            event.clientY;
+
         const designDistance =
-            getDesignDragDistance(
-                event.clientY,
-            );
+            movedDistance /
+            appScale;
 
         const limitedDistance =
             Math.min(
@@ -230,7 +226,8 @@ const Home = () => {
     ) => {
         if (
             !isDraggingRef.current ||
-            isEntering
+            isEntering ||
+            isEntered
         ) {
             return;
         }
@@ -260,18 +257,17 @@ const Home = () => {
             getAppScale();
 
         const movedDistance =
-            startYRef.current -
-            event.clientY;
-
-        const designDistance =
             Math.max(
-                movedDistance /
+                (
+                    startYRef.current -
+                    event.clientY
+                ) /
                     appScale,
                 0,
             );
 
         const velocity =
-            designDistance /
+            movedDistance /
             elapsedTime;
 
         const progress =
@@ -293,11 +289,8 @@ const Home = () => {
             return;
         }
 
-        /*
-         * 입장 기준 미달이면
-         * 투명해지지 않고 그대로 복귀.
-         */
         setSwipeOpacity(1);
+
         updateDragDistance(0);
     };
 
@@ -334,26 +327,34 @@ const Home = () => {
 
         event.preventDefault();
 
-        if (isEntering) {
+        if (
+            isEntering ||
+            isEntered
+        ) {
             return;
         }
 
         handleEnter();
     };
 
-    if (isEntered) {
-        return <HomeEntered />;
-    }
+    const handleReturnHome = () => {
+        setIsEntered(false);
+
+        setIsEntering(false);
+        setIsDragging(false);
+
+        isDraggingRef.current = false;
+
+        setSwipeOpacity(1);
+
+        updateDragDistance(0);
+    };
 
     return (
         <main
             ref={pageRef}
             className="home-page"
         >
-            <div className="home-entered-layer">
-                <HomeEntered />
-            </div>
-
             <div
                 className={`home-swipe-layer ${
                     isDragging
@@ -362,6 +363,10 @@ const Home = () => {
                 } ${
                     isEntering
                         ? "is-entering"
+                        : ""
+                } ${
+                    isEntered
+                        ? "is-entered-background"
                         : ""
                 }`}
                 style={{
@@ -390,7 +395,11 @@ const Home = () => {
                     handleEntryKeyDown
                 }
                 role="button"
-                tabIndex={0}
+                tabIndex={
+                    isEntered
+                        ? -1
+                        : 0
+                }
                 aria-label="위로 밀어서 정원 입장하기"
             >
                 <div className="home-design">
@@ -461,6 +470,22 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+            {!isEntered && (
+                <div className="home-entered-under-layer">
+                    <HomeEntered />
+                </div>
+            )}
+
+            {isEntered && (
+                <div className="home-entered-active-layer">
+                    <HomeEntered
+                        onReturnHome={
+                            handleReturnHome
+                        }
+                    />
+                </div>
+            )}
         </main>
     );
 };
