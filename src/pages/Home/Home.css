@@ -12,8 +12,7 @@
 
 
 /* ==============================
-    처음 Home을 위로 밀 때
-    아래에 보이는 입장 완료 화면
+    위로 올릴 때 뒤의 Entered
 ============================== */
 
 .home-entered-under-layer {
@@ -34,8 +33,7 @@
 
 
 /* ==============================
-    실제 입장 완료 후
-    최상단 HomeEntered
+    입장 완료 후 Entered
 ============================== */
 
 .home-entered-active-layer {
@@ -50,21 +48,13 @@
 
     overflow: hidden;
 
-    /*
-     * 중요
-     *
-     * HomeEntered를 오른쪽으로 밀었을 때
-     * 이 부모 배경이 보이면 안 된다.
-     *
-     * 아래 z-index 1의 첫 Home이
-     * 그대로 보여야 한다.
-     */
-    background-color: transparent;
+    background-color:
+        transparent;
 }
 
 
 /* ==============================
-    첫 Home 화면
+    첫 Home
 ============================== */
 
 .home-swipe-layer {
@@ -104,14 +94,12 @@
         transform,
         opacity;
 
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
 }
-
-
-/* ==============================
-    위로 드래그 중
-============================== */
 
 .home-swipe-layer.is-dragging {
     transition: none;
@@ -120,11 +108,6 @@
 
     opacity: 1;
 }
-
-
-/* ==============================
-    손을 뗀 뒤 입장
-============================== */
 
 .home-swipe-layer.is-entering {
     pointer-events: none;
@@ -148,6 +131,30 @@
 
 
 /* ==============================
+    Entered 뒤 Home 고정
+============================== */
+
+.home-swipe-layer.is-entered-background {
+    transition: none;
+
+    transform:
+        translate3d(
+            0,
+            0,
+            0
+        )
+        !important;
+
+    opacity:
+        1 !important;
+
+    pointer-events: none;
+
+    cursor: default;
+}
+
+
+/* ==============================
     Home Design
 ============================== */
 
@@ -162,7 +169,7 @@
 
 
 /* ==============================
-    배경 이미지
+    배경
 ============================== */
 
 .home-background {
@@ -176,7 +183,8 @@
     max-width: none;
 
     object-fit: cover;
-    object-position: center top;
+    object-position:
+        center top;
 
     pointer-events: none;
 
@@ -235,10 +243,13 @@
 }
 
 .home-divider {
+    display: block;
+
     width: 104px;
     height: 29px;
 
-    flex-shrink: 0;
+    flex:
+        0 0 29px;
 
     object-fit: contain;
 
@@ -260,7 +271,8 @@
     white-space: nowrap;
 }
 
-.home-subtitle + .home-divider {
+.home-subtitle +
+.home-divider {
     margin-bottom: 7px;
 }
 
@@ -323,6 +335,8 @@
 
     margin: 0;
 
+    flex-shrink: 0;
+
     color: #ffffff;
 
     font-family:
@@ -365,13 +379,19 @@
     display: flex;
 
     width: 34px;
+    height: 68px;
 
     margin-top: 18px;
+
+    flex:
+        0 0 68px;
 
     flex-direction: column;
     align-items: center;
 
     gap: 1px;
+
+    overflow: visible;
 }
 
 .home-entry-chevron-item {
@@ -379,6 +399,9 @@
 
     width: 22px;
     height: 22px;
+
+    flex:
+        0 0 22px;
 
     border-top:
         3px solid
@@ -389,6 +412,9 @@
         #ffffff;
 
     border-radius: 2px;
+
+    box-sizing:
+        border-box;
 
     transform:
         rotate(45deg);
@@ -415,42 +441,4 @@
 
 .home-entry-chevron-third {
     opacity: 0.5;
-}
-/* ==============================
-    Entered 뒤에 대기 중인 Home
-============================== */
-
-.home-swipe-layer.is-entered-background {
-    /*
-     * Entered 화면 뒤에서 Home이
-     * 원위치로 복구될 때 애니메이션이
-     * 보이지 않도록 완전히 고정한다.
-     */
-    transition: none;
-
-    transform: translate3d(
-        0,
-        0,
-        0
-    ) !important;
-
-    opacity: 1 !important;
-
-    pointer-events: none;
-
-    cursor: default;
-}
-
-/* ==============================
-    낮은 모바일 화면
-============================== */
-
-@media (max-height: 760px) {
-    .home-info {
-        top: 27%;
-    }
-
-    .home-entry-guide {
-        bottom: 42px;
-    }
 }

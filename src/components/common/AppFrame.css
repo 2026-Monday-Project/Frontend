@@ -3,7 +3,14 @@
 
     flex-shrink: 0;
 
-    box-shadow: 0 0 22px rgba(0, 0, 0, 0.16);
+    box-shadow:
+        0 0 22px
+        rgba(
+            0,
+            0,
+            0,
+            0.16
+        );
 
     overflow: hidden;
 }
@@ -14,20 +21,30 @@
     width: 402px;
     height: 874px;
 
-    transform-origin: top left;
+    transform-origin:
+        top left;
 
-    background-color: var(--color-background);
+    background-color:
+        var(--color-background);
 
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-/* Drawer가 열렸을 때만 페이지 스크롤 잠금 */
+
+/* ==============================
+    Drawer
+============================== */
+
 .app-frame.is-scroll-locked {
     overflow-y: hidden;
 }
 
-/* 모바일 */
+
+/* ==============================
+    모바일
+============================== */
+
 @media (max-width: 402px) {
     .app-frame-viewport,
     .app-frame-viewport-mobile {
@@ -50,9 +67,23 @@
         overflow-y: auto;
     }
 
-    /* 모바일에서도 Drawer가 열렸을 때만 스크롤 잠금 */
     .app-frame.is-scroll-locked,
     .app-frame-mobile.is-scroll-locked {
         overflow-y: hidden;
     }
+}
+
+
+/* ==============================
+    iPad / 태블릿
+============================== */
+
+.app-frame-viewport-tablet {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.app-frame-tablet {
+    transform-origin:
+        top left;
 }
