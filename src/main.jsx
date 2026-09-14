@@ -8,16 +8,33 @@ import homeEnteredBackground from "@/assets/images/custom/home-entered-backgroun
 
 import "@/styles/global.css";
 
+const isHomePath = () => {
+    return (
+        window.location.pathname ===
+        "/"
+    );
+};
+
 const preloadImage = (src) => {
     return new Promise((resolve) => {
         const image = new Image();
 
-        const handleComplete = () => {
+        const handleComplete = async () => {
+            try {
+                await image.decode?.();
+            } catch {
+                // decode 실패 시에도 렌더링 진행
+            }
+
             resolve();
         };
 
-        image.onload = handleComplete;
-        image.onerror = handleComplete;
+        image.onload =
+            handleComplete;
+
+        image.onerror = () => {
+            resolve();
+        };
 
         image.src = src;
 
@@ -33,22 +50,31 @@ const preloadHomeFont = async () => {
     }
 
     try {
-        await document.fonts.load(
-            "400 36px Warhaven",
-            "MAGGIE'S GARDEN",
-        );
+        await Promise.all([
+            document.fonts.load(
+                "400 36px Warhaven",
+                "MAGGIE'S GARDEN",
+            ),
 
-        await document.fonts.load(
-            "400 20px Warhaven",
-            "pouring love and letters",
-        );
+            document.fonts.load(
+                "400 20px Warhaven",
+                "pouring love and letters",
+            ),
 
-        await document.fonts.load(
-            "400 14px Warhaven",
-            "위로 스와이프하여 정원으로 입장하세요.",
-        );
+            document.fonts.load(
+                "400 15px Warhaven",
+                "2026.10.15 살롱문보우",
+            ),
+
+            document.fonts.load(
+                "400 14px Warhaven",
+                "위로 스와이프하여 정원으로 입장하세요.",
+            ),
+        ]);
+
+        await document.fonts.ready;
     } catch {
-        // 폰트 로딩 실패 시에도 앱은 실행한다.
+        // 폰트 실패 시에도 앱은 실행
     }
 };
 
@@ -70,26 +96,50 @@ const prepareHomeScreen = async () => {
     ]);
 };
 
-const isHomePath = () => {
-    return (
-        window.location.pathname ===
-        "/"
+const waitForLayout = () => {
+    return new Promise((resolve) => {
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                resolve();
+            });
+        });
+    });
+};
+
+const showHomeScreen = async () => {
+    /*
+     * React의 첫 렌더 및 effect가
+     * 실제 DOM에 반영될 시간을 준다.
+     */
+    await waitForLayout();
+
+    document.documentElement.classList.remove(
+        "home-initial-loading",
     );
 };
 
 const renderApp = async () => {
-    if (isHomePath()) {
+    const homePath =
+        isHomePath();
+
+    if (homePath) {
         await prepareHomeScreen();
     }
 
-    const root =
+    const rootElement =
         document.getElementById(
             "root",
         );
 
-    createRoot(root).render(
+    createRoot(
+        rootElement,
+    ).render(
         <App />,
     );
+
+    if (homePath) {
+        await showHomeScreen();
+    }
 };
 
 renderApp();
