@@ -158,7 +158,9 @@ const MondayOneSongCarousel = () => {
         };
     }, [contentOpenAt]);
 
-    const formatOpenDate = (dateTime) => {
+    const formatOpenDate = (
+        dateTime,
+    ) => {
         if (!dateTime) {
             return "";
         }
@@ -192,20 +194,23 @@ const MondayOneSongCarousel = () => {
     };
 
     const handleNext = () => {
-        setCurrentIndex((previousIndex) =>
-            Math.min(
-                previousIndex + 1,
-                carouselImages.length - 1,
-            ),
+        setCurrentIndex(
+            (previousIndex) =>
+                Math.min(
+                    previousIndex + 1,
+                    carouselImages.length -
+                        1,
+                ),
         );
     };
 
     const handlePrevious = () => {
-        setCurrentIndex((previousIndex) =>
-            Math.max(
-                previousIndex - 1,
-                0,
-            ),
+        setCurrentIndex(
+            (previousIndex) =>
+                Math.max(
+                    previousIndex - 1,
+                    0,
+                ),
         );
     };
 
@@ -217,7 +222,9 @@ const MondayOneSongCarousel = () => {
         setIsDragging(false);
     };
 
-    const handlePointerDown = (event) => {
+    const handlePointerDown = (
+        event,
+    ) => {
         if (!isReleased) {
             return;
         }
@@ -236,7 +243,9 @@ const MondayOneSongCarousel = () => {
         );
     };
 
-    const handlePointerMove = (event) => {
+    const handlePointerMove = (
+        event,
+    ) => {
         if (!isDragging) {
             return;
         }
@@ -245,10 +254,6 @@ const MondayOneSongCarousel = () => {
             event.clientX -
             dragStartXRef.current;
 
-        /*
-         * 첫 번째/마지막 사진에서
-         * 바깥쪽으로 과하게 끌리는 것 방지
-         */
         if (
             currentIndex === 0 &&
             distance > 0
@@ -290,7 +295,9 @@ const MondayOneSongCarousel = () => {
         setDragDistance(distance);
     };
 
-    const handlePointerUp = (event) => {
+    const handlePointerUp = (
+        event,
+    ) => {
         if (!isDragging) {
             return;
         }
@@ -323,7 +330,9 @@ const MondayOneSongCarousel = () => {
         }
     };
 
-    const handleWheel = (event) => {
+    const handleWheel = (
+        event,
+    ) => {
         if (!isReleased) {
             return;
         }
@@ -362,11 +371,9 @@ const MondayOneSongCarousel = () => {
         }, 300);
     };
 
-    const handleImageChange = (index) => {
-        if (!isReleased) {
-            return;
-        }
-
+    const handleImageChange = (
+        index,
+    ) => {
         setCurrentIndex(index);
 
         resetDrag();
@@ -436,7 +443,8 @@ const MondayOneSongCarousel = () => {
                             src={
                                 mondayOneSong
                             }
-                            alt="Monday One Song 콘텐츠"
+                            alt=""
+                            aria-hidden="true"
                             draggable="false"
                         />
 
@@ -456,37 +464,30 @@ const MondayOneSongCarousel = () => {
                 )}
             </div>
 
-            <div
-                className={`monday-song-indicator ${
-                    !isReleased
-                        ? "monday-song-indicator-disabled"
-                        : ""
-                }`}
-            >
-                {carouselImages.map(
-                    (_, index) => (
-                        <button
-                            key={index}
-                            type="button"
-                            className={`monday-song-dot ${
-                                currentIndex ===
-                                index
-                                    ? "monday-song-dot-active"
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                handleImageChange(
-                                    index,
-                                )
-                            }
-                            disabled={
-                                !isReleased
-                            }
-                            aria-label={`${index + 1}번째 Monday One Song 이미지 보기`}
-                        />
-                    ),
-                )}
-            </div>
+            {isReleased && (
+                <div className="monday-song-indicator">
+                    {carouselImages.map(
+                        (_, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                className={`monday-song-dot ${
+                                    currentIndex ===
+                                    index
+                                        ? "monday-song-dot-active"
+                                        : ""
+                                }`}
+                                onClick={() =>
+                                    handleImageChange(
+                                        index,
+                                    )
+                                }
+                                aria-label={`${index + 1}번째 Monday One Song 이미지 보기`}
+                            />
+                        ),
+                    )}
+                </div>
+            )}
         </div>
     );
 };
