@@ -41,15 +41,12 @@ const NicknameChange = ({ onBack }) => {
         const inputValue = event.target.value;
 
         /*
-         * 영어, 숫자, 특수문자는 제거
-         * 한글 완성형 + 한글 자모만 입력 가능
-         * 최대 10자
+         * 입력 자체는 허용하고
+         * 최대 10자까지만 저장
          */
-        const koreanOnlyNickname = inputValue
-            .replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣]/g, "")
-            .slice(0, 10);
-
-        setNickname(koreanOnlyNickname);
+        setNickname(
+            inputValue.slice(0, 10),
+        );
 
         /*
          * 입력값이 변경되면
@@ -60,18 +57,27 @@ const NicknameChange = ({ onBack }) => {
 
     /*
      * 완성된 한글만 1~10자일 때 유효
-     * ㄱ, ㄴ, ㅏ 등의 자모는 유효하지 않음
      */
     const isNicknameValid =
         /^[가-힣]{1,10}$/.test(nickname);
 
     /*
-     * 입력값에 초성/중성 등의
-     * 미완성 한글 자모가 있는지 확인
+     * ㄱ, ㄴ, ㅏ 등의
+     * 미완성 한글 자모 확인
      */
     const hasIncompleteKorean =
         nickname.length > 0 &&
         /[ㄱ-ㅎㅏ-ㅣ]/.test(nickname);
+
+    /*
+     * 영어, 숫자, 특수문자 등
+     * 한글이 아닌 문자가 있는지 확인
+     */
+    const hasNonKorean =
+        nickname.length > 0 &&
+        /[^ㄱ-ㅎㅏ-ㅣ가-힣]/.test(
+            nickname,
+        );
 
     const isDuplicate =
         nicknameCheckStatus === "duplicate";
@@ -80,7 +86,9 @@ const NicknameChange = ({ onBack }) => {
         nicknameCheckStatus === "available";
 
     const hasError =
-        hasIncompleteKorean || isDuplicate;
+        hasIncompleteKorean ||
+        hasNonKorean ||
+        isDuplicate;
 
     const handleDuplicateCheck = async () => {
         const trimmedNickname = nickname.trim();
@@ -215,20 +223,29 @@ const NicknameChange = ({ onBack }) => {
                         </button>
                     </div>
 
-                    {hasIncompleteKorean && (
+                    {hasNonKorean && (
                         <p className="nickname-change-message nickname-change-message-error">
-                            * 완성된 한글로 입력해 주세요.
+                            * 한글만 입력할 수 있습니다.
                         </p>
                     )}
 
-                    {!hasIncompleteKorean &&
+                    {!hasNonKorean &&
+                        hasIncompleteKorean && (
+                            <p className="nickname-change-message nickname-change-message-error">
+                                * 초성만 입력할 수 없습니다. 완성된 한글로 입력해 주세요.
+                            </p>
+                        )}
+
+                    {!hasNonKorean &&
+                        !hasIncompleteKorean &&
                         isAvailable && (
                             <p className="nickname-change-message nickname-change-message-success">
                                 사용 가능한 닉네임 입니다.
                             </p>
                         )}
 
-                    {!hasIncompleteKorean &&
+                    {!hasNonKorean &&
+                        !hasIncompleteKorean &&
                         isDuplicate && (
                             <p className="nickname-change-message nickname-change-message-error">
                                 * 이미 사용 중인 닉네임 입니다.
