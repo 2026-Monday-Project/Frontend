@@ -3,7 +3,10 @@ import {
     useRef,
     useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+
+import {
+    useNavigate,
+} from "react-router-dom";
 
 import homeEnteredBackground from "@/assets/images/custom/home-entered-background.svg";
 
@@ -17,7 +20,9 @@ const RETURN_ANIMATION_TIME = 460;
 
 const getAppScale = () => {
     const appFrame =
-        document.querySelector(".app-frame");
+        document.querySelector(
+            ".app-frame",
+        );
 
     if (!appFrame) {
         return 1;
@@ -27,54 +32,78 @@ const getAppScale = () => {
         appFrame.offsetWidth;
 
     const renderedWidth =
-        appFrame.getBoundingClientRect().width;
+        appFrame.getBoundingClientRect()
+            .width;
 
     if (!logicalWidth) {
         return 1;
     }
 
-    return renderedWidth / logicalWidth;
+    return (
+        renderedWidth /
+        logicalWidth
+    );
 };
 
 const HomeEntered = ({
     onReturnHome,
 }) => {
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-    const pageRef = useRef(null);
+    const pageRef =
+        useRef(null);
 
-    const startXRef = useRef(0);
-    const startTimeRef = useRef(0);
+    const startXRef =
+        useRef(0);
 
-    const dragDistanceRef = useRef(0);
-    const isDraggingRef = useRef(false);
+    const startTimeRef =
+        useRef(0);
 
-    const [scale, setScale] =
-        useState(1);
+    const dragDistanceRef =
+        useRef(0);
 
-    const [dragDistance, setDragDistance] =
-        useState(0);
+    const isDraggingRef =
+        useRef(false);
 
-    const [isDragging, setIsDragging] =
-        useState(false);
+    const [
+        scale,
+        setScale,
+    ] = useState(1);
 
-    const [isReturning, setIsReturning] =
-        useState(false);
+    const [
+        dragDistance,
+        setDragDistance,
+    ] = useState(0);
+
+    const [
+        isDragging,
+        setIsDragging,
+    ] = useState(false);
+
+    const [
+        isReturning,
+        setIsReturning,
+    ] = useState(false);
 
     useEffect(() => {
-        const page = pageRef.current;
+        const page =
+            pageRef.current;
 
         if (!page) {
             return undefined;
         }
 
-        const updateScale = () => {
-            const nextScale =
-                page.clientWidth /
-                FIGMA_WIDTH;
+        const updateScale =
+            () => {
+                const nextScale =
+                    page.clientWidth /
+                    FIGMA_WIDTH;
 
-            setScale(nextScale);
-        };
+                setScale(
+                    nextScale,
+                );
+            };
 
         updateScale();
 
@@ -83,7 +112,9 @@ const HomeEntered = ({
                 updateScale,
             );
 
-        resizeObserver.observe(page);
+        resizeObserver.observe(
+            page,
+        );
 
         return () => {
             resizeObserver.disconnect();
@@ -96,31 +127,42 @@ const HomeEntered = ({
         dragDistanceRef.current =
             distance;
 
-        setDragDistance(distance);
+        setDragDistance(
+            distance,
+        );
     };
 
-    const handleReturnHome = () => {
-        if (
-            !onReturnHome ||
-            isReturning
-        ) {
-            return;
-        }
+    const handleReturnHome =
+        () => {
+            if (
+                !onReturnHome ||
+                isReturning
+            ) {
+                return;
+            }
 
-        setIsReturning(true);
+            setIsReturning(true);
 
-        window.requestAnimationFrame(() => {
-            window.requestAnimationFrame(() => {
-                updateDragDistance(
-                    FIGMA_WIDTH + 40,
-                );
-            });
-        });
+            window.requestAnimationFrame(
+                () => {
+                    window.requestAnimationFrame(
+                        () => {
+                            updateDragDistance(
+                                FIGMA_WIDTH +
+                                    40,
+                            );
+                        },
+                    );
+                },
+            );
 
-        window.setTimeout(() => {
-            onReturnHome();
-        }, RETURN_ANIMATION_TIME);
-    };
+            window.setTimeout(
+                () => {
+                    onReturnHome();
+                },
+                RETURN_ANIMATION_TIME,
+            );
+        };
 
     const handlePointerDown = (
         event,
@@ -146,8 +188,11 @@ const HomeEntered = ({
         startTimeRef.current =
             performance.now();
 
-        dragDistanceRef.current = 0;
-        isDraggingRef.current = true;
+        dragDistanceRef.current =
+            0;
+
+        isDraggingRef.current =
+            true;
 
         setIsDragging(true);
 
@@ -203,7 +248,8 @@ const HomeEntered = ({
             return;
         }
 
-        isDraggingRef.current = false;
+        isDraggingRef.current =
+            false;
 
         setIsDragging(false);
 
@@ -269,7 +315,8 @@ const HomeEntered = ({
             return;
         }
 
-        isDraggingRef.current = false;
+        isDraggingRef.current =
+            false;
 
         setIsDragging(false);
 
@@ -286,13 +333,19 @@ const HomeEntered = ({
         }
     };
 
-    const handlePerformanceClick = () => {
-        navigate("/performance");
-    };
+    const handlePerformanceClick =
+        () => {
+            navigate(
+                "/performance",
+            );
+        };
 
-    const handleGardenClick = () => {
-        navigate("/garden");
-    };
+    const handleGardenClick =
+        () => {
+            navigate(
+                "/garden",
+            );
+        };
 
     return (
         <main

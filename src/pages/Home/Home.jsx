@@ -17,7 +17,9 @@ const ENTRY_ANIMATION_TIME = 460;
 
 const getAppScale = () => {
     const appFrame =
-        document.querySelector(".app-frame");
+        document.querySelector(
+            ".app-frame",
+        );
 
     if (!appFrame) {
         return 1;
@@ -27,63 +29,90 @@ const getAppScale = () => {
         appFrame.offsetWidth;
 
     const renderedWidth =
-        appFrame.getBoundingClientRect().width;
+        appFrame.getBoundingClientRect()
+            .width;
 
     if (!logicalWidth) {
         return 1;
     }
 
-    return renderedWidth / logicalWidth;
+    return (
+        renderedWidth /
+        logicalWidth
+    );
 };
 
 const Home = () => {
-    const pageRef = useRef(null);
+    const pageRef =
+        useRef(null);
 
-    const startYRef = useRef(0);
-    const startTimeRef = useRef(0);
+    const startYRef =
+        useRef(0);
 
-    const dragDistanceRef = useRef(0);
-    const isDraggingRef = useRef(false);
+    const startTimeRef =
+        useRef(0);
 
-    const [pageHeight, setPageHeight] =
-        useState(874);
+    const dragDistanceRef =
+        useRef(0);
 
-    const [dragDistance, setDragDistance] =
-        useState(0);
+    const isDraggingRef =
+        useRef(false);
 
-    const [swipeOpacity, setSwipeOpacity] =
-        useState(1);
+    const [
+        pageHeight,
+        setPageHeight,
+    ] = useState(874);
 
-    const [isDragging, setIsDragging] =
-        useState(false);
+    const [
+        dragDistance,
+        setDragDistance,
+    ] = useState(0);
 
-    const [isEntering, setIsEntering] =
-        useState(false);
+    const [
+        swipeOpacity,
+        setSwipeOpacity,
+    ] = useState(1);
 
-    const [isEntered, setIsEntered] =
-        useState(false);
+    const [
+        isDragging,
+        setIsDragging,
+    ] = useState(false);
+
+    const [
+        isEntering,
+        setIsEntering,
+    ] = useState(false);
+
+    const [
+        isEntered,
+        setIsEntered,
+    ] = useState(false);
 
     useEffect(() => {
-        const page = pageRef.current;
+        const page =
+            pageRef.current;
 
         if (!page) {
             return undefined;
         }
 
-        const updatePageHeight = () => {
-            const appScale =
-                getAppScale();
+        const updatePageHeight =
+            () => {
+                const appScale =
+                    getAppScale();
 
-            const renderedHeight =
-                page.getBoundingClientRect()
-                    .height;
+                const renderedHeight =
+                    page.getBoundingClientRect()
+                        .height;
 
-            const nextHeight =
-                renderedHeight /
-                appScale;
+                const nextHeight =
+                    renderedHeight /
+                    appScale;
 
-            setPageHeight(nextHeight);
-        };
+                setPageHeight(
+                    nextHeight,
+                );
+            };
 
         updatePageHeight();
 
@@ -92,7 +121,9 @@ const Home = () => {
                 updatePageHeight,
             );
 
-        resizeObserver.observe(page);
+        resizeObserver.observe(
+            page,
+        );
 
         window.addEventListener(
             "resize",
@@ -125,30 +156,42 @@ const Home = () => {
         dragDistanceRef.current =
             distance;
 
-        setDragDistance(distance);
+        setDragDistance(
+            distance,
+        );
     };
 
     const handleEnter = () => {
         setIsEntering(true);
+
         setSwipeOpacity(1);
 
-        window.requestAnimationFrame(() => {
-            window.requestAnimationFrame(() => {
-                updateDragDistance(
-                    pageHeight + 40,
-                );
+        window.requestAnimationFrame(
+            () => {
+                window.requestAnimationFrame(
+                    () => {
+                        updateDragDistance(
+                            pageHeight +
+                                40,
+                        );
 
-                setSwipeOpacity(0);
-            });
-        });
+                        setSwipeOpacity(
+                            0,
+                        );
+                    },
+                );
+            },
+        );
 
         window.setTimeout(() => {
             setIsEntered(true);
 
             setIsEntering(false);
+
             setIsDragging(false);
 
-            isDraggingRef.current = false;
+            isDraggingRef.current =
+                false;
 
             setSwipeOpacity(1);
 
@@ -172,10 +215,14 @@ const Home = () => {
         startTimeRef.current =
             performance.now();
 
-        dragDistanceRef.current = 0;
-        isDraggingRef.current = true;
+        dragDistanceRef.current =
+            0;
+
+        isDraggingRef.current =
+            true;
 
         setIsDragging(true);
+
         setSwipeOpacity(1);
 
         updateDragDistance(0);
@@ -232,7 +279,8 @@ const Home = () => {
             return;
         }
 
-        isDraggingRef.current = false;
+        isDraggingRef.current =
+            false;
 
         setIsDragging(false);
 
@@ -297,9 +345,11 @@ const Home = () => {
     const handlePointerCancel = (
         event,
     ) => {
-        isDraggingRef.current = false;
+        isDraggingRef.current =
+            false;
 
         setIsDragging(false);
+
         setSwipeOpacity(1);
 
         updateDragDistance(0);
@@ -319,7 +369,8 @@ const Home = () => {
         event,
     ) => {
         if (
-            event.key !== "Enter" &&
+            event.key !==
+                "Enter" &&
             event.key !== " "
         ) {
             return;
@@ -337,18 +388,21 @@ const Home = () => {
         handleEnter();
     };
 
-    const handleReturnHome = () => {
-        setIsEntered(false);
+    const handleReturnHome =
+        () => {
+            setIsEntered(false);
 
-        setIsEntering(false);
-        setIsDragging(false);
+            setIsEntering(false);
 
-        isDraggingRef.current = false;
+            setIsDragging(false);
 
-        setSwipeOpacity(1);
+            isDraggingRef.current =
+                false;
 
-        updateDragDistance(0);
-    };
+            setSwipeOpacity(1);
+
+            updateDragDistance(0);
+        };
 
     return (
         <main
@@ -405,9 +459,12 @@ const Home = () => {
                 <div className="home-design">
                     <img
                         className="home-background"
-                        src={homeBackground}
+                        src={
+                            homeBackground
+                        }
                         alt=""
                         draggable="false"
+                        fetchPriority="high"
                     />
 
                     <section className="home-info">
@@ -419,9 +476,12 @@ const Home = () => {
 
                         <img
                             className="home-divider"
-                            src={homeDivider}
+                            src={
+                                homeDivider
+                            }
                             alt=""
                             aria-hidden="true"
+                            draggable="false"
                         />
 
                         <p className="home-subtitle">
@@ -430,9 +490,12 @@ const Home = () => {
 
                         <img
                             className="home-divider"
-                            src={homeDivider}
+                            src={
+                                homeDivider
+                            }
                             alt=""
                             aria-hidden="true"
+                            draggable="false"
                         />
 
                         <div className="home-performance-info">
