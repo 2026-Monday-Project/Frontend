@@ -42,6 +42,16 @@
     width: min(329px, calc(100% - 36px));
 }
 
+.garden-content > .garden-sort-row {
+    width: 345px;
+}
+
+@media (max-width: 360px) {
+    .garden-content > .garden-sort-row {
+        width: min(345px, calc(100vw - 28px));
+    }
+}
+
 .garden-sort {
     display: flex;
     width: 88px;
