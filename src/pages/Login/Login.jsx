@@ -10,6 +10,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('default');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
 
@@ -44,9 +45,7 @@ const Login = () => {
         setStatus('default');
     };
 
-    const handleSubmit = async () => {
-        if (status !== 'success') return;
-
+    const performLogin = async () => {
         try {
             const response = await api.post('/accounts/login', {
                 email: email
@@ -56,13 +55,35 @@ const Login = () => {
             
             if (token) {
                 localStorage.setItem('accessToken', token);
-                navigate('/mygarden');
+                return true;
             } else {
                 alert('토큰 발급에 실패했습니다.');
+                return false;
             }
         } catch (error) {
             console.error('로그인 실패:', error);
             alert('로그인에 실패했습니다. 다시 시도해 주세요.');
+            return false;
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (status !== 'success') return;
+        
+        const isSuccess = await performLogin();
+        if (isSuccess) {
+            navigate('/mygarden');
+        }
+    };
+
+    const handleGoSendStory = async () => {
+        if (status === 'success') {
+            const isSuccess = await performLogin();
+            if (isSuccess) {
+                navigate('/story');
+            }
+        } else {
+            navigate('/story');
         }
     };
 
@@ -119,7 +140,7 @@ const Login = () => {
                 <button
                     className="go-send-button"
                     disabled={status === 'default'}
-                    onClick={() => navigate('/story')}
+                    onClick={handleGoSendStory}
                 >
                     사연 보내러 가기
                 </button>
