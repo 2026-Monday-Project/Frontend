@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.svg";
+import arrowLeft from "@/assets/icons/ep_arrow-left.svg";
 import mondayProjectLogo from "@/assets/icons/ConsentPage logo.svg";
 import "@/pages/ConsentPage/ConsentPage.css";
 
@@ -24,7 +24,7 @@ const ConsentPage4 = () => {
           </button>
 
           <h1 className="consent-page-title">
-            공연 중 소개·낭독 동의{" "}
+            <span className="consent-page-title-main">공연 중 소개·낭독 동의</span>{" "}
             <span className="consent-page-title-tag">(선택)</span>
           </h1>
         </header>

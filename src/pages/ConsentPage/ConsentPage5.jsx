@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import arrowLeft from "@/assets/icons/arrow-left.svg";
+import arrowLeft from "@/assets/icons/ep_arrow-left.svg";
 import mondayProjectLogo from "@/assets/icons/ConsentPage logo.svg";
 import "@/pages/ConsentPage/ConsentPage.css";
 
@@ -24,7 +24,7 @@ const ConsentPage5 = () => {
           </button>
 
           <h1 className="consent-page-title">
-            SNS·홍보물 활용 동의{" "}
+            <span className="consent-page-title-main">SNS·홍보물 활용 동의</span>{" "}
             <span className="consent-page-title-tag">(선택)</span>
           </h1>
         </header>
