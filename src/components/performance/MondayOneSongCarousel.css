@@ -74,15 +74,32 @@
     공개 전
    ============================== */
 
-.monday-song-image-blurred {
-    filter: blur(7.5px);
+.monday-song-preview {
+    position: relative;
 
-    transform: scale(1.04);
+    width: 100%;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+}
+
+.monday-song-image-blurred {
+    display: block;
+
+    width: 100%;
+
+    filter: blur(10px);
+
+    transform: scale(1.08);
+
+    transform-origin: center;
+
+    border-radius: 10px;
 }
 
 .monday-song-overlay {
     position: absolute;
-
     inset: 0;
 
     display: flex;
@@ -91,6 +108,8 @@
 
     justify-content: center;
     align-items: center;
+
+    z-index: 2;
 }
 
 .monday-song-overlay::before {
@@ -104,6 +123,9 @@
     border: 1px solid #fff;
 
     border-radius: 15px;
+
+    background:
+        rgba(49, 83, 56, 0.12);
 }
 
 .monday-song-coming-soon,
@@ -152,12 +174,6 @@
     margin-top: 12px;
 }
 
-.monday-song-indicator-disabled {
-    filter: blur(5px);
-
-    opacity: 0.45;
-}
-
 .monday-song-dot {
     width: 7px;
     height: 7px;
@@ -176,10 +192,6 @@
     transition:
         width 0.2s ease,
         background-color 0.2s ease;
-}
-
-.monday-song-dot:disabled {
-    cursor: default;
 }
 
 .monday-song-dot-active {
