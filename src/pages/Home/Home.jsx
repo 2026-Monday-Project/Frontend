@@ -6,7 +6,6 @@ import {
 
 import HomeEntered from "@/components/home/HomeEntered";
 
-import homeBackground from "@/assets/images/custom/home-background.svg";
 import homeDivider from "@/assets/images/custom/home-divider.svg";
 
 import "./Home.css";
@@ -396,7 +395,7 @@ const Home = () => {
                 <div className="home-design">
                     <img
                         className="home-background"
-                        src={homeBackground}
+                        src="/images/home-background.svg"
                         alt=""
                         draggable="false"
                     />
