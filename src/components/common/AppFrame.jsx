@@ -1,5 +1,5 @@
 import {
-    useEffect,
+    useLayoutEffect,
     useRef,
     useState,
 } from "react";
@@ -44,8 +44,10 @@ const getInitialFrameState = () => {
             scale: 1,
             isMobile: true,
             isTablet: false,
-            viewportWidth: width,
-            viewportHeight: height,
+            viewportWidth:
+                width,
+            viewportHeight:
+                height,
         };
     }
 
@@ -56,8 +58,10 @@ const getInitialFrameState = () => {
                 FRAME_HEIGHT,
             isMobile: false,
             isTablet: true,
-            viewportWidth: width,
-            viewportHeight: height,
+            viewportWidth:
+                width,
+            viewportHeight:
+                height,
         };
     }
 
@@ -78,8 +82,10 @@ const getInitialFrameState = () => {
             ),
         isMobile: false,
         isTablet: false,
-        viewportWidth: width,
-        viewportHeight: height,
+        viewportWidth:
+            width,
+        viewportHeight:
+            height,
     };
 };
 
@@ -109,7 +115,7 @@ const AppFrame = ({
             frameState.viewportWidth,
         );
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handleResize = () => {
             const {
                 width,
@@ -166,17 +172,17 @@ const AppFrame = ({
                         );
                 }
 
-                const tabletScale =
-                    maxViewportHeightRef.current /
-                    FRAME_HEIGHT;
-
                 setFrameState({
                     scale:
-                        tabletScale,
+                        maxViewportHeightRef.current /
+                        FRAME_HEIGHT,
+
                     isMobile: false,
                     isTablet: true,
+
                     viewportWidth:
                         width,
+
                     viewportHeight:
                         currentHeight,
                 });
@@ -199,14 +205,20 @@ const AppFrame = ({
                         heightScale,
                         1,
                     ),
+
                 isMobile: false,
+
                 isTablet: false,
+
                 viewportWidth:
                     width,
+
                 viewportHeight:
                     currentHeight,
             });
         };
+
+        handleResize();
 
         window.addEventListener(
             "resize",
@@ -265,7 +277,8 @@ const AppFrame = ({
                     isMobile
                         ? undefined
                         : {
-                              transform: `scale(${scale})`,
+                              transform:
+                                  `scale(${scale})`,
                           }
                 }
             >

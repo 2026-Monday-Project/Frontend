@@ -3,24 +3,17 @@
     <head>
         <meta charset="UTF-8" />
 
-        <!-- Home에서 가장 먼저 사용하는 폰트 -->
-        <link
-            rel="preload"
-            href="/src/assets/fonts/nexon-warhaven-regular.ttf"
-            as="font"
-            type="font/ttf"
-            crossorigin
-        />
+        <script>
+            if (
+                window.location.pathname ===
+                "/"
+            ) {
+                document.documentElement.classList.add(
+                    "home-initial-loading",
+                );
+            }
+        </script>
 
-        <!-- Home 첫 화면 배경 -->
-        <link
-            rel="preload"
-            href="/src/assets/images/custom/home-background.svg"
-            as="image"
-            fetchpriority="high"
-        />
-
-        <!-- 앱이 준비되기 전 흰색 플래시 방지 -->
         <style>
             html,
             body,
@@ -28,7 +21,18 @@
                 margin: 0;
                 width: 100%;
                 height: 100%;
+            }
+
+            body {
                 background: #f8f7f4;
+            }
+
+            /*
+             * Home 첫 진입에서만
+             * 중간 렌더링을 사용자에게 보여주지 않는다.
+             */
+            html.home-initial-loading #root {
+                visibility: hidden;
             }
         </style>
 
