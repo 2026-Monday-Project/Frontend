@@ -4,6 +4,7 @@ import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
 import StoryCard from '@/components/common/StoryCard';
+import GardenEmptyState from '@/components/garden/GardenEmptyState';
 import grassesImg from '@/assets/images/custom/grasses.svg';
 import earnedLikesTotal from '@/assets/images/custom/earned-likes-total.svg';
 import louisProfile from '@/assets/images/custom/louis-profile.svg';
@@ -72,18 +73,21 @@ const EarnedLikes = () => {
                 <div className="total-count-text">{totalLikes}</div>
             </div>
 
-
             <div className="story-list-scroll">
                 {!isLoading && totalLikes === 0 ? (
-                    <div className="empty-state-card">
-                        <p className="empty-state-text">아직 받은 공감이 없어요.</p>
+                    <div className="empty-state-wrapper">
+                        <GardenEmptyState 
+                            title="아직 받은 공감이 없어요."
+                            subtitle="첫 공감을 기다리고 있어요."
+                            guide="마음이 닿은 사연들이 이곳에 모여요."
+                        />
                     </div>
                 ) : (
                     stories.map(story => (
                         <StoryCard 
                             key={story.storyId}
-                            image={story.thumbnailUrl || story.imageUrl || louisProfile}
-                            title={story.title}
+                            image={story.thumbnailUrl || louisProfile}
+                            title={story.storyTitle}
                             petName={story.petName}
                             breed={story.petType}
                             age={story.petAge}

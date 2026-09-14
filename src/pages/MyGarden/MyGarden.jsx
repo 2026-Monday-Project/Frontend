@@ -12,6 +12,8 @@ import unreadDot from '@/assets/images/custom/unread-dot.svg';
 import leavesLeftTop from '@/assets/images/custom/leaves-left-top.svg'
 import leavesLeftBottom from '@/assets/images/custom/leaves-left-bottom.svg'
 import leavesRightBottom from '@/assets/images/custom/leaves-right-bottom.svg'
+import requiresStory from '@/assets/images/custom/requires-story.svg';
+import seperatePaw from '@/assets/images/custom/seperate-paw.svg';
 import './MyGarden.css';
 
 const MyGarden = () => {
@@ -147,18 +149,31 @@ const MyGarden = () => {
                     </div>
                     
                     <div className="story-list">
-                        {stories.map(story => (
-                            <StoryCard 
-                                key={story.storyId}
-                                thumbnail={story.thumbnailUrl || story.imageUrl || louisProfile}
-                                status={formatStatus(story.status)}
-                                title={story.title}
-                                date={formatDate(story.createdAt)}
-                                views={story.viewCount}
-                                likes={story.likeCount}
-                                onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
-                            />
-                        ))}
+                        {stories.length === 0 ? (
+                            <button 
+                                className="empty-state-card"
+                                onClick={() => navigate('/mystories/list')}
+                                type="button"
+                            >
+                                <img src={requiresStory} alt="보낸 사연 없음" className="empty-state-icon" />
+                                <p className="empty-state-title">아직 보낸 사연이 없어요.</p>
+                                <img src={seperatePaw} alt="구분선" className="empty-state-divider" />
+                                <p className="empty-state-desc">사연을 보내고 나만의 정원을 만들어 보세요.</p>
+                            </button>
+                        ) : (
+                            stories.map(story => (
+                                <StoryCard 
+                                    key={story.storyId}
+                                    thumbnail={story.thumbnailUrl || story.imageUrl || louisProfile}
+                                    status={formatStatus(story.status)}
+                                    title={story.title}
+                                    date={formatDate(story.createdAt)}
+                                    views={story.viewCount}
+                                    likes={story.likeCount}
+                                    onClick={() => navigate(`/mystories/detail/${story.storyId}`)}
+                                />
+                            ))
+                        )}
                     </div>
                 </section>
 
@@ -174,19 +189,19 @@ const MyGarden = () => {
                             const isExplicitlyUnread = mail.isRead === false;
 
                             return (
-                                <div 
+                                <button 
                                     key={mail.notificationId} 
                                     className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
                                     onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
-                                    style={{ cursor: 'pointer' }}
+                                    type="button"
                                 >
-                                    <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
-                                        <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
-                                        <p className={isExplicitlyUnread ? "mail-desc" : "mail-desc-read"}>{mail.content}</p>
-                                        <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
+                                    <div className="mail-text-wrapper">
+                                        <p className={isExplicitlyUnread ? "garden-mail-title" : "mail-title-read"}>{mail.title}</p>
+                                        <p className={isExplicitlyUnread ? "garden-mail-desc" : "mail-desc-read"}>{mail.content}</p>
+                                        <p className={isExplicitlyUnread ? "garden-mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
                                     </div>
-                                    {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
-                                </div>
+                                    {isExplicitlyUnread && <img src={unreadDot} alt="안 읽음" className="unread-dot" />}
+                                </button>
                             );
                         })}
                     </div>
