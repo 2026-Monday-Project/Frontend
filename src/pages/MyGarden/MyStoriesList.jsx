@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '@/api/axios';
-import Navbar from '@/components/common/Navbar';
-import Drawer from '@/components/common/Drawer';
-import StoryCard from '@/components/myGarden/StoryCard';
-import GardenEmptyState from '@/components/garden/GardenEmptyState';
-import grassesImg from '@/assets/images/custom/grasses.svg';
-import louisProfile from '@/assets/images/custom/louis-profile.svg';
-import './MyStoriesList.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "@/api/axios";
+import Navbar from "@/components/common/Navbar";
+import Drawer from "@/components/common/Drawer";
+import StoryCard from "@/components/mygarden/StoryCard";
+import GardenEmptyState from "@/components/garden/GardenEmptyState";
+import grassesImg from "@/assets/images/custom/grasses.svg";
+import louisProfile from "@/assets/images/custom/louis-profile.svg";
+import "./MyStoriesList.css";
 
 const MyStoriesList = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('전체');
+    const [activeTab, setActiveTab] = useState("전체");
     const [stories, setStories] = useState([]);
     const [isTotallyEmpty, setIsTotallyEmpty] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const tabs = ['전체', '공개', '검토중', '비공개'];
+    const tabs = ["전체", "공개", "검토중", "비공개"];
 
     const statusMap = {
-        '전체': null,
-        '공개': 'PUBLIC',
-        '검토중': 'PENDING',
-        '비공개': 'PRIVATE'
+        전체: null,
+        공개: "PUBLIC",
+        검토중: "PENDING",
+        비공개: "PRIVATE",
     };
 
     useEffect(() => {
@@ -34,11 +34,11 @@ const MyStoriesList = () => {
                 setIsLoading(true);
                 const currentStatus = statusMap[activeTab] ?? null;
                 const params = currentStatus ? { status: currentStatus } : {};
-                
-                const response = await api.get('/my-garden/stories', { params });
+
+                const response = await api.get("/my-garden/stories", { params });
                 const fetchedContent = response.data?.data?.content;
                 const storyArray = Array.isArray(fetchedContent) ? fetchedContent : [];
-                
+
                 setStories(storyArray);
 
                 if (!currentStatus && storyArray.length === 0) {
@@ -47,8 +47,8 @@ const MyStoriesList = () => {
                 }
             } catch (error) {
                 if (error.response?.status === 401) {
-                    localStorage.removeItem('accessToken');
-                    navigate('/mygarden/unlogged-in');
+                    localStorage.removeItem("accessToken");
+                    navigate("/mygarden/unlogged-in");
                 } else {
                     console.error(error);
                     setStories([]);
@@ -70,25 +70,25 @@ const MyStoriesList = () => {
     };
 
     const formatDate = (dateString) => {
-        if (!dateString) return '';
+        if (!dateString) return "";
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         return `${year}.${month}.${day}`;
     };
 
     const formatStatus = (status) => {
-        if (status === 'PENDING') return '검토중';
-        if (status === 'PUBLIC') return '공개';
-        return '비공개';
+        if (status === "PENDING") return "검토중";
+        if (status === "PUBLIC") return "공개";
+        return "비공개";
     };
 
     return (
         <div className="my-stories-page">
             <img src={grassesImg} alt="" className="grasses-bottom" />
-            
-            <Navbar 
+
+            <Navbar
                 title="내 사연"
                 showBackButton={true}
                 onBack={() => navigate(-1)}
@@ -101,9 +101,9 @@ const MyStoriesList = () => {
             {!isTotallyEmpty && (
                 <div className="tabs-section">
                     {tabs.map((tab) => (
-                        <button 
+                        <button
                             key={tab}
-                            className={`tab-button ${activeTab === tab ? 'active' : ''}`}
+                            className={`tab-button ${activeTab === tab ? "active" : ""}`}
                             onClick={() => setActiveTab(tab)}
                         >
                             {tab}
@@ -119,6 +119,22 @@ const MyStoriesList = () => {
                             title="아직 보낸 사연이 없어요."
                             subtitle="가장 먼저 우리 이야기를 들려주세요."
                             guide="사연을 보내고 나만의 정원을 만들어 보세요."
+                        />
+                    </div>
+                ) : !isLoading && stories.length === 0 ? (
+                    <div className="empty-state-wrapper">
+                        <GardenEmptyState 
+                            title={
+                                activeTab === '공개' ? "아직 공개된 사연이 없어요." :
+                                activeTab === '비공개' ? "숨겨진 사연이 없어요." :
+                                "아직 검토 중인 사연이 없어요."
+                            }
+                            subtitle={null}
+                            guide={
+                                activeTab === '공개' ? "공개된 사연은 여기서 확인할 수 있어요." :
+                                activeTab === '비공개' ? "숨겨진 사연은 여기서 확인할 수 있어요." :
+                                "검토 중인 사연은 여기서 확인할 수 있어요."
+                            }
                         />
                     </div>
                 ) : (
