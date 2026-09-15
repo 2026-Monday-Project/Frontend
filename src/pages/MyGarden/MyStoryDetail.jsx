@@ -12,7 +12,7 @@ import micIcon from "@/assets/images/custom/mic.svg";
 import phoneIcon from "@/assets/images/custom/phone.svg";
 import "./MyStoryDetail.css";
 
-const MyStoryDetail = () => {
+const MyStoryDetail = () => { 
     const navigate = useNavigate();
     const { storyId } = useParams();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
