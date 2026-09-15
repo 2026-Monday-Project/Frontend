@@ -138,6 +138,43 @@
     outline-offset: 2px;
 }
 
+/* Garden-only sizing: LikedStories also uses the base sort styles. */
+.garden-content .garden-sort,
+.garden-content .garden-sort-options {
+    box-shadow: none;
+}
+
+.garden-content .garden-sort {
+    width: 86px;
+    height: 32px;
+    /* Keep the 16px arrow and 5px gap inside the fixed button width. */
+    padding: 7px 10px;
+    justify-content: center;
+    gap: 5px;
+    line-height: 16px;
+    white-space: nowrap;
+}
+
+.garden-content .garden-sort img {
+    flex-shrink: 0;
+}
+
+.garden-content .garden-sort-options {
+    top: calc(100% + 4px);
+    width: 86px;
+}
+
+.garden-content .garden-sort-option {
+    height: 32px;
+    padding: 7px 20px;
+    line-height: 18px;
+    white-space: nowrap;
+}
+
+.garden-content .garden-sort-option-selected {
+    border-radius: 0;
+}
+
 .garden-sort-row + .garden-empty-state {
     margin-top: 31px;
 }
