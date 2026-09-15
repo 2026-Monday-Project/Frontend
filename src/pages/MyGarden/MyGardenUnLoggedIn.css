@@ -48,6 +48,7 @@
     z-index: 1;
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     min-height: 0;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
