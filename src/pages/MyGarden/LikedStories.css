@@ -58,3 +58,7 @@
     margin: 0;
     font-family: "Warhaven", sans-serif;
 }
+
+.liked-stories-page .empty-state-wrapper {
+    margin-top: 62px;
+}
