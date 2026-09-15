@@ -8,8 +8,7 @@ import arrowViewAll from '@/assets/images/custom/arrow-view-all.svg';
 import leavesLeftTop from '@/assets/images/custom/leaves-left-top.svg';
 import leavesLeftBottom from '@/assets/images/custom/leaves-left-bottom.svg';
 import leavesRightBottom from '@/assets/images/custom/leaves-right-bottom.svg';
-import requiresStory from '@/assets/images/custom/requires-story.svg';
-import seperatePaw from '@/assets/images/custom/seperate-paw.svg';
+import EmptyStateCard from '@/components/mygarden/EmptyStateCard';
 import './MyGardenUnLoggedIn.css';
 
 const MyGardenUnLoggedIn = () => {
@@ -84,11 +83,13 @@ const MyGardenUnLoggedIn = () => {
                             전체보기 <img src={arrowViewAll} alt="" />
                         </button>
                     </div>
-                    <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
-                        <img src={requiresStory} alt="" className="empty-state-icon" />
-                        <p className="empty-state-text">로그인하고 내 정원을 확인해 보세요.</p>
-                        <img src={seperatePaw} alt="" className="empty-state-divider" />
-                        <p className="empty-state-subtext">모든 이용 기록을 확인할 수 있어요.</p>
+                    
+                    <div className="story-list">
+                        <EmptyStateCard
+                            title="로그인하고 내 정원을 확인해 보세요."
+                            description="모든 이용 기록을 확인할 수 있어요."
+                            onClick={() => navigate('/login')}
+                        />
                     </div>
                 </section>
 
@@ -99,11 +100,13 @@ const MyGardenUnLoggedIn = () => {
                             전체보기 <img src={arrowViewAll} alt="" />
                         </button>
                     </div>
-                    <div className="empty-state-card" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
-                        <img src={requiresStory} alt="" className="empty-state-icon" />
-                        <p className="empty-state-text">로그인하고 내 정원을 확인해 보세요.</p>
-                        <img src={seperatePaw} alt="" className="empty-state-divider" />
-                        <p className="empty-state-subtext">모든 이용 기록을 확인할 수 있어요.</p>
+                    
+                    <div className="story-list">
+                        <EmptyStateCard
+                            title="로그인하고 내 정원을 확인해 보세요."
+                            description="모든 이용 기록을 확인할 수 있어요."
+                            onClick={() => navigate('/login')}
+                        />
                     </div>
                 </section>
             </div>

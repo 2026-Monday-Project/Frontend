@@ -1,10 +1,13 @@
 .my-garden-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    max-height: 100%;
     overflow: hidden;
-    position: relative
+    background-color: var(--color-background);
 }
 
 ::-webkit-scrollbar {
@@ -17,7 +20,7 @@
     left: 0;
     width: 104px;
     height: 106px;
-    z-index: 100;
+    z-index: 10;
     pointer-events: none;
 }
 
@@ -25,7 +28,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    z-index: 100;
+    z-index: 10;
     pointer-events: none;
 }
 
@@ -33,7 +36,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    z-index: 100;
+    z-index: 10;
     pointer-events: none;
 }
 
@@ -45,6 +48,9 @@
     flex: 1;
     overflow-y: auto;
     min-height: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    z-index: 1;
 }
 
 .profile-img-wrap {
@@ -197,8 +203,6 @@
 }
 
 
-
-/* --- 편지함 CSS --- */
 .mail-item, .mail-item-read {
     display: flex;
     justify-content: space-between;
@@ -223,7 +227,6 @@
     min-width: 0; 
 }
 
-/* 겹치지 않는 새로운 클래스명 적용 */
 .garden-mail-title, .garden-mail-title-read {
     font-size: 16px;
     font-weight: 500;
@@ -248,7 +251,6 @@
     margin: 0;
 }
 
-/* 읽은 편지 색상 처리 */
 .garden-mail-title-read,
 .garden-mail-desc-read,
 .garden-mail-date-read {
@@ -259,5 +261,5 @@
     width: 6px;
     height: 6px;
     flex-shrink: 0;
-    margin-top: 6px;
+    margin-top: 26px;
 }
