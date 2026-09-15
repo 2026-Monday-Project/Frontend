@@ -57,7 +57,7 @@
     margin-bottom: 30px;
 }
 
-.mail-title {
+.mail-detail-title {
     margin: 0 0 8px;
     font-size: 20px;
     font-weight: 500;
@@ -65,7 +65,7 @@
     width: 100%;
 }
 
-.mail-date {
+.mail-detail-date {
     margin: 0 0 20px;
     font-size: 10px;
     width: 100%;
@@ -78,7 +78,7 @@
     margin-bottom: 30px;
 }
 
-.mail-text {
+.mail-detail-text {
     width: 100%;
     font-size: 16px;
     line-height: 1.6;

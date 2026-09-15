@@ -1,4 +1,4 @@
-.mail-card {
+.mail-card-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -14,56 +14,56 @@
     box-sizing: border-box;
 }
 
-.mail-card.read .mail-title,
-.mail-card.read .mail-desc,
-.mail-card.read .mail-date {
+.mail-card-wrapper.read .mail-card-title,
+.mail-card-wrapper.read .mail-card-desc,
+.mail-card-wrapper.read .mail-card-date {
     color: #686866;
 }
 
-.mail-card:not(.read) .mail-title,
-.mail-card:not(.read) .mail-desc,
-.mail-card:not(.read) .mail-date {
+.mail-card-wrapper:not(.read) .mail-card-title,
+.mail-card-wrapper:not(.read) .mail-card-desc,
+.mail-card-wrapper:not(.read) .mail-card-date {
     color: var(--color-text);
 }
 
-.mail-text-wrapper {
+.mail-card-text-area {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
     flex: 1;
     min-width: 0;
-    text-align: left;
 }
 
-.mail-title {
+.mail-card-title,
+.mail-card-desc,
+.mail-card-date {
+    margin: 0;
+    width: 100%;
+    text-align: left !important;
+    display: block;
+}
+
+.mail-card-title {
     font-size: 16px;
     font-weight: 500;
-    margin: 0;
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: left;
 }
 
-.mail-desc {
+.mail-card-desc {
     font-size: 12px;
-    margin: 0;
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: left;
 }
 
-.mail-date {
+.mail-card-date {
     font-size: 10px;
-    margin: 0;
-    text-align: left;
 }
 
-.unread-dot {
+.mail-card-unread-dot {
     width: 6px;
     height: 6px;
     flex-shrink: 0;

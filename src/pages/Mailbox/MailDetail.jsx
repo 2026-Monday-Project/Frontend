@@ -84,12 +84,12 @@ const MailDetail = () => {
                         <div className="mail-inner-content">
                             <img src={letterOnly} alt="편지지 아이콘" className="mail-icon" />
                             
-                            <h2 className="mail-title">{mailDetail.title}</h2>
-                            <p className="mail-date">{formatDate(mailDetail.createdAt)}</p>
+                            <h2 className="mail-detail-title">{mailDetail.title}</h2>
+                            <p className="mail-detail-date">{formatDate(mailDetail.createdAt)}</p>
                             
                             <img src={letterDivider} alt="구분선" className="mail-divider" />
                             
-                            <p className="mail-text">{mailDetail.content}</p>
+                            <p className="mail-detail-text">{mailDetail.content}</p>
                         </div>    
                         
                         <div className="mail-envelope-wrapper">
