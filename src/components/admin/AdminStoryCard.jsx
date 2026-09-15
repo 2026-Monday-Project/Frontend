@@ -5,11 +5,22 @@ import AdminStatusBadge from "@/components/admin/AdminStatusBadge";
 
 import "./AdminStoryCard.css";
 
-const AdminStoryCard = ({ story }) => {
+const AdminStoryCard = ({
+    story,
+    selectedFilter,
+}) => {
     const navigate = useNavigate();
 
     const handleReviewClick = () => {
-        navigate(`/admin/reviews/${story.storyId}`);
+        navigate(
+            `/admin/reviews/${story.storyId}`,
+            {
+                state: {
+                    previousFilter:
+                        selectedFilter,
+                },
+            },
+        );
     };
 
     const formatCreatedAt = (createdAt) => {
@@ -41,10 +52,14 @@ const AdminStoryCard = ({ story }) => {
     return (
         <article className="admin-story-card">
             <div className="admin-story-card-top">
-                <AdminStatusBadge status={story.status} />
+                <AdminStatusBadge
+                    status={story.status}
+                />
 
                 <span className="admin-story-card-date">
-                    {formatCreatedAt(story.createdAt)}
+                    {formatCreatedAt(
+                        story.createdAt,
+                    )}
                 </span>
             </div>
 

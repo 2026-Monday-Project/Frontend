@@ -1,4 +1,8 @@
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
+import { useLocation } from "react-router-dom";
 
 import AdminStoryCard from "@/components/admin/AdminStoryCard";
 import reviewEmptyImage from "@/assets/images/custom/admin-review-empty.svg";
@@ -30,8 +34,13 @@ const filterList = [
 ];
 
 const AdminReview = () => {
+    const location = useLocation();
+
     const [selectedFilter, setSelectedFilter] =
-        useState("PENDING");
+        useState(
+            location.state?.selectedFilter ??
+                "PENDING",
+        );
 
     const [storyList, setStoryList] = useState([]);
 
@@ -65,16 +74,48 @@ const AdminReview = () => {
     useEffect(() => {
         const fetchStoryList = async () => {
             try {
-                const response =
-                    await getAdminStoryList({
-                        status: selectedFilter,
-                        page: 0,
-                        size: 20,
-                    });
+                const allStories = [];
 
-                setStoryList(
-                    response.data.data.stories,
-                );
+                let page = 0;
+                let hasNext = true;
+
+                while (hasNext) {
+                    const response =
+                        await getAdminStoryList({
+                            status: selectedFilter,
+                            page,
+                            size: 100,
+                        });
+
+                    const data =
+                        response.data.data;
+
+                    const stories =
+                        data.stories ?? [];
+
+                    allStories.push(...stories);
+
+                    if (
+                        typeof data.hasNext ===
+                        "boolean"
+                    ) {
+                        hasNext = data.hasNext;
+                    } else if (
+                        typeof data.totalPages ===
+                        "number"
+                    ) {
+                        hasNext =
+                            page + 1 <
+                            data.totalPages;
+                    } else {
+                        hasNext =
+                            stories.length === 100;
+                    }
+
+                    page += 1;
+                }
+
+                setStoryList(allStories);
             } catch {
                 setStoryList([]);
             }
@@ -127,12 +168,15 @@ const AdminReview = () => {
                         key={filter.value}
                         type="button"
                         className={`admin-review-filter ${
-                            selectedFilter === filter.value
+                            selectedFilter ===
+                            filter.value
                                 ? "admin-review-filter-active"
                                 : ""
                         }`}
                         onClick={() =>
-                            handleFilterClick(filter.value)
+                            handleFilterClick(
+                                filter.value,
+                            )
                         }
                     >
                         {filter.label}
@@ -146,6 +190,9 @@ const AdminReview = () => {
                         <AdminStoryCard
                             key={story.storyId}
                             story={story}
+                            selectedFilter={
+                                selectedFilter
+                            }
                         />
                     ))}
                 </div>
