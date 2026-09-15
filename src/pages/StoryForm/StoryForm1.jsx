@@ -358,7 +358,7 @@ const StoryForm1 = ({ mode }) => {
   };
 
   return (
-    <main className="story-form-page">
+    <main className={`story-form-page${isEdit ? "" : " story-form-create"}`}>
       <section className="story-form-container">
         <header className="story-form-header">
           <button
@@ -370,7 +370,7 @@ const StoryForm1 = ({ mode }) => {
             <img className="story-form-back-icon" src={arrowLeft} alt="" />
           </button>
 
-          <h1 className="story-form-title">우리 이야기 보내기</h1>
+          <h1 className="story-form-title navbar-title">우리 이야기 보내기</h1>
         </header>
 
         <div className="story-form-scroll-area">
