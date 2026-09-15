@@ -104,11 +104,11 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 32px;
+  bottom: 30px;
 
   display: flex;
-  gap: 40px;
-  padding: 0 28px;
+  gap: 0;
+  padding: 0 0 0 34px;
 }
 
 .story-form3-prev-button {
@@ -119,7 +119,7 @@
   flex: 0 0 148px;
   width: 148px;
   height: 43px;
-  padding: 10px 0;
+  padding: 10px 60px;
   white-space: nowrap;
   border: 1px solid var(--color-green-main);
   border-radius: 15px;
@@ -137,7 +137,8 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  flex: 1;
+  flex: 0 0 220px;
+  width: 220px;
   height: 43px;
   border: none;
   border-radius: 15px;
