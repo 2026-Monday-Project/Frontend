@@ -126,10 +126,10 @@ const MyStoriesList = () => {
             <GardenEmptyState
               title={
                 activeTab === "공개"
-                  ? "아직 공개된 사연이 없어요."
+                  ? "공개된 사연이 없어요."
                   : activeTab === "비공개"
                     ? "숨겨진 사연이 없어요."
-                    : "아직 검토 중인 사연이 없어요."
+                    : "검토 중인 사연이 없어요."
               }
               subtitle={null}
               guide={
