@@ -9,18 +9,35 @@ import "./AppFrame.css";
 const FRAME_WIDTH = 402;
 const FRAME_HEIGHT = 874;
 
+const DESKTOP_MAX_SCALE = 1.1;
+
 const getViewportSize = () => {
     return {
         width:
-            window.visualViewport
-                ?.width ??
+            window.visualViewport?.width ??
             window.innerWidth,
 
         height:
-            window.visualViewport
-                ?.height ??
+            window.visualViewport?.height ??
             window.innerHeight,
     };
+};
+
+const getDesktopScale = (
+    width,
+    height,
+) => {
+    const widthScale =
+        width / FRAME_WIDTH;
+
+    const heightScale =
+        height / FRAME_HEIGHT;
+
+    return Math.min(
+        widthScale,
+        heightScale,
+        DESKTOP_MAX_SCALE,
+    );
 };
 
 const getInitialFrameState = () => {
@@ -44,10 +61,8 @@ const getInitialFrameState = () => {
             scale: 1,
             isMobile: true,
             isTablet: false,
-            viewportWidth:
-                width,
-            viewportHeight:
-                height,
+            viewportWidth: width,
+            viewportHeight: height,
         };
     }
 
@@ -56,36 +71,27 @@ const getInitialFrameState = () => {
             scale:
                 height /
                 FRAME_HEIGHT,
+
             isMobile: false,
             isTablet: true,
-            viewportWidth:
-                width,
-            viewportHeight:
-                height,
+
+            viewportWidth: width,
+            viewportHeight: height,
         };
     }
 
-    const widthScale =
-        width /
-        FRAME_WIDTH;
-
-    const heightScale =
-        height /
-        FRAME_HEIGHT;
-
     return {
         scale:
-            Math.min(
-                widthScale,
-                heightScale,
-                1,
+            getDesktopScale(
+                width,
+                height,
             ),
+
         isMobile: false,
         isTablet: false,
-        viewportWidth:
-            width,
-        viewportHeight:
-            height,
+
+        viewportWidth: width,
+        viewportHeight: height,
     };
 };
 
@@ -136,10 +142,13 @@ const AppFrame = ({
             if (mobile) {
                 setFrameState({
                     scale: 1,
+
                     isMobile: true,
                     isTablet: false,
+
                     viewportWidth:
                         width,
+
                     viewportHeight:
                         currentHeight,
                 });
@@ -190,24 +199,14 @@ const AppFrame = ({
                 return;
             }
 
-            const widthScale =
-                width /
-                FRAME_WIDTH;
-
-            const heightScale =
-                currentHeight /
-                FRAME_HEIGHT;
-
             setFrameState({
                 scale:
-                    Math.min(
-                        widthScale,
-                        heightScale,
-                        1,
+                    getDesktopScale(
+                        width,
+                        currentHeight,
                     ),
 
                 isMobile: false,
-
                 isTablet: false,
 
                 viewportWidth:
@@ -258,8 +257,10 @@ const AppFrame = ({
                 isMobile
                     ? undefined
                     : {
-                          width: `${FRAME_WIDTH * scale}px`,
-                          height: `${FRAME_HEIGHT * scale}px`,
+                          width:
+                              `${FRAME_WIDTH * scale}px`,
+                          height:
+                              `${FRAME_HEIGHT * scale}px`,
                       }
             }
         >
