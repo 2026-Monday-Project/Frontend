@@ -26,6 +26,7 @@
 .liked-stories-page .story-list-scroll {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 16px;
