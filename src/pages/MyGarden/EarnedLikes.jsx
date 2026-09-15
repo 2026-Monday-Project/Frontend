@@ -23,7 +23,6 @@ const EarnedLikes = () => {
                 setIsLoading(true);
                 const response = await api.get('/my-garden/received-likes');
                 const fetchedContent = response.data?.data?.content || [];
-                console.log("받은 공감 사연 데이터:", fetchedContent[0]);
                 
                 setStories(fetchedContent);
                 setTotalLikes(response.data?.data?.totalCount || fetchedContent.length);
