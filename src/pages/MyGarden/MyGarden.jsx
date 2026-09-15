@@ -1,82 +1,91 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '@/api/axios';
-import Navbar from '@/components/common/Navbar';
-import Drawer from '@/components/common/Drawer';
-import StoryCard from '@/components/myGarden/StoryCard';
-import footprintIcon from '@/assets/images/custom/footprint.svg';
-import settingsIcon from '@/assets/images/custom/settings.svg';
-import arrowViewAll from '@/assets/images/custom/arrow-view-all.svg';
-import louisProfile from '@/assets/images/custom/louis-profile.svg';
-import unreadDot from '@/assets/images/custom/unread-dot.svg';
-import leavesLeftTop from '@/assets/images/custom/leaves-left-top.svg'
-import leavesLeftBottom from '@/assets/images/custom/leaves-left-bottom.svg'
-import leavesRightBottom from '@/assets/images/custom/leaves-right-bottom.svg'
-import requiresStory from '@/assets/images/custom/requires-story.svg';
-import seperatePaw from '@/assets/images/custom/seperate-paw.svg';
-import './MyGarden.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "@/api/axios";
+import Navbar from "@/components/common/Navbar";
+import Drawer from "@/components/common/Drawer";
+import StoryCard from "@/components/mygarden/StoryCard";
+import footprintIcon from "@/assets/images/custom/footprint.svg";
+import settingsIcon from "@/assets/images/custom/settings.svg";
+import arrowViewAll from "@/assets/images/custom/arrow-view-all.svg";
+import louisProfile from "@/assets/images/custom/louis-profile.svg";
+import unreadDot from "@/assets/images/custom/unread-dot.svg";
+import leavesLeftTop from "@/assets/images/custom/leaves-left-top.svg";
+import leavesLeftBottom from "@/assets/images/custom/leaves-left-bottom.svg";
+import leavesRightBottom from "@/assets/images/custom/leaves-right-bottom.svg";
+import EmptyStateCard from '@/components/mygarden/EmptyStateCard';
+import "./MyGarden.css";
 
 const MyGarden = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
-    const [profile, setProfile] = useState({ nickname: '', email: '' });
-    const [stats, setStats] = useState({ sentStoryCount: 0, receivedLikeCount: 0, likedStoryCount: 0 });
+
+    const [profile, setProfile] = useState({ nickname: "", email: "" });
+    const [stats, setStats] = useState({
+        sentStoryCount: 0,
+        receivedLikeCount: 0,
+        likedStoryCount: 0,
+    });
     const [stories, setStories] = useState([]);
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem("accessToken");
         if (!token) {
-            navigate('/mygarden/unlogged-in');
+            navigate("/mygarden/unlogged-in");
             return;
         }
 
         const fetchMyGardenData = async () => {
             const results = await Promise.allSettled([
-                api.get('/accounts/me'),
-                api.get('/my-garden/summary'),
-                api.get('/my-garden/stories/preview'),
-                api.get('/my-garden/notifications/preview')
+                api.get("/accounts/me"),
+                api.get("/my-garden/summary"),
+                api.get("/my-garden/stories/preview"),
+                api.get("/my-garden/notifications/preview"),
             ]);
 
             const isUnauthorized = results.some(
-                result => result.status === 'rejected' && result.reason?.response?.status === 401
+                (result) =>
+                    result.status === "rejected" &&
+                    result.reason?.response?.status === 401,
             );
 
             if (isUnauthorized) {
-                localStorage.removeItem('accessToken');
-                navigate('/mygarden/unlogged-in');
+                localStorage.removeItem("accessToken");
+                navigate("/mygarden/unlogged-in");
                 return;
             }
 
-            if (results[0].status === 'fulfilled') setProfile(results[0].value.data.data);
-            if (results[1].status === 'fulfilled') setStats(results[1].value.data.data);
-            if (results[2].status === 'fulfilled') setStories(results[2].value.data.data);
-            if (results[3].status === 'fulfilled') setNotifications(results[3].value.data.data);
+            if (results[0].status === "fulfilled")
+                setProfile(results[0].value.data.data);
+            if (results[1].status === "fulfilled")
+                setStats(results[1].value.data.data);
+            if (results[2].status === "fulfilled")
+                setStories(results[2].value.data.data);
+            if (results[3].status === "fulfilled")
+                setNotifications(results[3].value.data.data);
         };
 
         fetchMyGardenData();
     }, [navigate]);
 
-    const handleGoToMyStories = () => navigate('/mystories/list');
-    const handleGoToMailbox = () => navigate('/mailbox');
+    const handleGoToMyStories = () => navigate("/mystories/list");
+    const handleGoToMailbox = () => navigate("/mailbox");
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleDrawerClose = () => setIsMenuOpen(false);
 
     const formatDate = (dateString) => {
-        if (!dateString) return '';
+        if (!dateString) return "";
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         return `${year}.${month}.${day}`;
     };
 
     const formatStatus = (status) => {
-        if (status === 'PENDING') return '검토중';
-        if (status === 'PUBLIC') return '공개';
-        return '비공개';
+        if (status === "PENDING") return "검토중";
+        if (status === "PUBLIC") return "공개";
+        return "비공개";
     };
 
     return (
@@ -84,7 +93,7 @@ const MyGarden = () => {
             <img src={leavesLeftTop} alt="" className="leaf-left-top" />
             <img src={leavesLeftBottom} alt="" className="leaf-left-bottom" />
             <img src={leavesRightBottom} alt="" className="leaf-right-bottom" />
-            <Navbar 
+            <Navbar
                 title="내 정원"
                 showMenuButton={true}
                 onMenuClick={handleMenuClick}
@@ -95,44 +104,48 @@ const MyGarden = () => {
                 <section className="profile-section">
                     <div className="profile-info">
                         <div className="profile-img-wrap">
-                            <img src={footprintIcon} alt="기본 프사" className="profile-image" />
+                            <img
+                                src={footprintIcon}
+                                alt="기본 프사"
+                                className="profile-image"
+                            />
                         </div>
                         <div className="profile-text">
                             <p className="greeting">안녕하세요, {profile.nickname} 님!</p>
                             <p className="email">{profile.email}</p>
                         </div>
                     </div>
-                    <img 
-                        src={settingsIcon} 
-                        alt="설정" 
-                        className="settings-icon" 
-                        onClick={() => navigate('/settings')} 
-                        style={{ cursor: 'pointer' }}
+                    <img
+                        src={settingsIcon}
+                        alt="설정"
+                        className="settings-icon"
+                        onClick={() => navigate("/settings")}
+                        style={{ cursor: "pointer" }}
                     />
-                </section>    
+                </section>
 
                 <section className="stats-section">
-                    <button 
-                        className="stat-item" 
-                        onClick={() => navigate('/mystories/list')} 
+                    <button
+                        className="stat-item"
+                        onClick={() => navigate("/mystories/list")}
                         type="button"
                     >
                         <p className="stat-label">보낸 사연</p>
                         <p className="stat-value">{stats.sentStoryCount}</p>
                     </button>
                     <div className="seperate-line"></div>
-                    <button 
-                        className="stat-item" 
-                        onClick={() => navigate('/mygarden/earned-likes')} 
+                    <button
+                        className="stat-item"
+                        onClick={() => navigate("/mygarden/earned-likes")}
                         type="button"
                     >
                         <p className="stat-label">받은 공감</p>
                         <p className="stat-value">{stats.receivedLikeCount}</p>
                     </button>
                     <div className="seperate-line"></div>
-                    <button 
-                        className="stat-item" 
-                        onClick={() => navigate('/mygarden/liked-stories')} 
+                    <button
+                        className="stat-item"
+                        onClick={() => navigate("/mygarden/liked-stories")}
                         type="button"
                     >
                         <p className="stat-label">공감한 사연</p>
@@ -150,16 +163,11 @@ const MyGarden = () => {
                     
                     <div className="story-list">
                         {stories.length === 0 ? (
-                            <button 
-                                className="empty-state-card"
+                            <EmptyStateCard
+                                title="아직 보낸 사연이 없어요."
+                                description="사연을 보내고 나만의 정원을 만들어 보세요."
                                 onClick={() => navigate('/mystories/list')}
-                                type="button"
-                            >
-                                <img src={requiresStory} alt="보낸 사연 없음" className="empty-state-icon" />
-                                <p className="empty-state-title">아직 보낸 사연이 없어요.</p>
-                                <img src={seperatePaw} alt="구분선" className="empty-state-divider" />
-                                <p className="empty-state-desc">사연을 보내고 나만의 정원을 만들어 보세요.</p>
-                            </button>
+                            />
                         ) : (
                             stories.map(story => (
                                 <StoryCard 
@@ -185,22 +193,50 @@ const MyGarden = () => {
                         </button>
                     </div>
                     <div className="mail-list">
-                        {notifications.map(mail => {
+                        {notifications.map((mail) => {
                             const isExplicitlyUnread = mail.isRead === false;
 
                             return (
-                                <button 
-                                    key={mail.notificationId} 
-                                    className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
-                                    onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
+                                <button
+                                    key={mail.notificationId}
+                                    className={
+                                        isExplicitlyUnread ? "mail-item" : "mail-item-read"
+                                    }
+                                    onClick={() => navigate(`/mailbox/${mail.notificationId}`)}
                                     type="button"
                                 >
                                     <div className="mail-text-wrapper">
-                                        <p className={isExplicitlyUnread ? "garden-mail-title" : "mail-title-read"}>{mail.title}</p>
-                                        <p className={isExplicitlyUnread ? "garden-mail-desc" : "mail-desc-read"}>{mail.content}</p>
-                                        <p className={isExplicitlyUnread ? "garden-mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
+                                        <p
+                                            className={
+                                                isExplicitlyUnread
+                                                    ? "garden-mail-title"
+                                                    : "mail-title-read"
+                                            }
+                                        >
+                                            {mail.title}
+                                        </p>
+                                        <p
+                                            className={
+                                                isExplicitlyUnread
+                                                    ? "garden-mail-desc"
+                                                    : "mail-desc-read"
+                                            }
+                                        >
+                                            {mail.content}
+                                        </p>
+                                        <p
+                                            className={
+                                                isExplicitlyUnread
+                                                    ? "garden-mail-date"
+                                                    : "mail-date-read"
+                                            }
+                                        >
+                                            {formatDate(mail.createdAt)}
+                                        </p>
                                     </div>
-                                    {isExplicitlyUnread && <img src={unreadDot} alt="안 읽음" className="unread-dot" />}
+                                    {isExplicitlyUnread && (
+                                        <img src={unreadDot} alt="안 읽음" className="unread-dot" />
+                                    )}
                                 </button>
                             );
                         })}

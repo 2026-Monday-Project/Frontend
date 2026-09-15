@@ -20,12 +20,14 @@ const GardenEmptyState = ({
                 <p className="garden-empty-state-title">
                     {title}
                 </p>
-                <p className="garden-empty-state-subtitle">
-                    {subtitle}
-                </p>
+                {subtitle && (
+                    <p className="garden-empty-state-subtitle">
+                        {subtitle}
+                    </p>
+                )}
             </div>
 
-            <div className="garden-empty-state-guide">
+            <div className={`garden-empty-state-guide ${!subtitle ? "no-subtitle" : ""}`}>
                 <img src={dividerImage} alt="" aria-hidden="true" />
                 <p>{guide}</p>
             </div>
