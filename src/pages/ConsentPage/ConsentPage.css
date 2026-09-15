@@ -25,7 +25,7 @@
   width: 100%;
   min-height: 40px;
   /* 뒤로가기 버튼 위치를 사연 작성 페이지(StoryForm) 헤더와 정확히 맞춘다. */
-  padding: 30px 36px 0 24px;
+  padding: 17px 36px 0 24px;
 }
 
 /* 본문 스크롤 영역 */
@@ -57,6 +57,7 @@
   flex-shrink: 0;
   width: 26px;
   height: 26px;
+  margin-top: 3px;
   aspect-ratio: 1/1;
   object-fit: contain;
 }
