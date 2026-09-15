@@ -1,5 +1,5 @@
 import emptyStateImage from "@/assets/images/custom/garden-empty-state.png";
-import dividerImage from "@/assets/images/custom/drawer-divider.png";
+import emptyStateDivider from "@/assets/images/custom/empty-state-divider.svg";
 import "./GardenEmptyState.css";
 
 const GardenEmptyState = ({
@@ -17,20 +17,18 @@ const GardenEmptyState = ({
             />
 
             <div className="garden-empty-state-copy">
-                <p className="garden-empty-state-title">
-                    {title}
-                </p>
+                <p className="garden-empty-state-title">{title}</p>
                 {subtitle && (
-                    <p className="garden-empty-state-subtitle">
-                        {subtitle}
-                    </p>
+                    <p className="garden-empty-state-subtitle">{subtitle}</p>
                 )}
             </div>
 
-            <div className={`garden-empty-state-guide ${!subtitle ? "no-subtitle" : ""}`}>
-                <img src={dividerImage} alt="" aria-hidden="true" />
-                <p>{guide}</p>
+            {/* 👇 74px 투명 여백을 15px로 잘라낼 강제 크롭 래퍼 */}
+            <div className={`garden-empty-state-divider-crop ${!subtitle ? "no-subtitle" : ""}`}>
+                <img src={emptyStateDivider} alt="" aria-hidden="true" />
             </div>
+            
+            <p className="garden-empty-state-guide-text">{guide}</p>
         </div>
     );
 };

@@ -2,6 +2,9 @@
     position: relative;
     width: min(329px, calc(100% - 36px));
     height: 505px;
+    min-height: 505px;
+    flex-shrink: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +12,7 @@
     padding: 75px 32px 74px;
     border-radius: 10px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .garden-empty-state::before {
@@ -36,7 +40,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    margin-bottom: 0;
 }
 
 .garden-empty-state-title {
@@ -50,7 +54,7 @@
 }
 
 .garden-empty-state-subtitle {
-    margin: 0;
+    margin: 6px 0 0;
     color: var(--color-text);
     font-family: Warhaven, sans-serif;
     font-size: 14px;
@@ -59,33 +63,37 @@
     white-space: nowrap;
 }
 
-.garden-empty-state-guide {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.garden-empty-state-divider-crop {
+    width: 265px;
+    height: 9px;
     margin-top: 30px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.garden-empty-state-divider-crop.no-subtitle {
+    margin-top: 16px;
+}
+
+.garden-empty-state-divider-crop img {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 265px;
+    height: 29px;
+    max-width: none;
+    flex-shrink: 0;
+}
+
+.garden-empty-state-guide-text {
+    margin: 0;
     color: var(--color-text-muted);
     font-family: Warhaven, sans-serif;
     font-size: 11px;
     font-weight: 400;
     line-height: normal;
-}
-
-.garden-empty-state-guide img {
-    width: 264px;
-    height: 82px;
-    max-width: none;
-}
-
-.garden-empty-state-guide p {
-    margin: -25px 0 0;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.garden-empty-state-guide.no-subtitle {
-    margin-top: 15px;
 }
 
 @media (max-width: 360px) {
