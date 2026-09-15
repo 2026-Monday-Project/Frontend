@@ -162,10 +162,26 @@ const Home = () => {
     };
 
     const handleEnter = () => {
+        if (
+            isEntering ||
+            isEntered
+        ) {
+            return;
+        }
+
         setIsEntering(true);
+        setIsDragging(false);
 
-        setSwipeOpacity(1);
+        isDraggingRef.current =
+            false;
 
+        /*
+         * 손을 놓는 순간 현재 위치에서
+         * 자동으로 끝까지 올라간다.
+         *
+         * 올라가는 동안 Home은
+         * 자연스럽게 투명해진다.
+         */
         window.requestAnimationFrame(
             () => {
                 window.requestAnimationFrame(
@@ -183,20 +199,28 @@ const Home = () => {
             },
         );
 
-        window.setTimeout(() => {
-            setIsEntered(true);
+        window.setTimeout(
+            () => {
+                /*
+                 * 중요:
+                 * 여기서 dragDistance를
+                 * 다시 0으로 만들면
+                 * Home이 다시 내려온다.
+                 *
+                 * 입장 완료 후에는
+                 * 위로 빠진 상태 그대로 유지한다.
+                 */
+                setIsEntered(true);
+                setIsEntering(false);
+                setIsDragging(false);
 
-            setIsEntering(false);
+                isDraggingRef.current =
+                    false;
 
-            setIsDragging(false);
-
-            isDraggingRef.current =
-                false;
-
-            setSwipeOpacity(1);
-
-            updateDragDistance(0);
-        }, ENTRY_ANIMATION_TIME);
+                setSwipeOpacity(0);
+            },
+            ENTRY_ANIMATION_TIME,
+        );
     };
 
     const handlePointerDown = (
@@ -337,6 +361,10 @@ const Home = () => {
             return;
         }
 
+        /*
+         * 충분히 올리지 않았을 때만
+         * 원래 Home 위치로 돌아온다.
+         */
         setSwipeOpacity(1);
 
         updateDragDistance(0);
@@ -345,6 +373,13 @@ const Home = () => {
     const handlePointerCancel = (
         event,
     ) => {
+        if (
+            isEntering ||
+            isEntered
+        ) {
+            return;
+        }
+
         isDraggingRef.current =
             false;
 
@@ -388,27 +423,15 @@ const Home = () => {
         handleEnter();
     };
 
-    const handleReturnHome =
-        () => {
-            setIsEntered(false);
-
-            setIsEntering(false);
-
-            setIsDragging(false);
-
-            isDraggingRef.current =
-                false;
-
-            setSwipeOpacity(1);
-
-            updateDragDistance(0);
-        };
-
     return (
         <main
             ref={pageRef}
             className="home-page"
         >
+            <div className="home-entered-under-layer">
+                <HomeEntered />
+            </div>
+
             <div
                 className={`home-swipe-layer ${
                     isDragging
@@ -420,7 +443,7 @@ const Home = () => {
                         : ""
                 } ${
                     isEntered
-                        ? "is-entered-background"
+                        ? "is-entered"
                         : ""
                 }`}
                 style={{
@@ -533,22 +556,6 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-
-            {!isEntered && (
-                <div className="home-entered-under-layer">
-                    <HomeEntered />
-                </div>
-            )}
-
-            {isEntered && (
-                <div className="home-entered-active-layer">
-                    <HomeEntered
-                        onReturnHome={
-                            handleReturnHome
-                        }
-                    />
-                </div>
-            )}
         </main>
     );
 };

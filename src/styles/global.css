@@ -197,11 +197,6 @@ body {
     overflow: hidden;
 }
 
-@supports (height: 100svh) {
-    #root {
-        height: 100svh;
-    }
-}
 
 /* ==============================
     모바일
@@ -209,6 +204,8 @@ body {
 
 @media (max-width: 402px) {
     #root {
+        height: 100svh;
+
         align-items:
             flex-start;
     }

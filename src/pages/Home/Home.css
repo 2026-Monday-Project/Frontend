@@ -33,27 +33,6 @@
 
 
 /* ==============================
-    입장 완료 후 Entered
-============================== */
-
-.home-entered-active-layer {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    z-index: 2;
-
-    overflow: hidden;
-
-    background-color:
-        transparent;
-}
-
-
-/* ==============================
     첫 Home
 ============================== */
 
@@ -101,6 +80,9 @@
         hidden;
 }
 
+
+/* 직접 드래그 중 */
+
 .home-swipe-layer.is-dragging {
     transition: none;
 
@@ -108,6 +90,9 @@
 
     opacity: 1;
 }
+
+
+/* 손을 놓은 뒤 자동 입장 */
 
 .home-swipe-layer.is-entering {
     pointer-events: none;
@@ -130,25 +115,12 @@
 }
 
 
-/* ==============================
-    Entered 뒤 Home 고정
-============================== */
+/* 입장 완료 */
 
-.home-swipe-layer.is-entered-background {
-    transition: none;
-
-    transform:
-        translate3d(
-            0,
-            0,
-            0
-        )
-        !important;
-
-    opacity:
-        1 !important;
-
+.home-swipe-layer.is-entered {
     pointer-events: none;
+
+    opacity: 0;
 
     cursor: default;
 }
