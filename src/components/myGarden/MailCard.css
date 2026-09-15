@@ -1,0 +1,71 @@
+.mail-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #fffdf6;
+    padding: 16px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    gap: 16px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.mail-card.read .mail-title,
+.mail-card.read .mail-desc,
+.mail-card.read .mail-date {
+    color: #686866;
+}
+
+.mail-card:not(.read) .mail-title,
+.mail-card:not(.read) .mail-desc,
+.mail-card:not(.read) .mail-date {
+    color: var(--color-text);
+}
+
+.mail-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.mail-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.mail-desc {
+    font-size: 12px;
+    margin: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.mail-date {
+    font-size: 10px;
+    margin: 0;
+    text-align: left;
+}
+
+.unread-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    margin-top: 26px;
+}

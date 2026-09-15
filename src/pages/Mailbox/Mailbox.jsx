@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/api/axios';
 import Navbar from '@/components/common/Navbar';
 import Drawer from '@/components/common/Drawer';
+import MailCard from '@/components/myGarden/MailCard';
 import mailboxImg from '@/assets/images/custom/mailbox.svg';
 import grassesImg from '@/assets/images/custom/grasses.svg';
-import unreadDot from '@/assets/images/custom/unread-dot.svg';
 import './Mailbox.css';
 
 const Mailbox = () => {
@@ -63,27 +63,19 @@ const Mailbox = () => {
             />
             <Drawer isOpen={isMenuOpen} onClose={handleDrawerClose} />
             <img src={mailboxImg} alt="우체통" className="mailbox-image" />
+            
             <div className="mailbox-container">
                 <div className="mail-list">
-                    {notifications.map(mail => {
-                        const isExplicitlyUnread = mail.isRead === false;
-
-                        return (
-                            <div 
-                                key={mail.notificationId} 
-                                className={isExplicitlyUnread ? "mail-item" : "mail-item-read"} 
-                                onClick={() => navigate(`/mailbox/${mail.notificationId}`)} 
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <div className={isExplicitlyUnread ? "mail-content" : "mail-content-read"}>
-                                    <p className={isExplicitlyUnread ? "mail-title" : "mail-title-read"}>{mail.title}</p>
-                                    <p className={isExplicitlyUnread ? "mail-desc" : "mail-desc-read"}>{mail.content}</p>
-                                    <p className={isExplicitlyUnread ? "mail-date" : "mail-date-read"}>{formatDate(mail.createdAt)}</p>
-                                </div>
-                                {isExplicitlyUnread && <img src={unreadDot} alt="" className="unread-dot" />}
-                            </div>
-                        );
-                    })}
+                    {notifications.map(mail => (
+                        <MailCard
+                            key={mail.notificationId}
+                            title={mail.title}
+                            content={mail.content}
+                            date={formatDate(mail.createdAt)}
+                            isRead={mail.isRead}
+                            onClick={() => navigate(`/mailbox/${mail.notificationId}`)}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
