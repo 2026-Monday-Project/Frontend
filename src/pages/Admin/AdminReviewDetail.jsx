@@ -4,6 +4,7 @@ import {
     useState,
 } from "react";
 import {
+    useLocation,
     useNavigate,
     useParams,
 } from "react-router-dom";
@@ -42,6 +43,7 @@ const reviewItemList = [
 
 const AdminReviewDetail = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { storyId } = useParams();
 
     const photoListRef = useRef(null);
@@ -68,6 +70,9 @@ const AdminReviewDetail = () => {
     const [isSubmitting, setIsSubmitting] =
         useState(false);
 
+    const previousFilter =
+        location.state?.previousFilter ?? "PENDING";
+
     useEffect(() => {
         const fetchStoryDetail = async () => {
             try {
@@ -84,7 +89,11 @@ const AdminReviewDetail = () => {
     }, [storyId]);
 
     const handleBack = () => {
-        navigate("/admin/reviews");
+        navigate("/admin/reviews", {
+            state: {
+                selectedFilter: previousFilter,
+            },
+        });
     };
 
     const handleCheckClick = (key) => {
@@ -97,6 +106,11 @@ const AdminReviewDetail = () => {
     const handlePhotosClick = () => {
         navigate(
             `/admin/reviews/${story.storyId}/photos`,
+            {
+                state: {
+                    previousFilter,
+                },
+            },
         );
     };
 
@@ -127,7 +141,6 @@ const AdminReviewDetail = () => {
     };
 
     const handlePhotoPointerDown = (event) => {
-        // 모바일/태블릿은 브라우저 기본 터치 스크롤 사용
         if (event.pointerType !== "mouse") {
             return;
         }
@@ -192,9 +205,15 @@ const AdminReviewDetail = () => {
     const allChecked =
         Object.values(reviewChecks).every(Boolean);
 
+    const isPublicEnabled =
+        selectedVisibility === "PUBLIC" &&
+        allChecked;
+
+    const isPrivateEnabled =
+        selectedVisibility === "PRIVATE";
+
     const isNextEnabled =
-        allChecked &&
-        selectedVisibility !== null;
+        isPublicEnabled || isPrivateEnabled;
 
     const handleNext = async () => {
         if (
@@ -216,18 +235,21 @@ const AdminReviewDetail = () => {
             const currentStatus =
                 response.data.data.status;
 
-            // 내가 보고 있는 동안 다른 관리자가 상태를 변경한 경우
             if (currentStatus !== story.status) {
                 window.alert(
                     "다른 관리자에 의해 사연 상태가 변경되었습니다.",
                 );
 
-                navigate("/admin/reviews");
+                navigate("/admin/reviews", {
+                    state: {
+                        selectedFilter:
+                            previousFilter,
+                    },
+                });
 
                 return;
             }
 
-            // 현재 상태와 새로 선택한 상태가 다를 때만 PATCH
             if (currentStatus !== selectedVisibility) {
                 await updateAdminStoryReview(
                     story.storyId,
@@ -235,7 +257,6 @@ const AdminReviewDetail = () => {
                 );
             }
 
-            // 같은 상태를 다시 선택해도 알림 발송 페이지로 이동
             navigate(
                 `/admin/notifications/${story.storyId}`,
                 {
@@ -344,8 +365,7 @@ const AdminReviewDetail = () => {
                                     <img
                                         src={image}
                                         alt={`제출 사진 ${
-                                            index +
-                                            1
+                                            index + 1
                                         }`}
                                         draggable="false"
                                     />
@@ -383,9 +403,7 @@ const AdminReviewDetail = () => {
 
                             return (
                                 <button
-                                    key={
-                                        item.key
-                                    }
+                                    key={item.key}
                                     type="button"
                                     className="admin-review-check-item"
                                     onClick={() =>
@@ -405,9 +423,7 @@ const AdminReviewDetail = () => {
 
                                     <span>
                                         <strong>
-                                            {
-                                                item.title
-                                            }
+                                            {item.title}
                                         </strong>
 
                                         <small>
