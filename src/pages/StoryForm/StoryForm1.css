@@ -1,3 +1,5 @@
+@import "../../components/common/Navbar.css";
+
 .story-form-page {
   display: flex;
   flex-direction: column;
@@ -83,15 +85,7 @@
   left: 50%;
   transform: translateX(-50%);
 
-  margin: 0;
-
   color: var(--color-green-main);
-
-  font-family: Warhaven, sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-
-  white-space: nowrap;
 }
 
 /* step 이미지 */
@@ -338,4 +332,10 @@
 
 .story-form-next-button.is-valid {
   background-color: var(--color-green-main);
+}
+
+/* Garden의 .garden-cta-button과 동일한 272 × 48px, radius 15px 기준. */
+.story-form-create .story-form-next-button {
+  width: 272px;
+  bottom: 28px;
 }

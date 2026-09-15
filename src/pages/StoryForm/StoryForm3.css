@@ -154,3 +154,24 @@
 .story-form3-submit-button.is-valid {
   background-color: var(--color-green-main);
 }
+
+.story-form-create .story-form3-footer {
+  /* StoryForm2 footer와 같은 하단 기준 및 좌우 여백. */
+  bottom: 32px;
+  gap: 40px;
+  padding: 0 28px;
+}
+
+.story-form-create .story-form3-prev-button {
+  flex: 0 0 148px;
+  width: 148px;
+  padding: 10px 0;
+}
+
+.story-form-create .story-form3-submit-button {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  white-space: nowrap;
+}
