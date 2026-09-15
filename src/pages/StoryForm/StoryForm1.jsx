@@ -18,10 +18,15 @@ const PET_AGE_LIMIT_MESSAGE = "최대 99살까지 입력할 수 있어요.";
 const PET_TYPE_LIMIT_MESSAGE = "최대 50자까지 입력할 수 있어요.";
 
 // 자모 단독 입력(ㄱ, ㅏ 등)까지 허용해야 조합 중인 한글 입력이 끊기지 않는다.
-const NON_HANGUL_REGEX = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+const NON_HANGUL_REGEX = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/;
+const NON_HANGUL_MESSAGE = "*한글만 입력할 수 있습니다.";
 // 완성되지 않은 자모(초성/모음 단독)만 남아있는지 검사한다.
 const INCOMPLETE_HANGUL_REGEX = /[ㄱ-ㅎㅏ-ㅣ]/;
-const INCOMPLETE_HANGUL_MESSAGE = "완성된 한글로 입력해 주세요.";
+const INCOMPLETE_HANGUL_MESSAGE =
+  "*초성만 입력할 수 없습니다. 완성된 한글로 입력해 주세요.";
+
+const HANGUL_REGEX = /[ㄱ-ㅎㅏ-ㅣ가-힣]/;
+const INVALID_EMAIL_MESSAGE = "*올바른 이메일을 입력해주세요.";
 
 const EMPTY_DATA = {
   petName: "",
@@ -154,12 +159,7 @@ const StoryForm1 = ({ mode }) => {
     const { name, value } = event.target;
 
     // 나이는 정수만 허용 (소수점 "." / 음수 "-" / 지수 표기 "e" 등을 즉시 제거)
-    const nextValue =
-      name === "petAge"
-        ? value.replace(/[^0-9]/g, "")
-        : name === "nickname"
-          ? value.replace(NON_HANGUL_REGEX, "")
-          : value;
+    const nextValue = name === "petAge" ? value.replace(/[^0-9]/g, "") : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -167,12 +167,16 @@ const StoryForm1 = ({ mode }) => {
     }));
 
     let fieldError = "";
-    if (name === "nickname" && INCOMPLETE_HANGUL_REGEX.test(nextValue)) {
+    if (name === "nickname" && NON_HANGUL_REGEX.test(nextValue)) {
+      fieldError = NON_HANGUL_MESSAGE;
+    } else if (name === "nickname" && INCOMPLETE_HANGUL_REGEX.test(nextValue)) {
       fieldError = INCOMPLETE_HANGUL_MESSAGE;
     } else if (name === "petAge" && Number(nextValue) > 99) {
       fieldError = PET_AGE_LIMIT_MESSAGE;
     } else if (name === "petType" && nextValue.length > 50) {
       fieldError = PET_TYPE_LIMIT_MESSAGE;
+    } else if (name === "email" && HANGUL_REGEX.test(nextValue)) {
+      fieldError = INVALID_EMAIL_MESSAGE;
     }
 
     setErrors((prev) => ({
@@ -215,10 +219,18 @@ const StoryForm1 = ({ mode }) => {
         ? ""
         : !formData.nickname.trim()
           ? REQUIRED_MESSAGE
-          : INCOMPLETE_HANGUL_REGEX.test(formData.nickname)
-            ? INCOMPLETE_HANGUL_MESSAGE
+          : NON_HANGUL_REGEX.test(formData.nickname)
+            ? NON_HANGUL_MESSAGE
+            : INCOMPLETE_HANGUL_REGEX.test(formData.nickname)
+              ? INCOMPLETE_HANGUL_MESSAGE
+              : "",
+      email: lockIdentity
+        ? ""
+        : !formData.email.trim()
+          ? REQUIRED_MESSAGE
+          : HANGUL_REGEX.test(formData.email)
+            ? INVALID_EMAIL_MESSAGE
             : "",
-      email: lockIdentity || formData.email.trim() ? "" : REQUIRED_MESSAGE,
     };
 
     if (!lockIdentity && (isCheckingNickname || isCheckingEmail)) {
@@ -250,6 +262,12 @@ const StoryForm1 = ({ mode }) => {
     if (!nickname) {
       setNicknameSuccessMessage("");
       setErrors((prev) => ({ ...prev, nickname: "*닉네임을 입력해주세요." }));
+      return;
+    }
+
+    if (NON_HANGUL_REGEX.test(nickname)) {
+      setNicknameSuccessMessage("");
+      setErrors((prev) => ({ ...prev, nickname: NON_HANGUL_MESSAGE }));
       return;
     }
 
@@ -299,6 +317,12 @@ const StoryForm1 = ({ mode }) => {
     if (!email) {
       setEmailSuccessMessage("");
       setErrors((prev) => ({ ...prev, email: "*이메일을 입력해주세요." }));
+      return;
+    }
+
+    if (HANGUL_REGEX.test(email)) {
+      setEmailSuccessMessage("");
+      setErrors((prev) => ({ ...prev, email: INVALID_EMAIL_MESSAGE }));
       return;
     }
 

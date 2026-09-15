@@ -34,7 +34,7 @@
 
   width: 100%;
 
-  padding: 30px 28px 0 24px;
+  padding: 17px 28px 0 24px;
 }
 
 /* 본문 스크롤 영역 */
@@ -71,6 +71,7 @@
   flex-shrink: 0;
   width: 26px;
   height: 26px;
+  margin-top: 3px;
   aspect-ratio: 1/1;
   object-fit: contain;
 }
@@ -78,7 +79,7 @@
 .story-form-title {
   position: absolute;
 
-  top: 30px;
+  top: 17px;
   left: 50%;
   transform: translateX(-50%);
 
