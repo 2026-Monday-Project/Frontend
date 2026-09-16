@@ -18,6 +18,8 @@ const AdminStoryCard = ({
                 state: {
                     previousFilter:
                         selectedFilter,
+                    previousStatus:
+                        story.status,
                 },
             },
         );
@@ -70,7 +72,8 @@ const AdminStoryCard = ({
             <div className="admin-story-card-bottom">
                 <span className="admin-story-card-attachment">
                     {story.nickname} · 사진{" "}
-                    {story.imageCount !== undefined
+                    {story.imageCount !==
+                    undefined
                         ? `${story.imageCount}장`
                         : "-장"}
                 </span>
@@ -78,7 +81,9 @@ const AdminStoryCard = ({
                 <button
                     type="button"
                     className="admin-story-card-review"
-                    onClick={handleReviewClick}
+                    onClick={
+                        handleReviewClick
+                    }
                 >
                     검토하기
 
