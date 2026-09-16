@@ -301,7 +301,7 @@
 .story-form-next-button {
   position: absolute;
   left: 50%;
-  bottom: 25px;
+  bottom: 28px;
   transform: translateX(-50%);
 
   display: flex;
@@ -309,7 +309,7 @@
   align-items: center;
   gap: 10px;
 
-  width: 239px;
+  width: 272px;
   height: 48px;
 
   padding: 10px 60px;
@@ -332,10 +332,4 @@
 
 .story-form-next-button.is-valid {
   background-color: var(--color-green-main);
-}
-
-/* Garden의 .garden-cta-button과 동일한 272 × 48px, radius 15px 기준. */
-.story-form-create .story-form-next-button {
-  width: 272px;
-  bottom: 28px;
 }
