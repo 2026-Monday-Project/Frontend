@@ -52,46 +52,102 @@ const AdminReviewDetail = () => {
 
     const [story, setStory] = useState(null);
 
-    const [isPhotoDragging, setIsPhotoDragging] =
-        useState(false);
+    const [
+        isPhotoDragging,
+        setIsPhotoDragging,
+    ] = useState(false);
 
-    const [photoScrollProgress, setPhotoScrollProgress] =
-        useState(0);
+    const [
+        photoScrollProgress,
+        setPhotoScrollProgress,
+    ] = useState(0);
 
-    const [reviewChecks, setReviewChecks] = useState({
+    const [
+        reviewChecks,
+        setReviewChecks,
+    ] = useState({
         policy: false,
         privacy: false,
         image: false,
     });
 
-    const [selectedVisibility, setSelectedVisibility] =
-        useState(null);
+    const [
+        selectedVisibility,
+        setSelectedVisibility,
+    ] = useState(null);
 
-    const [isSubmitting, setIsSubmitting] =
-        useState(false);
+    const [
+        isSubmitting,
+        setIsSubmitting,
+    ] = useState(false);
 
     const previousFilter =
-        location.state?.previousFilter ?? "PENDING";
+        location.state?.previousFilter ??
+        "PENDING";
+
+    /*
+     * 목록에서 상세 페이지로 들어오기 직전의 상태.
+     *
+     * PUBLIC 글이면 PUBLIC,
+     * PRIVATE 글이면 PRIVATE,
+     * PENDING 글이면 PENDING.
+     */
+    const previousStatus =
+        location.state?.previousStatus ??
+        null;
 
     useEffect(() => {
+        let isActive = true;
+
         const fetchStoryDetail = async () => {
             try {
                 const response =
-                    await getAdminStoryDetail(storyId);
+                    await getAdminStoryDetail(
+                        storyId,
+                    );
 
-                setStory(response.data.data);
+                const storyData =
+                    response.data.data;
+
+                if (!isActive) {
+                    return;
+                }
+
+                setStory(storyData);
+
+                if (
+                    storyData.status ===
+                        "PUBLIC" ||
+                    storyData.status ===
+                        "PRIVATE"
+                ) {
+                    setSelectedVisibility(
+                        storyData.status,
+                    );
+                } else {
+                    setSelectedVisibility(
+                        null,
+                    );
+                }
             } catch {
-                setStory(null);
+                if (isActive) {
+                    setStory(null);
+                }
             }
         };
 
         fetchStoryDetail();
+
+        return () => {
+            isActive = false;
+        };
     }, [storyId]);
 
     const handleBack = () => {
         navigate("/admin/reviews", {
             state: {
-                selectedFilter: previousFilter,
+                selectedFilter:
+                    previousFilter,
             },
         });
     };
@@ -109,17 +165,25 @@ const AdminReviewDetail = () => {
             {
                 state: {
                     previousFilter,
+                    previousStatus:
+                        previousStatus ??
+                        story.status,
                 },
             },
         );
     };
 
-    const handleVisibilityClick = (visibility) => {
-        setSelectedVisibility(visibility);
+    const handleVisibilityClick = (
+        visibility,
+    ) => {
+        setSelectedVisibility(
+            visibility,
+        );
     };
 
     const handlePhotoScroll = () => {
-        const element = photoListRef.current;
+        const element =
+            photoListRef.current;
 
         if (!element) {
             return;
@@ -131,6 +195,7 @@ const AdminReviewDetail = () => {
 
         if (maxScrollLeft <= 0) {
             setPhotoScrollProgress(0);
+
             return;
         }
 
@@ -140,12 +205,18 @@ const AdminReviewDetail = () => {
         );
     };
 
-    const handlePhotoPointerDown = (event) => {
-        if (event.pointerType !== "mouse") {
+    const handlePhotoPointerDown = (
+        event,
+    ) => {
+        if (
+            event.pointerType !==
+            "mouse"
+        ) {
             return;
         }
 
-        const element = photoListRef.current;
+        const element =
+            photoListRef.current;
 
         if (!element) {
             return;
@@ -153,22 +224,30 @@ const AdminReviewDetail = () => {
 
         setIsPhotoDragging(true);
 
-        dragStartX.current = event.clientX;
+        dragStartX.current =
+            event.clientX;
+
         dragStartScrollLeft.current =
             element.scrollLeft;
 
-        element.setPointerCapture(event.pointerId);
+        element.setPointerCapture(
+            event.pointerId,
+        );
     };
 
-    const handlePhotoPointerMove = (event) => {
+    const handlePhotoPointerMove = (
+        event,
+    ) => {
         if (
-            event.pointerType !== "mouse" ||
+            event.pointerType !==
+                "mouse" ||
             !isPhotoDragging
         ) {
             return;
         }
 
-        const element = photoListRef.current;
+        const element =
+            photoListRef.current;
 
         if (!element) {
             return;
@@ -183,16 +262,24 @@ const AdminReviewDetail = () => {
             dragDistance;
     };
 
-    const handlePhotoPointerUp = (event) => {
-        if (event.pointerType !== "mouse") {
+    const handlePhotoPointerUp = (
+        event,
+    ) => {
+        if (
+            event.pointerType !==
+            "mouse"
+        ) {
             return;
         }
 
-        const element = photoListRef.current;
+        const element =
+            photoListRef.current;
 
         if (
             element &&
-            element.hasPointerCapture(event.pointerId)
+            element.hasPointerCapture(
+                event.pointerId,
+            )
         ) {
             element.releasePointerCapture(
                 event.pointerId,
@@ -203,17 +290,22 @@ const AdminReviewDetail = () => {
     };
 
     const allChecked =
-        Object.values(reviewChecks).every(Boolean);
+        Object.values(
+            reviewChecks,
+        ).every(Boolean);
 
     const isPublicEnabled =
-        selectedVisibility === "PUBLIC" &&
+        selectedVisibility ===
+            "PUBLIC" &&
         allChecked;
 
     const isPrivateEnabled =
-        selectedVisibility === "PRIVATE";
+        selectedVisibility ===
+        "PRIVATE";
 
     const isNextEnabled =
-        isPublicEnabled || isPrivateEnabled;
+        isPublicEnabled ||
+        isPrivateEnabled;
 
     const handleNext = async () => {
         if (
@@ -235,22 +327,39 @@ const AdminReviewDetail = () => {
             const currentStatus =
                 response.data.data.status;
 
-            if (currentStatus !== story.status) {
+            if (
+                currentStatus !==
+                story.status
+            ) {
                 window.alert(
                     "다른 관리자에 의해 사연 상태가 변경되었습니다.",
                 );
 
-                navigate("/admin/reviews", {
-                    state: {
-                        selectedFilter:
-                            previousFilter,
+                navigate(
+                    "/admin/reviews",
+                    {
+                        state: {
+                            selectedFilter:
+                                previousFilter,
+                        },
                     },
-                });
+                );
 
                 return;
             }
 
-            if (currentStatus !== selectedVisibility) {
+            /*
+             * 알림 화면에 표시할 이전 상태는
+             * 목록에서 상세로 들어왔을 때의 상태를 사용한다.
+             */
+            const notificationPreviousStatus =
+                previousStatus ??
+                currentStatus;
+
+            if (
+                currentStatus !==
+                selectedVisibility
+            ) {
                 await updateAdminStoryReview(
                     story.storyId,
                     selectedVisibility,
@@ -261,9 +370,11 @@ const AdminReviewDetail = () => {
                 `/admin/notifications/${story.storyId}`,
                 {
                     state: {
-                        previousStatus: currentStatus,
+                        previousStatus:
+                            notificationPreviousStatus,
                         nextStatus:
                             selectedVisibility,
+                        previousFilter,
                     },
                 },
             );
@@ -276,7 +387,8 @@ const AdminReviewDetail = () => {
         return null;
     }
 
-    const photoList = story.imageUrls ?? [];
+    const photoList =
+        story.imageUrls ?? [];
 
     return (
         <main className="admin-review-detail-page">
@@ -295,11 +407,14 @@ const AdminReviewDetail = () => {
                 </h2>
 
                 <p className="admin-review-detail-author">
-                    {story.nickname} · {story.email}
+                    {story.nickname} ·{" "}
+                    {story.email}
                 </p>
 
                 <section className="admin-review-submission">
-                    <h3>제출 내용</h3>
+                    <h3>
+                        제출 내용
+                    </h3>
 
                     <p className="admin-review-pet">
                         {story.petName} ·{" "}
@@ -314,9 +429,12 @@ const AdminReviewDetail = () => {
 
                 <section className="admin-review-photo-section">
                     <div className="admin-review-photo-heading">
-                        <h3>제출 사진</h3>
+                        <h3>
+                            제출 사진
+                        </h3>
 
-                        {photoList.length > 0 && (
+                        {photoList.length >
+                            0 && (
                             <button
                                 type="button"
                                 onClick={
@@ -326,7 +444,9 @@ const AdminReviewDetail = () => {
                                 사진 자세히 보기
 
                                 <img
-                                    src={caretRight}
+                                    src={
+                                        caretRight
+                                    }
                                     alt=""
                                 />
                             </button>
@@ -334,7 +454,9 @@ const AdminReviewDetail = () => {
                     </div>
 
                     <div
-                        ref={photoListRef}
+                        ref={
+                            photoListRef
+                        }
                         className={`admin-review-photo-list ${
                             isPhotoDragging
                                 ? "admin-review-photo-list-dragging"
@@ -357,16 +479,21 @@ const AdminReviewDetail = () => {
                         }
                     >
                         {photoList.map(
-                            (image, index) => (
+                            (
+                                image,
+                                index,
+                            ) => (
                                 <div
-                                    key={image}
+                                    key={
+                                        image
+                                    }
                                     className="admin-review-photo-item"
                                 >
                                     <img
-                                        src={image}
-                                        alt={`제출 사진 ${
-                                            index + 1
-                                        }`}
+                                        src={
+                                            image
+                                        }
+                                        alt={`제출 사진 ${index + 1}`}
                                         draggable="false"
                                     />
                                 </div>
@@ -374,7 +501,8 @@ const AdminReviewDetail = () => {
                         )}
                     </div>
 
-                    {photoList.length > 3 && (
+                    {photoList.length >
+                        3 && (
                         <div
                             className="admin-review-photo-scroll"
                             aria-hidden="true"
@@ -383,10 +511,8 @@ const AdminReviewDetail = () => {
                                 className="admin-review-photo-scroll-thumb"
                                 style={{
                                     left: `${photoScrollProgress * 100}%`,
-                                    transform: `translateX(-${
-                                        photoScrollProgress *
-                                        74.5
-                                    }px)`,
+                                    transform:
+                                        `translateX(-${photoScrollProgress * 74.5}px)`,
                                 }}
                             />
                         </div>
@@ -403,7 +529,9 @@ const AdminReviewDetail = () => {
 
                             return (
                                 <button
-                                    key={item.key}
+                                    key={
+                                        item.key
+                                    }
                                     type="button"
                                     className="admin-review-check-item"
                                     onClick={() =>
@@ -423,7 +551,9 @@ const AdminReviewDetail = () => {
 
                                     <span>
                                         <strong>
-                                            {item.title}
+                                            {
+                                                item.title
+                                            }
                                         </strong>
 
                                         <small>
@@ -486,7 +616,9 @@ const AdminReviewDetail = () => {
                             !isNextEnabled ||
                             isSubmitting
                         }
-                        onClick={handleNext}
+                        onClick={
+                            handleNext
+                        }
                     >
                         {isSubmitting
                             ? "처리 중"

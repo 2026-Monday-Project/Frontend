@@ -3,6 +3,7 @@ import {
     useState,
 } from "react";
 import {
+    useLocation,
     useNavigate,
     useParams,
 } from "react-router-dom";
@@ -35,54 +36,103 @@ const AUTO_NOTIFICATION = {
 
 const AdminNotification = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { storyId } = useParams();
 
+    const previousStatus =
+        location.state?.previousStatus;
+
     const [nextStatus, setNextStatus] =
-        useState(null);
+        useState(
+            location.state?.nextStatus ??
+                null,
+        );
 
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [reason, setReason] = useState("");
+    const [title, setTitle] =
+        useState("");
 
-    const [isAutoFilled, setIsAutoFilled] =
-        useState(false);
+    const [content, setContent] =
+        useState("");
 
-    const [isConfirmed, setIsConfirmed] =
-        useState(false);
+    const [reason, setReason] =
+        useState("");
 
-    const [isSending, setIsSending] =
-        useState(false);
+    const [
+        isAutoFilled,
+        setIsAutoFilled,
+    ] = useState(false);
+
+    const [
+        isConfirmed,
+        setIsConfirmed,
+    ] = useState(false);
+
+    const [
+        isSending,
+        setIsSending,
+    ] = useState(false);
 
     useEffect(() => {
-        const fetchStoryStatus = async () => {
-            try {
-                const response =
-                    await getAdminStoryDetail(storyId);
+        /*
+         * 사연 검토 페이지를 거치지 않고
+         * 알림 페이지 URL로 직접 접근한 경우에는
+         * 이전 상태를 알 수 없으므로 목록으로 이동한다.
+         */
+        if (!previousStatus) {
+            navigate("/admin/reviews", {
+                replace: true,
+            });
 
-                const currentStatus =
-                    response.data.data.status;
+            return;
+        }
 
-                if (
-                    currentStatus !== "PUBLIC" &&
-                    currentStatus !== "PRIVATE"
-                ) {
-                    navigate("/admin/reviews", {
-                        replace: true,
-                    });
+        const fetchStoryStatus =
+            async () => {
+                try {
+                    const response =
+                        await getAdminStoryDetail(
+                            storyId,
+                        );
 
-                    return;
+                    const currentStatus =
+                        response.data.data
+                            .status;
+
+                    if (
+                        currentStatus !==
+                            "PUBLIC" &&
+                        currentStatus !==
+                            "PRIVATE"
+                    ) {
+                        navigate(
+                            "/admin/reviews",
+                            {
+                                replace: true,
+                            },
+                        );
+
+                        return;
+                    }
+
+                    setNextStatus(
+                        currentStatus,
+                    );
+                } catch {
+                    navigate(
+                        "/admin/reviews",
+                        {
+                            replace: true,
+                        },
+                    );
                 }
-
-                setNextStatus(currentStatus);
-            } catch {
-                navigate("/admin/reviews", {
-                    replace: true,
-                });
-            }
-        };
+            };
 
         fetchStoryStatus();
-    }, [storyId, navigate]);
+    }, [
+        storyId,
+        navigate,
+        previousStatus,
+    ]);
 
     const needsReason =
         nextStatus === "PRIVATE";
@@ -103,7 +153,9 @@ const AdminNotification = () => {
         }
 
         const draft =
-            AUTO_NOTIFICATION[nextStatus];
+            AUTO_NOTIFICATION[
+                nextStatus
+            ];
 
         if (!draft) {
             return;
@@ -113,7 +165,9 @@ const AdminNotification = () => {
         setContent(draft.content);
 
         if (needsReason) {
-            setReason(AUTO_REASON_PREFIX);
+            setReason(
+                AUTO_REASON_PREFIX,
+            );
         } else {
             setReason("");
         }
@@ -131,14 +185,17 @@ const AdminNotification = () => {
             return false;
         }
 
-        const reasonDetail = reason
-            .replace(
-                AUTO_REASON_PREFIX,
-                "",
-            )
-            .trim();
+        const reasonDetail =
+            reason
+                .replace(
+                    AUTO_REASON_PREFIX,
+                    "",
+                )
+                .trim();
 
-        return reasonDetail.length >= 2;
+        return (
+            reasonDetail.length >= 2
+        );
     })();
 
     const isFormFilled =
@@ -147,20 +204,35 @@ const AdminNotification = () => {
         isReasonValid &&
         nextStatus !== null;
 
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
+    const handleTitleChange = (
+        event,
+    ) => {
+        setTitle(
+            event.target.value,
+        );
+
         setIsConfirmed(false);
         setIsAutoFilled(false);
     };
 
-    const handleContentChange = (event) => {
-        setContent(event.target.value);
+    const handleContentChange = (
+        event,
+    ) => {
+        setContent(
+            event.target.value,
+        );
+
         setIsConfirmed(false);
         setIsAutoFilled(false);
     };
 
-    const handleReasonChange = (event) => {
-        setReason(event.target.value);
+    const handleReasonChange = (
+        event,
+    ) => {
+        setReason(
+            event.target.value,
+        );
+
         setIsConfirmed(false);
         setIsAutoFilled(false);
     };
@@ -173,41 +245,48 @@ const AdminNotification = () => {
         setIsConfirmed(true);
     };
 
-    const handleNotificationSend = async () => {
-        if (
-            !isConfirmed ||
-            isSending ||
-            !nextStatus
-        ) {
-            return;
-        }
+    const handleNotificationSend =
+        async () => {
+            if (
+                !isConfirmed ||
+                isSending ||
+                !nextStatus
+            ) {
+                return;
+            }
 
-        const notificationContent =
-            needsReason
-                ? `${content.trim()}\n\n${reason.trim()}`
-                : content.trim();
+            const notificationContent =
+                needsReason
+                    ? `${content.trim()}\n\n${reason.trim()}`
+                    : content.trim();
 
-        try {
-            setIsSending(true);
+            try {
+                setIsSending(true);
 
-            await sendAdminNotification(
-                storyId,
-                title.trim(),
-                notificationContent,
-            );
+                await sendAdminNotification(
+                    storyId,
+                    title.trim(),
+                    notificationContent,
+                );
 
-            navigate("/admin/completed", {
-                replace: true,
-                state: {
-                    type: "notification",
-                },
-            });
-        } catch {
-            setIsSending(false);
-        }
-    };
+                navigate(
+                    "/admin/completed",
+                    {
+                        replace: true,
+                        state: {
+                            type: "notification",
+                        },
+                    },
+                );
+            } catch {
+                setIsSending(false);
+            }
+        };
 
-    if (!nextStatus) {
+    if (
+        !nextStatus ||
+        !previousStatus
+    ) {
         return null;
     }
 
@@ -221,7 +300,9 @@ const AdminNotification = () => {
             <div className="admin-notification-content">
                 <div className="admin-notification-status">
                     <AdminStatusBadge
-                        status="PENDING"
+                        status={
+                            previousStatus
+                        }
                     />
 
                     <img
@@ -230,7 +311,9 @@ const AdminNotification = () => {
                     />
 
                     <AdminStatusBadge
-                        status={nextStatus}
+                        status={
+                            nextStatus
+                        }
                     />
                 </div>
 
@@ -243,7 +326,9 @@ const AdminNotification = () => {
                         id="notification-title"
                         type="text"
                         value={title}
-                        onChange={handleTitleChange}
+                        onChange={
+                            handleTitleChange
+                        }
                     />
                 </div>
 
@@ -255,7 +340,9 @@ const AdminNotification = () => {
                     <textarea
                         id="notification-content"
                         value={content}
-                        onChange={handleContentChange}
+                        onChange={
+                            handleContentChange
+                        }
                     />
                 </div>
 
@@ -265,7 +352,9 @@ const AdminNotification = () => {
                             className="admin-notification-reason-label"
                             htmlFor="notification-reason"
                         >
-                            <span>사유</span>
+                            <span>
+                                사유
+                            </span>
 
                             <small>
                                 (두 자 이상 입력해주세요)
@@ -276,7 +365,9 @@ const AdminNotification = () => {
                             id="notification-reason"
                             type="text"
                             value={reason}
-                            onChange={handleReasonChange}
+                            onChange={
+                                handleReasonChange
+                            }
                         />
                     </div>
                 )}
@@ -286,7 +377,9 @@ const AdminNotification = () => {
                         <button
                             type="button"
                             className="admin-notification-auto"
-                            disabled={!nextStatus}
+                            disabled={
+                                !nextStatus
+                            }
                             onClick={
                                 handleAutoComplete
                             }
@@ -303,8 +396,12 @@ const AdminNotification = () => {
                                     ? "admin-notification-button-active"
                                     : ""
                             }`}
-                            disabled={!isFormFilled}
-                            onClick={handleConfirm}
+                            disabled={
+                                !isFormFilled
+                            }
+                            onClick={
+                                handleConfirm
+                            }
                         >
                             확인
                         </button>
