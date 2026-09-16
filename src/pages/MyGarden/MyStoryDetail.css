@@ -219,11 +219,11 @@
     right: 0;
     width: 100%;
     padding: 15px 24px 30px 24px;
-    background-color: var(--color-background);
+    background-color: var(--color-background, #FFFDF6) !important; /* 배경 투명 방지 완벽 고정 */
     box-sizing: border-box;
     display: flex;
     gap: 10px;
-    z-index: 50;
+    z-index: 10;
 }
 
 .btn-delete-half {
@@ -314,28 +314,58 @@
     height: 50px;
 }
 
-.photo-viewer-fullscreen-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
+.my-story-detail-page .story-photo-viewer {
     height: 100%;
-    background-color: var(--color-background);
-    z-index: 9999;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    gap: 24px;
+    padding-bottom: 32px;
+    overflow-y: auto;
 }
 
-.photo-viewer-fullscreen-overlay > * {
-    position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    background-color: var(--color-background) !important;
+.my-story-detail-page .story-photo-viewer .story-photo-viewer-header {
+    height: 68px;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 12px 56px;
+}
+
+.my-story-detail-page .story-photo-viewer .story-photo-viewer-back {
+    top: 12px;
+}
+
+.my-story-detail-page .story-photo-viewer .story-photo-viewer-back img {
+    width: 26px;
+    height: 26px;
+}
+
+.my-story-detail-page .story-photo-viewer .story-photo-viewer-image {
+    width: 100%;
+    height: 402px;
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: center;
+    margin-block: 55px auto;
+}
+
+.my-story-detail-page .story-photo-viewer .story-photo-viewer-thumbnails {
+    position: static;
+    flex-shrink: 0;
+}
+
+@media (max-width: 402px) {
+    .my-story-detail-page .story-photo-viewer {
+        height: 100%;
+        height: min(100svh, 100dvh);
+        gap: 8px;
+        gap: clamp(8px, calc(5svh - 13px), 24px);
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .my-story-detail-page .story-photo-viewer .story-photo-viewer-image {
+        min-height: 0;
+        flex-shrink: 1;
+        margin-top: 0;
+        margin-top: clamp(0px, calc(100svh - 660px), 55px);
+    }
 }
