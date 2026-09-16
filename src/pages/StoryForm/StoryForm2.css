@@ -198,7 +198,7 @@
 
 /* 사진 자세히 보기 */
 
-.story-photo-viewer {
+.story-form2-photo-viewer {
   position: fixed;
   top: 0;
   left: 50%;
@@ -206,16 +206,21 @@
   z-index: 50;
   width: 100%;
   max-width: var(--max-mobile-width);
-  /* iOS Safari는 하단 툴바가 늘었다 줄었다 하면서 100%/100vh를 툴바 숨긴 상태 기준으로 계산해,
-     툴바가 떠 있을 때 화면 아래쪽(썸네일)이 그 뒤로 가려진다. 100dvh는 툴바 상태를 반영해 갱신된다. */
-  height: 100vh;
-  height: 100dvh;
+  /* Scaled AppFrame uses its own height, not a second viewport-sized height. */
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--color-background);
+  overscroll-behavior: contain;
 }
 
-.story-photo-viewer-header {
+@media (max-width: 402px) {
+  .story-form2-photo-viewer {
+    height: min(100svh, 100dvh);
+  }
+}
+
+.story-form2-photo-viewer-header {
   position: relative;
   display: flex;
   align-items: center;
@@ -225,7 +230,7 @@
   padding: 0 16px;
 }
 
-.story-photo-viewer-back {
+.story-form2-photo-viewer-back {
   position: absolute;
   left: 16px;
   display: flex;
@@ -236,27 +241,29 @@
   cursor: pointer;
 }
 
-.story-photo-viewer-count {
+.story-form2-photo-viewer-count {
   color: var(--color-text);
   font-size: 17px;
   font-weight: 500;
 }
 
-.story-photo-viewer-main {
+.story-form2-photo-viewer-main {
   flex: 1;
-  overflow: hidden;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.story-photo-viewer-main img {
+.story-form2-photo-viewer-main img {
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
 
-.story-photo-viewer-thumbs {
+.story-form2-photo-viewer-thumbs {
   display: flex;
   flex-shrink: 0;
   gap: 12px;
@@ -266,11 +273,11 @@
   -ms-overflow-style: none;
 }
 
-.story-photo-viewer-thumbs::-webkit-scrollbar {
+.story-form2-photo-viewer-thumbs::-webkit-scrollbar {
   display: none;
 }
 
-.story-photo-viewer-thumb {
+.story-form2-photo-viewer-thumb {
   flex-shrink: 0;
   width: 84px;
   height: 84px;
@@ -279,13 +286,13 @@
   cursor: pointer;
 }
 
-.story-photo-viewer-thumb img {
+.story-form2-photo-viewer-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.story-photo-viewer-thumb.is-active {
+.story-form2-photo-viewer-thumb.is-active {
   outline: 2px solid var(--color-green-main);
   outline-offset: 2px;
 }
