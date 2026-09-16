@@ -1,14 +1,14 @@
+## Monday 프로젝트
+
 <div align="center">
   <img src="./public/readme/mondayproject.jpeg" alt="Monday Project 대표 이미지" width="400">
 </div>
 
----
-
-## 📅 Monday 프로젝트 개요
-
 ### 서비스 소개
 
 Monday는 관객이 사연을 쓰고 다른 관객의 사연에 공감하며, 자연스럽게 공연 예매로 이어지는 **관객참여형 양방향 콘텐츠 공간**을 지향합니다.
+
+- 배포 사이트: [love-garden.site](https://www.love-garden.site/)
 
 #### 🎪 먼데이프로젝트 Monday Project
 
@@ -93,7 +93,7 @@ Monday는 관객이 사연을 쓰고 다른 관객의 사연에 공감하며, �
 <tr>
 <th align="center">Deployment</th>
 <td align="left">
-추가 예정
+<img src="https://skillicons.dev/icons?i=vercel" alt="Vercel">
 </td>
 </tr>
 </table>
