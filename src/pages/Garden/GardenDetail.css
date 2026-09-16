@@ -56,6 +56,25 @@
     flex-shrink: 0;
 }
 
+/* Unscaled mobile frame: reserve controls/thumbnails, then fit the photo.
+   Keep the svh frame limit when Safari's browser chrome retracts. */
+@media (max-width: 402px) {
+    .garden-detail-page .story-photo-viewer {
+        height: 100%;
+        height: min(100svh, 100dvh);
+        gap: 8px;
+        gap: clamp(8px, calc(5svh - 13px), 24px);
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .garden-detail-page .story-photo-viewer .story-photo-viewer-image {
+        min-height: 0;
+        flex-shrink: 1;
+        margin-top: 0;
+        margin-top: clamp(0px, calc(100svh - 660px), 55px);
+    }
+}
+
 .garden-detail-status {
     margin: 48px 20px;
     color: var(--color-text-muted);
