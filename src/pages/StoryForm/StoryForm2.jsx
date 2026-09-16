@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { usePhotoViewerScrollLock } from "@/hooks/usePhotoViewerScrollLock";
 import { useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "@/assets/icons/ep_arrow-left.svg";
 import stepIndicator from "@/assets/icons/step-indicator-2.svg";
@@ -102,6 +103,8 @@ const StoryForm2 = ({ mode }) => {
 
   const [photos, setPhotos] = useState(story.photos);
   const [viewerIndex, setViewerIndex] = useState(null);
+  const viewerRef = useRef(null);
+  usePhotoViewerScrollLock(viewerRef, viewerIndex !== null);
 
   // handlePhotoChange는 리사이즈(await) 동안 photos state가 바뀔 수 있어, MAX_PHOTOS 슬롯을
   // await 이전에 동기적으로 "예약"하기 위한 카운터. state와 별개로 항상 최신 개수를 반영한다.
@@ -109,16 +112,6 @@ const StoryForm2 = ({ mode }) => {
 
   const isFormValid =
     formData.title.trim() && formData.content.trim() && photos.length > 0;
-
-  useEffect(() => {
-    if (viewerIndex === null) return;
-
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [viewerIndex]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -413,32 +406,32 @@ const StoryForm2 = ({ mode }) => {
         </div>
 
         {viewerIndex !== null && (
-          <div className="story-photo-viewer">
-            <header className="story-photo-viewer-header">
+          <div ref={viewerRef} className="story-form2-photo-viewer" role="dialog" aria-modal="true" aria-label="사진 자세히 보기">
+            <header className="story-form2-photo-viewer-header">
               <button
                 type="button"
-                className="story-photo-viewer-back"
+                className="story-form2-photo-viewer-back"
                 onClick={handleViewerClose}
                 aria-label="사진 자세히 보기 닫기"
               >
                 <img className="story-form-back-icon" src={arrowLeft} alt="" />
               </button>
 
-              <span className="story-photo-viewer-count">
+              <span className="story-form2-photo-viewer-count">
                 {viewerIndex + 1}/{photos.length}
               </span>
             </header>
 
-            <div className="story-photo-viewer-main">
+            <div className="story-form2-photo-viewer-main">
               <img src={photos[viewerIndex].url} alt="" />
             </div>
 
-            <div className="story-photo-viewer-thumbs">
+            <div className="story-form2-photo-viewer-thumbs">
               {photos.map((photo, index) => (
                 <button
                   type="button"
                   key={photo.id}
-                  className={`story-photo-viewer-thumb ${
+                  className={`story-form2-photo-viewer-thumb ${
                     index === viewerIndex ? "is-active" : ""
                   }`}
                   onClick={() => setViewerIndex(index)}
