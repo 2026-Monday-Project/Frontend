@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/mondayproject.jpeg" alt="Monday Project 대표 이미지" width="400">
+  <img src="./public/readme/mondayproject.jpeg" alt="Monday Project 대표 이미지" width="400">
 </div>
 
 ---
@@ -37,16 +37,16 @@ Monday는 관객이 사연을 쓰고 다른 관객의 사연에 공감하며, �
   <tbody>
     <tr>
       <td align="center">
-        <img src="./public/team/김예빈.jpg" alt="김예빈 사진" width="150" height="150">
+        <img src="./public/readme/김예빈.jpg" alt="김예빈 사진" width="150" height="150">
       </td>
       <td align="center">
-        <img src="./public/team/박다인.jpeg" alt="박다인 사진" width="150" height="150">
+        <img src="./public/readme/박다인.jpeg" alt="박다인 사진" width="150" height="150">
       </td>
       <td align="center">
-        <img src="./public/team/이주희.jpeg" alt="이주희 사진" width="150" height="150">
+        <img src="./public/readme/이주희.jpeg" alt="이주희 사진" width="150" height="150">
       </td>
       <td align="center">
-        <img src="./public/team/김나경.jpeg" alt="김나경 사진" width="150" height="150">
+        <img src="./public/readme/김나경.jpeg" alt="김나경 사진" width="150" height="150">
       </td>
     </tr>
     <tr>
