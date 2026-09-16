@@ -34,7 +34,6 @@ const MyStoryDetail = () => {
                     localStorage.removeItem("accessToken");
                     navigate("/mygarden/unlogged-in");
                 } else {
-                    console.error(error);
                     alert("사연을 불러오는 중 오류가 발생했습니다.");
                     navigate(-1);
                 }
@@ -82,7 +81,6 @@ const MyStoryDetail = () => {
                 localStorage.removeItem("accessToken");
                 navigate("/mygarden/unlogged-in");
             } else {
-                console.error(error);
                 alert("사연 삭제에 실패했습니다.");
             }
         } finally {
@@ -308,7 +306,7 @@ const MyStoryDetail = () => {
                 </div>
             </div>
 
-            {renderBottomButtons()}
+            {!isPhotoViewerOpen && renderBottomButtons()}
 
             {isDeleteModalOpen && (
                 <div className="modal-overlay" onClick={closeDeleteModal}>
@@ -330,15 +328,13 @@ const MyStoryDetail = () => {
             )}
 
             {isPhotoViewerOpen && storyImages.length > 0 && (
-                <div className="photo-viewer-fullscreen-overlay">
-                    <StoryPhotoViewer
-                        images={storyImages}
-                        currentIndex={currentImageIndex}
-                        onChange={setCurrentImageIndex}
-                        onClose={closePhotoViewer}
-                        title={story.title}
-                    />
-                </div>
+                <StoryPhotoViewer
+                    images={storyImages}
+                    currentIndex={currentImageIndex}
+                    onChange={setCurrentImageIndex}
+                    onClose={closePhotoViewer}
+                    title={story.title}
+                />
             )}
         </div>
     );
