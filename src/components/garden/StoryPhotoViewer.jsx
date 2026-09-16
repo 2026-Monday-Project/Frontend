@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePhotoViewerScrollLock } from "@/hooks/usePhotoViewerScrollLock";
 
 import arrowBackIcon from "@/assets/icons/arrow-back.svg";
 
 import "./StoryPhotoViewer.css";
 
 const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) => {
+    const viewerRef = useRef(null);
+    usePhotoViewerScrollLock(viewerRef, true);
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
 
     useEffect(() => {
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-
         const handleKeyDown = (event) => {
             if (event.key === "Escape") onClose();
         };
@@ -19,7 +19,6 @@ const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) =>
         document.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            document.body.style.overflow = previousOverflow;
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
@@ -61,7 +60,7 @@ const StoryPhotoViewer = ({ images, currentIndex, onChange, onClose, title }) =>
     };
 
     return (
-        <div className="story-photo-viewer" role="dialog" aria-modal="true" aria-label="사진 자세히 보기">
+        <div ref={viewerRef} className="story-photo-viewer" role="dialog" aria-modal="true" aria-label="사진 자세히 보기">
             <header className="story-photo-viewer-header">
                 <button
                     className="story-photo-viewer-back"
