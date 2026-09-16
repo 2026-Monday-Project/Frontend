@@ -21,11 +21,17 @@ const EarnedLikes = () => {
         const fetchEarnedLikes = async () => {
             try {
                 setIsLoading(true);
-                const response = await api.get('/my-garden/received-likes');
-                const fetchedContent = response.data?.data?.content || [];
+                
+                const [listResponse, summaryResponse] = await Promise.all([
+                    api.get('/my-garden/received-likes'),
+                    api.get('/my-garden/summary')
+                ]);
+
+                const fetchedContent = listResponse.data?.data?.content || [];
                 
                 setStories(fetchedContent);
-                setTotalLikes(response.data?.data?.totalCount || fetchedContent.length);
+                setTotalLikes(summaryResponse.data?.data?.receivedLikeCount || 0);
+
             } catch (error) {
                 if (error.response?.status === 401) {
                     localStorage.removeItem('accessToken');
