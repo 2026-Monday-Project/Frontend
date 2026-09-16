@@ -64,7 +64,8 @@ const PerformanceCarousel = () => {
         setIsTransitioning(true);
 
         setCurrentIndex(
-            (prev) => prev + 1,
+            (previousIndex) =>
+                previousIndex + 1,
         );
     };
 
@@ -72,7 +73,8 @@ const PerformanceCarousel = () => {
         setIsTransitioning(true);
 
         setCurrentIndex(
-            (prev) => prev - 1,
+            (previousIndex) =>
+                previousIndex - 1,
         );
     };
 
@@ -159,11 +161,6 @@ const PerformanceCarousel = () => {
 
     const handleTransitionEnd =
         () => {
-            /*
-             * 마지막 실제 포스터 다음의
-             * 복제된 첫 번째 포스터에 도착하면
-             * 애니메이션 없이 진짜 첫 번째로 이동
-             */
             if (
                 currentIndex ===
                 carouselList.length - 1
@@ -177,11 +174,6 @@ const PerformanceCarousel = () => {
                 return;
             }
 
-            /*
-             * 첫 번째 실제 포스터 이전의
-             * 복제된 마지막 포스터에 도착하면
-             * 애니메이션 없이 진짜 마지막으로 이동
-             */
             if (
                 currentIndex === 0
             ) {
@@ -323,21 +315,31 @@ const PerformanceCarousel = () => {
                         (
                             poster,
                             index,
-                        ) => (
-                            <div
-                                className="performance-carousel-slide"
-                                key={`${poster}-${index}`}
-                            >
-                                <img
-                                    className="performance-carousel-image"
-                                    src={
-                                        poster
-                                    }
-                                    alt=""
-                                    draggable="false"
-                                />
-                            </div>
-                        ),
+                        ) => {
+                            const isFirstPoster =
+                                poster ===
+                                performance1;
+
+                            return (
+                                <div
+                                    className="performance-carousel-slide"
+                                    key={`${poster}-${index}`}
+                                >
+                                    <img
+                                        className={`performance-carousel-image ${
+                                            isFirstPoster
+                                                ? "performance-carousel-image-first"
+                                                : ""
+                                        }`}
+                                        src={
+                                            poster
+                                        }
+                                        alt=""
+                                        draggable="false"
+                                    />
+                                </div>
+                            );
+                        },
                     )}
                 </div>
             </div>
