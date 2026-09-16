@@ -37,7 +37,7 @@ Monday는 관객이 사연을 쓰고 다른 관객의 사연에 공감하며, �
   <tbody>
     <tr>
       <td align="center">
-        <img src="./public/readme/김예빈.jpg" alt="김예빈 사진" width="150" height="150">
+        <img src="./public/readme/김예빈.jpeg" alt="김예빈 사진" width="150" height="150">
       </td>
       <td align="center">
         <img src="./public/readme/박다인.jpeg" alt="박다인 사진" width="150" height="150">
