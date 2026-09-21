@@ -4,14 +4,14 @@ import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarouse
 import "./PerformanceDetails.css";
 
 const INSTAGRAM_URL =
-    "https://www.instagram.com/mondayprojectkr/";
+    "https://www.instagram.com/p/DdiJPPXk_si/?img_index=1";
 const GOOGLE_MAP_EMBED_URL =
     "https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C+113&z=20&output=embed";
 
 const PerformanceDetails = () => {
     const handleReservationClick = () => {
         window.open(
-            "https://ticket.melon.com/main/index.htm",
+            "https://ticket.melon.com/performance/index.htm?prodId=213930",
             "_blank",
             "noopener,noreferrer",
         );
