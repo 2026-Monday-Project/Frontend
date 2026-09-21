@@ -3,20 +3,16 @@ import MondayOneSongCarousel from "@/components/performance/MondayOneSongCarouse
 
 import "./PerformanceDetails.css";
 
+const RESERVATION_URL =
+    "https://ticket.melon.com/performance/index.htm?prodId=213930";
+
 const INSTAGRAM_URL =
-    "https://www.instagram.com/p/DdiJPPXk_si/?img_index=1";
+    "https://www.instagram.com/p/DdiJPPXk_si/";
+
 const GOOGLE_MAP_EMBED_URL =
     "https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8+%EB%A7%88%ED%8F%AC%EA%B5%AC+%EC%9E%94%EB%8B%A4%EB%A6%AC%EB%A1%9C+113&z=20&output=embed";
 
 const PerformanceDetails = () => {
-    const handleReservationClick = () => {
-        window.open(
-            "https://ticket.melon.com/performance/index.htm?prodId=213930",
-            "_blank",
-            "noopener,noreferrer",
-        );
-    };
-
     return (
         <>
             <section className="performance-details">
@@ -53,13 +49,14 @@ const PerformanceDetails = () => {
                         </div>
                     </dl>
 
-                    <button
-                        type="button"
+                    <a
                         className="performance-reservation-button"
-                        onClick={handleReservationClick}
+                        href={RESERVATION_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         멜론티켓에서 예매하기
-                    </button>
+                    </a>
                 </div>
             </section>
 
@@ -92,7 +89,7 @@ const PerformanceDetails = () => {
                     className="performance-instagram-link"
                     href={INSTAGRAM_URL}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                 >
                     <img
                         className="performance-instagram-icon"
