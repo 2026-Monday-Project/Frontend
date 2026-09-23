@@ -10,8 +10,7 @@ import mondayOneSong from "@/assets/images/provided/performance/monday-one-song.
 import "./MondayOneSongCarousel.css";
 
 const CONTENT_OPEN_AT =
-    "2026-09-28T00:00:00+09:00";
-
+    "2026-09-28T20:00:00+09:00";
 /*
  * 공개 후 캐러셀을 미리 테스트할 때만 true
  * 실제 배포 시 반드시 false
