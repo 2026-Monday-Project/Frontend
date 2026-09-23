@@ -6,12 +6,11 @@ import {
 } from "react";
 
 import mondayOneSong from "@/assets/images/provided/performance/monday-one-song.svg";
-import { getMondayOneSong } from "@/api/performanceApi";
 
 import "./MondayOneSongCarousel.css";
 
-const DEFAULT_CONTENT_OPEN_AT =
-    "2026-09-27T00:00:00+09:00";
+const CONTENT_OPEN_AT =
+    "2026-09-28T00:00:00+09:00";
 
 /*
  * 공개 후 캐러셀을 미리 테스트할 때만 true
@@ -31,33 +30,10 @@ const mondayOneSongModules = import.meta.glob(
 );
 
 const getOpenTime = (dateTime) => {
-    if (!dateTime) {
-        return new Date(
-            DEFAULT_CONTENT_OPEN_AT,
-        ).getTime();
-    }
-
-    const hasTimezone =
-        /Z$|[+-]\d{2}:\d{2}$/.test(
-            dateTime,
-        );
-
-    const normalizedDateTime =
-        hasTimezone
-            ? dateTime
-            : `${dateTime}+09:00`;
-
-    return new Date(
-        normalizedDateTime,
-    ).getTime();
+    return new Date(dateTime).getTime();
 };
 
 const MondayOneSongCarousel = () => {
-    const [contentOpenAt, setContentOpenAt] =
-        useState(
-            DEFAULT_CONTENT_OPEN_AT,
-        );
-
     const [isReleased, setIsReleased] =
         useState(
             FORCE_RELEASE_PREVIEW,
@@ -100,35 +76,12 @@ const MondayOneSongCarousel = () => {
             : [mondayOneSong];
 
     useEffect(() => {
-        const fetchMondayOneSong = async () => {
-            try {
-                const response =
-                    await getMondayOneSong();
-
-                const content =
-                    response.data.data;
-
-                setContentOpenAt(
-                    content.contentOpenAt ??
-                        DEFAULT_CONTENT_OPEN_AT,
-                );
-            } catch {
-                setContentOpenAt(
-                    DEFAULT_CONTENT_OPEN_AT,
-                );
-            }
-        };
-
-        fetchMondayOneSong();
-    }, []);
-
-    useEffect(() => {
         if (FORCE_RELEASE_PREVIEW) {
             return undefined;
         }
 
         const openTime =
-            getOpenTime(contentOpenAt);
+            getOpenTime(CONTENT_OPEN_AT);
 
         const remainingTime =
             openTime - Date.now();
@@ -156,28 +109,12 @@ const MondayOneSongCarousel = () => {
                 releaseTimer,
             );
         };
-    }, [contentOpenAt]);
+    }, []);
 
     const formatOpenDate = (
         dateTime,
     ) => {
-        if (!dateTime) {
-            return "";
-        }
-
-        const hasTimezone =
-            /Z$|[+-]\d{2}:\d{2}$/.test(
-                dateTime,
-            );
-
-        const normalizedDateTime =
-            hasTimezone
-                ? dateTime
-                : `${dateTime}+09:00`;
-
-        const date = new Date(
-            normalizedDateTime,
-        );
+        const date = new Date(dateTime);
 
         const year =
             date.getFullYear();
@@ -455,7 +392,7 @@ const MondayOneSongCarousel = () => {
 
                             <p className="monday-song-release">
                                 {formatOpenDate(
-                                    contentOpenAt,
+                                    CONTENT_OPEN_AT,
                                 )}{" "}
                                 공개 예정
                             </p>
