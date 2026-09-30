@@ -57,7 +57,7 @@ Monday는 관객이 사연을 쓰고 다른 관객의 사연에 공감하며, �
         <a href="https://github.com/daniswings">@daniswings</a>
       </td>
       <td align="center">
-        <a href="https://github.com/jooeeh17">@jooeeh16</a>
+        <a href="https://github.com/jooeeeh17">@jooeeh16</a>
       </td>
       <td align="center">
         <a href="https://github.com/kimnkgyeong">@kimnkgyeong</a>
